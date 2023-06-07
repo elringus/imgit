@@ -1,5 +1,4 @@
-﻿import dts from "rollup-plugin-dts";
-import ts from "@rollup/plugin-typescript";
+﻿import ts from "@rollup/plugin-typescript";
 
 const external = [
     "axios",
@@ -15,21 +14,16 @@ const external = [
 
 const config = [
     {
-        input: "build/index.js",
+        input: "dist/types/index.js",
         output: { file: "dist/stopka.js", format: "cjs", sourcemap: true },
         plugins: [ts()],
         external
     },
     {
-        input: "build/index.js",
+        input: "dist/types/index.js",
         output: { file: "dist/stopka.mjs", format: "esm", sourcemap: true },
         plugins: [ts()],
         external
-    },
-    {
-        input: "build/index.d.ts",
-        output: { file: "dist/stopka.d.ts", format: "es" },
-        plugins: [dts()]
     }
 ];
 

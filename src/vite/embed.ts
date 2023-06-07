@@ -2,8 +2,7 @@
 import * as afs from "node:fs/promises";
 import * as path from "node:path";
 import { VitePlugin, ViteConfig } from "./types";
-// noinspection ES6PreferShortImport (breaks rollup d.ts bundling)
-import { EmbedOptions, Embedder, DownloadOptions, defaultEmbedOptions, createDefaultEmbedder } from "../embed/index";
+import { EmbedOptions, Embedder, DownloadOptions, defaultEmbedOptions, createDefaultEmbedder } from "embed";
 
 export const EmbedAssets = (embedder?: Embedder, options?: EmbedOptions & DownloadOptions): VitePlugin => {
     const assetsDir = path.resolve(options?.assetsDir ?? defaultEmbedOptions.assetsDir);

@@ -1,1 +1,1 @@
-﻿export * from "./remote";
+﻿export * from "./embed";

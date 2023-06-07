@@ -1,6 +1,6 @@
 ﻿import { MarkdownEnv } from "./types";
 import { Replace } from "./replace";
-import { getMediaSize } from "../embed";
+import { getMediaSize } from "embed";
 
 export function RenderImages(regex?: RegExp) {
     return Replace(regex ?? /!\[(.*?)]\((\S+?\.(?:png|jpe?g|svg|gif))\)/m, buildImageTags);
