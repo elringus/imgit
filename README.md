@@ -1,3 +1,3 @@
 # Stopga
 
-Stop the layout shift caused by loading media assets
+Stop layout shift caused by loading images and video.
