@@ -4,7 +4,7 @@
     "description": "Stop layout shift caused by loading images and video.",
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
-    "keywords": ["CLS", "preloading", "remote assets", "precompute size"],
+    "keywords": ["CLS", "media", "assets", "size", "aspect-ratio", "preload", "precompute", "embed"],
     "repository": { "type": "git", "url": "https://github.com/Elringus/Stopga.git" },
     "funding": "https://github.com/sponsors/Elringus",
     "homepage": "https://github.com/Elringus/Stopga#readme",
