@@ -1,36 +1,32 @@
 {
     "name": "imgit",
     "version": "0.0.0-alpha.1",
-    "description": "Optimize images and video generated from markdown.",
+    "description": "Transform images, video and YouTube links to HTML optimized for web vitals.",
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
-    "keywords": ["CLS", "media", "lazy-load", "size", "encode", "compress", "md", "avif"],
+    "keywords": ["CLS", "lazy-load", "embed", "size", "encode", "compress", "md", "avif", "vite-plugin"],
     "repository": { "type": "git", "url": "https://github.com/elringus/imgit.git" },
     "funding": "https://github.com/sponsors/elringus",
     "homepage": "https://imgit.dev",
     "bugs": { "url": "https://github.com/elringus/imgit/issues" },
-    "module": "dist/imgit.mjs",
-    "types": "dist/imgit.d.ts",
-    "type": "module",
+    "engines": { "node": ">=18.0.0" },
     "files": ["dist"],
+    "type": "module",
+    "exports": {
+        ".": {
+            "import": "./dist/client/index.js",
+            "types": "./dist/client/index.d.ts"
+        },
+        "./vite-plugin-imgit": {
+            "import": "./dist/server/vite-plugin-imgit.js",
+            "types": "./dist/server/vite-plugin-imgit.d.ts"
+        }
+    },
     "scripts": {
         "update": "ncu --interactive",
         "bundle": "esbuild src/index.ts --bundle --platform=node --outfile=dist/imgit.mjs --format=esm",
         "types": "tsc --outDir dist --declaration --emitDeclarationOnly",
         "build": "rimraf dist && npm run bundle && npm run types",
         "publish-npm": "npm publish --access public"
-    },
-    "dependencies": {
-        "axios": "^1.5.1",
-        "magic-string": "^0.30.5",
-        "ffprobe": "^1.1.2",
-        "ffprobe-static": "^3.1.0"
-    },
-    "devDependencies": {
-        "typescript": "^5.2.2",
-        "@types/node": "^20.8.7",
-        "esbuild": "^0.19.5",
-        "rimraf": "^5.0.5",
-        "npm-check-updates": "^16.14.6"
     }
 }
