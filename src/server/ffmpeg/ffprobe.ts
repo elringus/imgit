@@ -1,5 +1,5 @@
-import { ContentInfo } from "../asset";
-import { std, cfg, getExtension } from "../common";
+import { ContentInfo } from "server/asset";
+import { std, cfg, getExtension } from "server/common";
 
 // https://ffmpeg.org/ffprobe.html
 const args = "-loglevel error -select_streams v:0 -show_entries stream=width,height,pix_fmt -of csv=p=0";

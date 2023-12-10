@@ -1,5 +1,5 @@
 import { Options } from "./options";
-import { logTTY } from "../common";
+import { logTTY } from "server/common";
 
 /** Default build server configuration. */
 export const defaults: Readonly<Options> = {

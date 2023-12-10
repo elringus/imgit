@@ -1,6 +1,6 @@
-import { std, cfg, ensureDir } from "./common";
-import { ContentInfo } from "./asset";
-import { EncodeSpec } from "./config";
+import { std, cfg, ensureDir } from "server/common";
+import { ContentInfo } from "server/asset";
+import { EncodeSpec } from "server/config";
 
 /** Cached results of the build operations. Each property is persisted as a
  *  standalone JSON file between build runs. Custom properties can be added. */

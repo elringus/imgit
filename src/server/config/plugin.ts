@@ -1,4 +1,4 @@
-import { CapturedAsset, ResolvedAsset, FetchedAsset, ProbedAsset, EncodedAsset, BuiltAsset } from "../asset";
+import { CapturedAsset, ResolvedAsset, FetchedAsset, ProbedAsset, EncodedAsset, BuiltAsset } from "server/asset";
 
 /** External imgit extension. */
 export type Plugin = {

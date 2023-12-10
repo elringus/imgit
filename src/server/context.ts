@@ -1,5 +1,5 @@
-import { CapturedAsset } from "./asset";
-import { ContentInfo } from "./asset";
+import { CapturedAsset } from "server/asset";
+import { ContentInfo } from "server/asset";
 
 /** Shared mutable state of the current build operation. */
 export const ctx = {

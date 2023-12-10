@@ -1,5 +1,5 @@
-import { BuiltAsset } from "../asset";
-import { ctx, cfg } from "../common";
+import { BuiltAsset } from "server/asset";
+import { ctx, cfg } from "server/common";
 
 /** Rewrites content of the document with specified assets; returns modified document content. */
 export async function rewriteAll(id: string, content: string, assets: BuiltAsset[]): Promise<string> {

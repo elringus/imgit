@@ -1,7 +1,7 @@
-import { Plugin, Cache, cache as $cache, cfg, std } from "../../server";
-import { BuiltAsset, ResolvedAsset, AssetSyntax } from "../../server/asset";
-import { resolveSpec } from "../../server/transform/2-resolve";
-import { build as buildDefault } from "../../server/transform/6-build";
+import { Plugin, Cache, cache as $cache, cfg, std } from "server";
+import { BuiltAsset, ResolvedAsset, AssetSyntax } from "server/asset";
+import { resolveSpec } from "server/transform/2-resolve";
+import { build as buildDefault } from "server/transform/6-build";
 
 /** YouTube plugin preferences. */
 export type Prefs = {
