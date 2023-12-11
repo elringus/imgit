@@ -12,9 +12,9 @@ export async function bind(api?: Platform) {
 }
 
 async function detect(): Promise<Platform> {
+    // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
+    // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
     if (typeof process === "object" && "versions" in process) {
-        // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
-        // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
         if (process.versions.bun) return (await import("./bun")).bun;
         if (process.versions.node) return (await import("./node")).node;
     }
