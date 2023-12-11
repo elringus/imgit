@@ -3,11 +3,10 @@ import * as fs from "https://deno.land/std/fs/mod.ts";
 // @ts-ignore
 import * as path from "https://deno.land/std/path/mod.ts";
 // @ts-ignore
-import { encodeBase64 } from "https://deno.land/std/encoding/base64.ts";
+import * as base64 from "https://deno.land/std/encoding/base64.ts";
 import { Platform } from "./platform";
 
 // https://github.com/denoland/deno/releases/download/v1.38.1/lib.deno.d.ts
-
 declare module Deno {
     const readFile: (path: string) => Promise<Uint8Array>;
     const readTextFile: (path: string) => Promise<string>;
@@ -20,6 +19,26 @@ declare module Deno {
         constructor(command: string);
         output(): Promise<{ success: boolean, stdout: BufferSource, stderr: BufferSource }>;
     }
+}
+
+// https://deno.land/std/fs
+declare module fs {
+    const exists: (path: string) => Promise<boolean>;
+}
+
+// https://deno.land/std/path
+declare module path {
+    const join: (...parts: string[]) => string;
+    const resolve: (...parts: string[]) => string;
+    const relative: (...parts: string[]) => string;
+    const basename: (path: string) => string;
+    const dirname: (path: string) => string;
+    const fromFileUrl: (path: string) => string;
+}
+
+// https://deno.land/std@0.208.0/encoding/base64.ts
+declare module base64 {
+    const encodeBase64: (data: Uint8Array) => string;
 }
 
 export const deno: Readonly<Platform> = {
@@ -51,5 +70,5 @@ export const deno: Readonly<Platform> = {
     },
     fetch: (url, abort) => fetch(url, { signal: abort }),
     wait: (seconds) => new Promise(resolve => setTimeout(resolve, seconds * 1000)),
-    base64: async data => encodeBase64(data)
+    base64: async data => base64.encodeBase64(data)
 };

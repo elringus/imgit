@@ -1,9 +1,10 @@
-import fs from "node:fs/promises";
+// @ts-ignore
+import afs from "node:fs/promises";
+// @ts-ignore
 import path from "node:path";
 import { Platform } from "./platform";
 
 // https://github.com/oven-sh/bun/tree/main/packages/bun-types
-
 declare module Bun {
     const file: (path: string) => {
         exists: () => Promise<boolean>;
@@ -20,10 +21,31 @@ declare module Bun {
     };
 }
 
+// Bun shim for https://nodejs.org/api/buffer.html
+declare module Buffer {
+    const from: (data: Uint8Array) => { toString: (fmt: string) => string };
+}
+
+// Bun shim for https://nodejs.org/api/fs.html#promises-api
+declare module afs {
+    const stat: (path: string) => Promise<{ size: number }>;
+    const unlink: (path: string) => Promise<void>;
+    const mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
+}
+
+// Bun shim for https://nodejs.org/api/path.html
+declare module path {
+    const join: (...parts: string[]) => string;
+    const resolve: (...parts: string[]) => string;
+    const relative: (...parts: string[]) => string;
+    const basename: (path: string) => string;
+    const dirname: (path: string) => string;
+}
+
 export const bun: Readonly<Platform> = {
     fs: {
         exists: path => Bun.file(path).exists(),
-        size: path => fs.stat(path).then(s => s.size),
+        size: path => afs.stat(path).then(s => s.size),
         read: async (path, encoding) => {
             const file = Bun.file(path);
             if (encoding === "utf8") return <never>await file.text();
@@ -33,8 +55,8 @@ export const bun: Readonly<Platform> = {
             if (typeof content === "string") return Bun.write(path, content).then();
             return Bun.write(path, content).then();
         },
-        remove: fs.unlink,
-        mkdir: (path: string) => fs.mkdir(path, { recursive: true }).then()
+        remove: afs.unlink,
+        mkdir: (path: string) => afs.mkdir(path, { recursive: true }).then()
     },
     path: {
         join: (...p) => path.join(...p).replaceAll("\\", "/"),

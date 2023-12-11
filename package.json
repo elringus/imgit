@@ -21,9 +21,5 @@
         "types": "tsc --outDir dist --declaration --emitDeclarationOnly",
         "build": "rimraf dist && npm run bundle && npm run types",
         "publish-npm": "npm publish --access public"
-    },
-    "devDependencies": {
-        "typescript": "^5.3.3",
-        "@types/node": "^20.10.4"
     }
 }

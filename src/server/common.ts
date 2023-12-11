@@ -20,11 +20,21 @@ export function getExtension(path: string): string {
 
 /** When stdout is TTY clears current line and writes the message; logs to console otherwise. */
 export function logTTY(msg: string): void {
-    if (!process?.stdout?.isTTY) {
+    if (typeof process !== "object" || !process.stdout?.isTTY) {
         console.info(msg);
         return;
     }
     process.stdout.clearLine(0);
     process.stdout.cursorTo(0);
     process.stdout.write(msg);
+}
+
+// TODO: Move to platform.
+declare module process {
+    const stdout: {
+        isTTY?: boolean;
+        clearLine: (idx: number) => void;
+        cursorTo: (idx: number) => void;
+        write: (msg: string) => void;
+    } | undefined;
 }

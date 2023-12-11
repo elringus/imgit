@@ -1,5 +1,4 @@
 import { Platform } from "./platform";
-
 export { Platform } from "./platform";
 
 /** Platform-specific APIs. */
@@ -13,9 +12,18 @@ export async function bind(api?: Platform) {
 }
 
 async function detect(): Promise<Platform> {
-    // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
-    // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
-    if (process.versions.bun) return (await import("./bun")).bun;
-    if (process.versions.node) return (await import("./node")).node;
+    if (typeof process === "object" && "versions" in process) {
+        // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
+        // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
+        if (process.versions.bun) return (await import("./bun")).bun;
+        if (process.versions.node) return (await import("./node")).node;
+    }
     throw Error("Failed to detect JavaScript runtime; specify 'platform' via plugin parameter.");
+}
+
+declare module process {
+    const versions: {
+        bun?: boolean;
+        node?: boolean;
+    };
 }
