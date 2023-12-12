@@ -1,6 +1,6 @@
 {
     "name": "imgit",
-    "version": "0.0.0-alpha.9",
+    "version": "0.0.0-alpha.10",
     "description": "Transform images, video and YouTube links to HTML optimized for web vitals.",
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
@@ -20,7 +20,13 @@
         "./svg": { "import": "./dist/plugin/svg.js", "types": "./dist/plugin/svg.d.ts" }
     },
     "scripts": {
+        "test": "bun test",
+        "cover": "bun test --coverage",
         "build": "sh scripts/build.sh",
-        "deploy": "sh scripts/publish.sh"
+        "deploy": "sh scripts/deploy.sh"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3",
+        "bun-types": "^1.0.17"
     }
 }

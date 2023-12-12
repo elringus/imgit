@@ -43,7 +43,7 @@ const fs = $fs as {
 const afs = $afs as {
     stat: (path: string) => Promise<{ size: number }>;
     readFile: (path: string, fmt?: string) => Promise<string | ArrayBufferLike>;
-    writeFile: (path: string, content: string | ArrayBufferLike, fmt?: string) => Promise<void>;
+    writeFile: (path: string, content: string | Uint8Array, fmt?: string) => Promise<void>;
     unlink: (path: string) => Promise<void>;
     mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
 };
