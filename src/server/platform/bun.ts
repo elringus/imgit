@@ -1,7 +1,7 @@
 // @ts-ignore
-import afs from "node:fs/promises";
+import $afs from "node:fs/promises";
 // @ts-ignore
-import path from "node:path";
+import $path from "node:path";
 import type { Platform } from "./platform.js";
 
 // https://github.com/oven-sh/bun/tree/main/packages/bun-types
@@ -26,22 +26,6 @@ declare module Buffer {
     const from: (data: Uint8Array) => { toString: (fmt: string) => string };
 }
 
-// Bun shim for https://nodejs.org/api/fs.html#promises-api
-declare module afs {
-    const stat: (path: string) => Promise<{ size: number }>;
-    const unlink: (path: string) => Promise<void>;
-    const mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
-}
-
-// Bun shim for https://nodejs.org/api/path.html
-declare module path {
-    const join: (...parts: string[]) => string;
-    const resolve: (...parts: string[]) => string;
-    const relative: (...parts: string[]) => string;
-    const basename: (path: string) => string;
-    const dirname: (path: string) => string;
-}
-
 // Bun shim for https://nodejs.org/api/process.html
 declare module process {
     const stdout: {
@@ -58,6 +42,22 @@ declare module console {
     const warn: (msg: string) => void;
     const error: (msg: string) => void;
 }
+
+// Bun shim for https://nodejs.org/api/fs.html#promises-api
+const afs = $afs as {
+    stat: (path: string) => Promise<{ size: number }>;
+    unlink: (path: string) => Promise<void>;
+    mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
+};
+
+// Bun shim for https://nodejs.org/api/path.html
+const path = $path as {
+    join: (...parts: string[]) => string;
+    resolve: (...parts: string[]) => string;
+    relative: (...parts: string[]) => string;
+    basename: (path: string) => string;
+    dirname: (path: string) => string;
+};
 
 export const bun: Readonly<Platform> = {
     fs: {

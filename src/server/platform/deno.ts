@@ -1,9 +1,9 @@
 // @ts-ignore
-import * as fs from "https://deno.land/std/fs/mod.ts";
+import * as $fs from "https://deno.land/std/fs/mod.ts";
 // @ts-ignore
-import * as path from "https://deno.land/std/path/mod.ts";
+import * as $path from "https://deno.land/std/path/mod.ts";
 // @ts-ignore
-import * as base64 from "https://deno.land/std/encoding/base64.ts";
+import * as $base64 from "https://deno.land/std/encoding/base64.ts";
 import { Platform } from "./platform.js";
 
 // https://github.com/denoland/deno/releases/download/v1.38.1/lib.deno.d.ts
@@ -21,32 +21,32 @@ declare module Deno {
     }
 }
 
-// https://deno.land/std/fs
-declare module fs {
-    const exists: (path: string) => Promise<boolean>;
-}
-
-// https://deno.land/std/path
-declare module path {
-    const join: (...parts: string[]) => string;
-    const resolve: (...parts: string[]) => string;
-    const relative: (...parts: string[]) => string;
-    const basename: (path: string) => string;
-    const dirname: (path: string) => string;
-    const fromFileUrl: (path: string) => string;
-}
-
-// https://deno.land/std/encoding/base64.ts
-declare module base64 {
-    const encodeBase64: (data: Uint8Array) => string;
-}
-
 // https://deno.land/api?s=Console
 declare module console {
     const info: (msg: string) => void;
     const warn: (msg: string) => void;
     const error: (msg: string) => void;
 }
+
+// https://deno.land/std/fs
+const fs = $fs as {
+    exists: (path: string) => Promise<boolean>;
+};
+
+// https://deno.land/std/path
+const path = $path as {
+    join: (...parts: string[]) => string;
+    resolve: (...parts: string[]) => string;
+    relative: (...parts: string[]) => string;
+    basename: (path: string) => string;
+    dirname: (path: string) => string;
+    fromFileUrl: (path: string) => string;
+};
+
+// https://deno.land/std/encoding/base64.ts
+const base64 = $base64 as {
+    encodeBase64: (data: Uint8Array) => string;
+};
 
 export const deno: Readonly<Platform> = {
     fs: {

@@ -1,9 +1,9 @@
 // @ts-ignore
-import fs from "node:fs";
+import $fs from "node:fs";
 // @ts-ignore
-import afs from "node:fs/promises";
+import $afs from "node:fs/promises";
 // @ts-ignore
-import path from "node:path";
+import $path from "node:path";
 // @ts-ignore
 import { promisify } from "node:util";
 // @ts-ignore
@@ -15,29 +15,6 @@ import { Platform } from "./platform.js";
 // https://nodejs.org/api/buffer.html
 declare module Buffer {
     const from: (data: Uint8Array) => { toString: (fmt: string) => string };
-}
-
-// https://nodejs.org/api/fs.html
-declare module fs {
-    const existsSync: (path: string) => boolean;
-}
-
-// https://nodejs.org/api/fs.html#promises-api
-declare module afs {
-    const stat: (path: string) => Promise<{ size: number }>;
-    const readFile: (path: string, fmt?: string) => Promise<string | ArrayBufferLike>;
-    const writeFile: (path: string, content: string | ArrayBufferLike, fmt?: string) => Promise<void>;
-    const unlink: (path: string) => Promise<void>;
-    const mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
-}
-
-// https://nodejs.org/api/path.html
-declare module path {
-    const join: (...parts: string[]) => string;
-    const resolve: (...parts: string[]) => string;
-    const relative: (...parts: string[]) => string;
-    const basename: (path: string) => string;
-    const dirname: (path: string) => string;
 }
 
 // https://nodejs.org/api/process.html
@@ -56,6 +33,29 @@ declare module console {
     const warn: (msg: string) => void;
     const error: (msg: string) => void;
 }
+
+// https://nodejs.org/api/fs.html
+const fs = $fs as {
+    existsSync: (path: string) => boolean;
+};
+
+// https://nodejs.org/api/fs.html#promises-api
+const afs = $afs as {
+    stat: (path: string) => Promise<{ size: number }>;
+    readFile: (path: string, fmt?: string) => Promise<string | ArrayBufferLike>;
+    writeFile: (path: string, content: string | ArrayBufferLike, fmt?: string) => Promise<void>;
+    unlink: (path: string) => Promise<void>;
+    mkdir: (path: string, options?: { recursive?: boolean }) => Promise<void>;
+};
+
+// https://nodejs.org/api/path.html
+const path = $path as {
+    join: (...parts: string[]) => string;
+    resolve: (...parts: string[]) => string;
+    relative: (...parts: string[]) => string;
+    basename: (path: string) => string;
+    dirname: (path: string) => string;
+};
 
 export const node: Readonly<Platform> = {
     fs: {

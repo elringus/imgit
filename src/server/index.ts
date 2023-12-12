@@ -16,7 +16,7 @@ export { transform } from "./transform/index.js";
 export async function boot(prefs?: Prefs, platform?: Platform): Promise<void> {
     await bind(platform);
     if (prefs) configure(prefs);
-    if (cfg.cache) Object.assign(cache, await cache.load());
+    if (cfg.cache) Object.assign(cache.cache, await cache.load());
 }
 
 /** Resets build context and caches results. */
