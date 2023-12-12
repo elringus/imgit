@@ -44,7 +44,7 @@ export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
 
 function inject(plugins?: Plugin[]): HtmlTagDescriptor[] {
     const dir = std.path.dirname(std.path.fileUrlToPath(import.meta.url));
-    const src = "/@fs/" + std.path.resolve(`${dir}/../client/index.ts`);
+    const src = "/@fs/" + std.path.resolve(`${dir}/../client/index.js`);
     const tags = [buildScriptTag(src)];
     if (plugins) for (const plugin of plugins) if (plugin.inject)
         tags.push(buildScriptTag("/@fs/" + plugin.inject()));
