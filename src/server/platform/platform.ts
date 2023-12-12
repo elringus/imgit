@@ -31,6 +31,18 @@ export type Platform = Record<string, unknown> & {
         /** Converts specified file URL (usually <code>import.meta.url</code>) to local file path. */
         fileUrlToPath: (url: string) => string;
     };
+    /** Logging and reporting APIs. */
+    log: {
+        /** Clears current line and writes to stdout when text terminal is available,
+         *  ignores otherwise; used for reporting build progress. */
+        tty: (msg: string) => void;
+        /** Logs informational message. */
+        info: (msg: string) => void;
+        /** Logs warning message. */
+        warn: (msg: string) => void;
+        /** Logs error message. */
+        err: (msg: string) => void;
+    };
     /** Executes specified command in system shell. */
     exec: (cmd: string) => Promise<{ out: string, err?: Error }>;
     /** Fetches a remote resource with specified url. */

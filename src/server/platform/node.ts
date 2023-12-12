@@ -40,6 +40,23 @@ declare module path {
     const dirname: (path: string) => string;
 }
 
+// https://nodejs.org/api/process.html
+declare module process {
+    const stdout: {
+        isTTY?: boolean;
+        clearLine: (idx: number) => void;
+        cursorTo: (idx: number) => void;
+        write: (msg: string) => void;
+    };
+}
+
+// https://nodejs.org/api/console.html
+declare module console {
+    const info: (msg: string) => void;
+    const warn: (msg: string) => void;
+    const error: (msg: string) => void;
+}
+
 export const node: Readonly<Platform> = {
     fs: {
         exists: async path => fs.existsSync(path),
@@ -62,6 +79,17 @@ export const node: Readonly<Platform> = {
         basename: path.basename,
         dirname: p => path.dirname(p).replaceAll("\\", "/"),
         fileUrlToPath: url => fileURLToPath(url).replaceAll("\\", "/")
+    },
+    log: {
+        tty: msg => {
+            if (!process.stdout.isTTY) return;
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+            process.stdout.write(msg);
+        },
+        info: console.info,
+        warn: console.warn,
+        err: console.error
     },
     exec: async cmd => {
         const execAsync = promisify(exec);

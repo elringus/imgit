@@ -1,16 +1,10 @@
 import { Options } from "./options";
-import { logTTY } from "server/common";
 
 /** Default build server configuration. */
 export const defaults: Readonly<Options> = {
     root: "./public",
     regex: [/!\[(?<alt>.*?)(?<spec>\?\S+?)?]\((?<url>.+?)\)/g],
     width: null,
-    log: {
-        info: logTTY,
-        warn: console.warn,
-        err: console.error
-    },
     cache: { root: "./node_modules/.cache/imgit" },
     fetch: {
         root: "./node_modules/.cache/imgit/fetched",

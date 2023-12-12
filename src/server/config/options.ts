@@ -19,8 +19,6 @@ export type Options = {
      *  will as well generate additional "dense" variant that will be shown on high-dpi displays.
      *  This option is ignored when asset has width explicitly assigned via spec syntax. */
     width: number | null;
-    /** Configure logging; assign <code>null</code> to disable logging. */
-    log: LogOptions | null;
     /** Configure build artifacts caching; assign <code>null</code> to disable caching. */
     cache: CacheOptions | null;
     /** Configure remote content fetching. */
@@ -29,19 +27,6 @@ export type Options = {
     encode: EncodeOptions;
     /** External imgit extensions; use to override or extend server behaviour. */
     plugins?: Plugin[];
-};
-
-/** Configures logging behaviour. */
-export type LogOptions = {
-    /** Logs informational message, such as which assets were downloaded and encoded;
-     *  assign <code>null</code> to disable logging informational messages. */
-    info: ((msg: string) => void) | null;
-    /** Logs warning message, such as a non-fatal issue with encoding process;
-     *  assign <code>null</code> to disable logging warning messages. */
-    warn: ((msg: string) => void) | null;
-    /** Logs error message associated with a failed procedure;
-     *  assign <code>null</code> to disable logging error messages. */
-    err: ((msg: string) => void) | null;
 };
 
 /** Configures server cache. */

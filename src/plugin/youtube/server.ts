@@ -1,4 +1,4 @@
-import { Plugin, Cache, cache as $cache, cfg, std } from "server";
+import { Plugin, Cache, cache as $cache, std } from "server";
 import { BuiltAsset, ResolvedAsset, AssetSyntax } from "server/asset";
 import { resolveSpec } from "server/transform/2-resolve";
 import { build as buildDefault } from "server/transform/6-build";
@@ -93,7 +93,7 @@ async function resolveThumbnailUrl(id: string): Promise<string> {
     let response: Response = <never>null;
     for (const variant of thumbs)
         if ((response = await std.fetch(buildThumbnailUrl(id, variant))).ok) break;
-    if (!response.ok) cfg.log?.warn?.(`Failed to resolve thumbnail for "${id}" YouTube video.`);
+    if (!response.ok) std.log.warn(`Failed to resolve thumbnail for "${id}" YouTube video.`);
     else (<YouTubeCache>cache).youtube[id] = response.url;
     return response.url;
 }

@@ -82,7 +82,7 @@ async function encodeContent(key: string, path: string, out: string,
     info: ContentInfo, spec: EncodeSpec, dirty?: boolean): Promise<void> {
     if (!dirty && await cacheValid(key, out, spec)) return;
     if (ctx.encodes.has(key)) return ctx.encodes.get(key)!;
-    cfg.log?.info?.(`Encoding ${key}`);
+    std.log.tty(`Encoding ${key}`);
     const promise = ffmpeg(path, out, info, spec);
     ctx.encodes.set(key, promise);
     await promise;

@@ -2,7 +2,7 @@
 import afs from "node:fs/promises";
 // @ts-ignore
 import path from "node:path";
-import { Platform } from "./platform";
+import type { Platform } from "./platform";
 
 // https://github.com/oven-sh/bun/tree/main/packages/bun-types
 declare module Bun {
@@ -16,8 +16,8 @@ declare module Bun {
     const spawn: (cmd: string[]) => {
         exited: Promise<void>;
         exitCode: number;
-        stdout: ReadableStream;
-        stderr: ReadableStream;
+        stdout: ArrayBuffer;
+        stderr: ArrayBuffer;
     };
 }
 
@@ -40,6 +40,23 @@ declare module path {
     const relative: (...parts: string[]) => string;
     const basename: (path: string) => string;
     const dirname: (path: string) => string;
+}
+
+// Bun shim for https://nodejs.org/api/process.html
+declare module process {
+    const stdout: {
+        isTTY?: boolean;
+        clearLine: (idx: number) => void;
+        cursorTo: (idx: number) => void;
+        write: (msg: string) => void;
+    };
+}
+
+// Bun shim for: https://nodejs.org/api/console.html
+declare module console {
+    const info: (msg: string) => void;
+    const warn: (msg: string) => void;
+    const error: (msg: string) => void;
 }
 
 export const bun: Readonly<Platform> = {
@@ -65,6 +82,17 @@ export const bun: Readonly<Platform> = {
         basename: path.basename,
         dirname: p => path.dirname(p).replaceAll("\\", "/"),
         fileUrlToPath: url => Bun.fileURLToPath(url).replaceAll("\\", "/")
+    },
+    log: {
+        tty: msg => {
+            if (!process.stdout.isTTY) return;
+            process.stdout.clearLine(0);
+            process.stdout.cursorTo(0);
+            process.stdout.write(msg);
+        },
+        info: console.info,
+        warn: console.warn,
+        err: console.error
     },
     exec: async cmd => {
         const proc = Bun.spawn(cmd.split(" "));

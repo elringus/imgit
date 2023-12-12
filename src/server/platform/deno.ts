@@ -36,9 +36,16 @@ declare module path {
     const fromFileUrl: (path: string) => string;
 }
 
-// https://deno.land/std@0.208.0/encoding/base64.ts
+// https://deno.land/std/encoding/base64.ts
 declare module base64 {
     const encodeBase64: (data: Uint8Array) => string;
+}
+
+// https://deno.land/api?s=Console
+declare module console {
+    const info: (msg: string) => void;
+    const warn: (msg: string) => void;
+    const error: (msg: string) => void;
 }
 
 export const deno: Readonly<Platform> = {
@@ -60,6 +67,12 @@ export const deno: Readonly<Platform> = {
         basename: path.basename,
         dirname: p => path.dirname(p).replaceAll("\\", "/"),
         fileUrlToPath: url => path.fromFileUrl(url).replaceAll("\\", "/")
+    },
+    log: {
+        tty: _ => {}, // TODO: Implement.
+        info: console.info,
+        warn: console.warn,
+        err: console.error
     },
     exec: async cmd => {
         const proc = new Deno.Command(cmd);

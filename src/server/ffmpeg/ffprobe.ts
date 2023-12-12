@@ -1,12 +1,12 @@
 import { ContentInfo } from "server/asset";
-import { std, cfg, getExtension } from "server/common";
+import { std, getExtension } from "server/common";
 
 // https://ffmpeg.org/ffprobe.html
 const args = "-loglevel error -select_streams v:0 -show_entries stream=width,height,pix_fmt -of csv=p=0";
 
 export async function ffprobe(path: string): Promise<ContentInfo> {
     const { out, err } = await std.exec(`ffprobe ${args} "${path}"`);
-    if (err) cfg.log?.err?.(`ffprobe error: ${err}`);
+    if (err) std.log.err(`ffprobe error: ${err}`);
     const parts = out.split(",");
     const alpha = alphaFormats.has(parts[2].trim());
     const type = resolveTypeNaive(path); // TODO: Sniff via file --mime-type (choco file on win)
@@ -30,7 +30,7 @@ function resolveTypeNaive(path: string): string {
     if (ext === "mov") return "video/quicktime";
     if (ext === "avi") return "video/x-msvideo";
     if (ext === "mkv") return "video/x-matroska";
-    cfg.log?.warn?.(`Failed to resolve MIME type of '${path}'.`);
+    std.log.warn(`Failed to resolve MIME type of '${path}'.`);
     return "unknown";
 }
 

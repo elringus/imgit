@@ -1,12 +1,12 @@
 import { ContentInfo } from "server/asset";
 import { EncodeSpec } from "server/config";
-import { std, cfg, ensureDir } from "server/common";
+import { std, ensureDir } from "server/common";
 
 export async function ffmpeg(path: string, out: string, info: ContentInfo, spec: EncodeSpec): Promise<void> {
     await ensureDir(std.path.dirname(out));
     const args = buildArgs(path, out, info, spec);
     const { err } = await std.exec(`ffmpeg ${args}`);
-    if (err) cfg.log?.err?.(`ffmpeg error: ${err}`);
+    if (err) std.log.err(`ffmpeg error: ${err}`);
 }
 
 function buildArgs(path: string, out: string, info: ContentInfo, spec: EncodeSpec): string {

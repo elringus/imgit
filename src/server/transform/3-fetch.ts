@@ -34,14 +34,14 @@ async function fetchWithPlugins(asset: FetchedAsset): Promise<boolean> {
 }
 
 async function fetchWithRetries(src: string, out: string): Promise<void> {
-    cfg.log?.info?.(`Downloading ${src} to ${cfg.fetch.root}`);
+    std.log.tty(`Downloading ${src} to ${cfg.fetch.root}`);
     try { return fetchWithTimeout(src, out); } catch (error) {
         ctx.retries.set(src, (ctx.retries.get(src) ?? 0) + 1);
         if (ctx.retries.get(src)! > cfg.fetch.retries) {
             await std.fs.remove(out);
             throw error;
         }
-        cfg.log?.warn?.(`Failed to download ${src}, retrying. (error: ${error})`);
+        std.log.warn(`Failed to download ${src}, retrying. (error: ${error})`);
         await std.wait(Math.floor(Math.random() * cfg.fetch.delay));
         return fetchWithRetries(src, out);
     }
@@ -64,7 +64,7 @@ async function fetchAndWriteTo(src: string, out: string, signal: AbortSignal): P
 async function handleRetryResponse(src: string, out: string, response: Response): Promise<void> {
     const delay = Number(response.headers.get("retry-after"));
     if (isNaN(delay)) throw Error(`${src}: 429 without retry-after header (${delay}).`);
-    cfg.log?.warn?.(`Too many fetch requests; the host asked to wait ${delay} seconds.`);
+    std.log.warn(`Too many fetch requests; the host asked to wait ${delay} seconds.`);
     await std.wait(delay);
     return fetchWithTimeout(src, out);
 }
