@@ -1,4 +1,4 @@
-import { Platform, Prefs, Plugin, boot, exit, transform, std } from "server";
+import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server";
 
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {

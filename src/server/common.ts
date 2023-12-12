@@ -1,9 +1,9 @@
-import { std } from "server/platform";
+import { std } from "./platform";
 
-export { std } from "server/platform";
-export { cfg } from "server/config";
-export { ctx } from "server/context";
-export { cache } from "server/cache";
+export { std } from "./platform";
+export { cfg } from "./config";
+export { ctx } from "./context";
+export { cache } from "./cache";
 
 /** Creates specified directory in case it doesn't exist (recursive). */
 export async function ensureDir(dir: string): Promise<void> {

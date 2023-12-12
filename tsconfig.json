@@ -3,8 +3,8 @@
         "target": "esnext",
         "module": "esnext",
         "moduleResolution": "bundler",
-        "baseUrl": "src",
-        "strict": true
+        "strict": true,
+        "outDir": "dist"
     },
     "include": ["src"]
 }

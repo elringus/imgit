@@ -1,5 +1,5 @@
-import { ResolvedAsset, FetchedAsset } from "server/asset";
-import { std, cfg, ctx, cache, ensureDir } from "server/common";
+import { ResolvedAsset, FetchedAsset } from "../asset";
+import { std, cfg, ctx, cache, ensureDir } from "../common";
 
 /** Downloads source content files for the resolved assets. */
 export async function fetchAll(assets: ResolvedAsset[]): Promise<FetchedAsset[]> {

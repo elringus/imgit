@@ -11,15 +11,5 @@
     "bugs": { "url": "https://github.com/elringus/imgit/issues" },
     "engines": { "node": ">=18.0.0", "deno": ">=1.38.0", "bun": ">=1.0.0" },
     "files": ["dist"],
-    "type": "module",
-    "exports": {
-        "./client": { "import": "./dist/client/index.js", "types": "./dist/client/index.d.ts" },
-        "./server": { "import": "./dist/server/index.js", "types": "./dist/server/index.d.ts" }
-    },
-    "scripts": {
-        "bundle": "esbuild src/index.ts --bundle --platform=node --outfile=dist/imgit.mjs --format=esm",
-        "types": "tsc --outDir dist --declaration --emitDeclarationOnly",
-        "build": "rimraf dist && npm run bundle && npm run types",
-        "publish-npm": "npm publish --access public"
-    }
+    "type": "module"
 }

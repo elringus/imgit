@@ -1,5 +1,5 @@
-import { CapturedAsset, AssetSyntax } from "server/asset";
-import { cfg, ctx } from "server/common";
+import { CapturedAsset, AssetSyntax } from "../asset";
+import { cfg, ctx } from "../common";
 
 /** Finds assets to transform in the document with specified content. */
 export async function captureAll(id: string, content: string): Promise<CapturedAsset[]> {

@@ -1,4 +1,4 @@
-import { addHandler } from "client/mutation";
+import { addHandler } from "../../client/mutation";
 import "./styles.css";
 
 addHandler([handleAdded, handleRemoved]);
