@@ -1,8 +1,8 @@
-import { Options } from "./options";
-import { defaults } from "./defaults";
+import { Options } from "./options.js";
+import { defaults } from "./defaults.js";
 
-export * from "./options";
-export { defaults } from "./defaults";
+export * from "./options.js";
+export { defaults } from "./defaults.js";
 
 /** User-defined build preferences. */
 export type Prefs = { [P in keyof Options]?: Partial<Options[P]>; };

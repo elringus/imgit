@@ -4,7 +4,7 @@ import * as fs from "https://deno.land/std/fs/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 // @ts-ignore
 import * as base64 from "https://deno.land/std/encoding/base64.ts";
-import { Platform } from "./platform";
+import { Platform } from "./platform.js";
 
 // https://github.com/denoland/deno/releases/download/v1.38.1/lib.deno.d.ts
 declare module Deno {

@@ -1,4 +1,4 @@
-import { Options } from "./options";
+import { Options } from "./options.js";
 
 /** Default build server configuration. */
 export const defaults: Readonly<Options> = {

@@ -1,4 +1,4 @@
-import { observeVideo, unobserveVideo } from "./intersection";
+import { observeVideo, unobserveVideo } from "./intersection.js";
 
 const IMAGE_LOADED_EVENT = "load";
 const VIDEO_LOADED_EVENT = "loadeddata";

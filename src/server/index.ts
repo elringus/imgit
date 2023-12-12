@@ -1,14 +1,14 @@
-import { Prefs, configure, cfg } from "./config";
-import { Platform, bind } from "./platform";
-import * as cache from "./cache";
-import { clear as clearContext } from "./context";
+import { Prefs, configure, cfg } from "./config/index.js";
+import { Platform, bind } from "./platform/index.js";
+import * as cache from "./cache.js";
+import { clear as clearContext } from "./context.js";
 
-export { Platform, std } from "./platform";
-export { Prefs, cfg, defaults } from "./config";
-export { Plugin } from "./config/plugin";
-export { ctx } from "./context";
-export { Cache, cache } from "./cache";
-export { transform } from "./transform";
+export { Platform, std } from "./platform/index.js";
+export { Prefs, cfg, defaults } from "./config/index.js";
+export { Plugin } from "./config/plugin.js";
+export { ctx } from "./context.js";
+export { Cache, cache } from "./cache.js";
+export { transform } from "./transform/index.js";
 
 /** Initializes build context with specified options.
  *  @param prefs Build preferences; will use pre-defined defaults when not assigned.

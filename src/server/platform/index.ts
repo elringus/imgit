@@ -1,5 +1,5 @@
-import { Platform } from "./platform";
-export { Platform } from "./platform";
+import { Platform } from "./platform.js";
+export { Platform } from "./platform.js";
 
 /** Platform-specific APIs. */
 export const std: Readonly<Platform> = <never>{};
@@ -15,8 +15,8 @@ async function detect(): Promise<Platform> {
     // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
     // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
     if (typeof process === "object" && "versions" in process) {
-        if (process.versions.bun) return (await import("./bun")).bun;
-        if (process.versions.node) return (await import("./node")).node;
+        if (process.versions.bun) return (await import("./bun.js")).bun;
+        if (process.versions.node) return (await import("./node.js")).node;
     }
     throw Error("Failed to detect JavaScript runtime; specify 'platform' via plugin parameter.");
 }

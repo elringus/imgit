@@ -1,10 +1,10 @@
-import { captureAll } from "./1-capture";
-import { resolveAll } from "./2-resolve";
-import { fetchAll } from "./3-fetch";
-import { probeAll } from "./4-probe";
-import { encodeAll } from "./5-encode";
-import { buildAll } from "./6-build";
-import { rewriteAll } from "./7-rewrite";
+import { captureAll } from "./1-capture.js";
+import { resolveAll } from "./2-resolve.js";
+import { fetchAll } from "./3-fetch.js";
+import { probeAll } from "./4-probe.js";
+import { encodeAll } from "./5-encode.js";
+import { buildAll } from "./6-build.js";
+import { rewriteAll } from "./7-rewrite.js";
 
 /** Transforms source document (eg, <code>.md</code>, <code>.jsx</code> or <code>.html</code>)
  *  with specified content replacing configured asset syntax with optimized HTML.

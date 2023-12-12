@@ -1,7 +1,7 @@
-import { ProbedAsset, EncodedAsset, EncodedContent, ProbedContent, ContentInfo } from "../asset";
-import { EncodeSpec } from "../config";
-import { std, cfg, ctx, cache } from "../common";
-import { ffmpeg } from "../ffmpeg";
+import { ProbedAsset, EncodedAsset, EncodedContent, ProbedContent, ContentInfo } from "../asset.js";
+import { EncodeSpec } from "../config/index.js";
+import { std, cfg, ctx, cache } from "../common.js";
+import { ffmpeg } from "../ffmpeg/index.js";
 
 /** Generates optimized versions of the source content files. */
 export async function encodeAll(assets: ProbedAsset[]): Promise<EncodedAsset[]> {

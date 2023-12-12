@@ -1,5 +1,5 @@
-import { EncodedAsset, BuiltAsset, EncodedContent, ContentInfo } from "../asset";
-import { std, cfg, cache } from "../common";
+import { EncodedAsset, BuiltAsset, EncodedContent, ContentInfo } from "../asset.js";
+import { std, cfg, cache } from "../common.js";
 
 /** Builds HTML for the optimized assets to overwrite source syntax. */
 export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {

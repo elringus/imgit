@@ -2,7 +2,7 @@
 import afs from "node:fs/promises";
 // @ts-ignore
 import path from "node:path";
-import type { Platform } from "./platform";
+import type { Platform } from "./platform.js";
 
 // https://github.com/oven-sh/bun/tree/main/packages/bun-types
 declare module Bun {

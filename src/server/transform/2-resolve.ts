@@ -1,5 +1,5 @@
-import { CapturedAsset, ResolvedAsset, AssetSpec } from "../asset";
-import { cfg } from "../common";
+import { CapturedAsset, ResolvedAsset, AssetSpec } from "../asset.js";
+import { cfg } from "../common.js";
 
 /** Resolves content locations and specs of the captured syntax. */
 export async function resolveAll(assets: CapturedAsset[]): Promise<ResolvedAsset[]> {

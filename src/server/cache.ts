@@ -1,6 +1,6 @@
-import { std, cfg, ensureDir } from "./common";
-import { ContentInfo } from "./asset";
-import { EncodeSpec } from "./config";
+import { std, cfg, ensureDir } from "./common.js";
+import { ContentInfo } from "./asset.js";
+import { EncodeSpec } from "./config/index.js";
 
 /** Cached results of the build operations. Each property is persisted as a
  *  standalone JSON file between build runs. Custom properties can be added. */

@@ -1,4 +1,4 @@
-import { observeMutations } from "./mutation";
+import { observeMutations } from "./mutation.js";
 import "./styles.css";
 
 observeMutations();

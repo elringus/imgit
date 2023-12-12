@@ -1,6 +1,6 @@
-import { ContentInfo } from "../asset";
-import { EncodeSpec } from "../config";
-import { std, ensureDir } from "../common";
+import { ContentInfo } from "../asset.js";
+import { EncodeSpec } from "../config/index.js";
+import { std, ensureDir } from "../common.js";
 
 export async function ffmpeg(path: string, out: string, info: ContentInfo, spec: EncodeSpec): Promise<void> {
     await ensureDir(std.path.dirname(out));

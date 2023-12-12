@@ -1,6 +1,6 @@
-import { FetchedAsset, ProbedAsset } from "../asset";
-import { cfg, ctx, cache } from "../common";
-import { ffprobe } from "../ffmpeg";
+import { FetchedAsset, ProbedAsset } from "../asset.js";
+import { cfg, ctx, cache } from "../common.js";
+import { ffprobe } from "../ffmpeg/index.js";
 
 /** Probes downloaded asset files to identify their content properties. */
 export async function probeAll(assets: FetchedAsset[]): Promise<ProbedAsset[]> {

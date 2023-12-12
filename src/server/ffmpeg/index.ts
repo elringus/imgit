@@ -1,2 +1,2 @@
-export { ffmpeg } from "./ffmpeg";
-export { ffprobe } from "./ffprobe";
+export { ffmpeg } from "./ffmpeg.js";
+export { ffprobe } from "./ffprobe.js";

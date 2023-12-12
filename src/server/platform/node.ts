@@ -10,7 +10,7 @@ import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 // @ts-ignore
 import { exec } from "node:child_process";
-import { Platform } from "./platform";
+import { Platform } from "./platform.js";
 
 // https://nodejs.org/api/buffer.html
 declare module Buffer {
