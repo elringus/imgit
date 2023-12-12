@@ -20,13 +20,14 @@
         "./svg": { "import": "./dist/plugin/svg.js", "types": "./dist/plugin/svg.d.ts" }
     },
     "scripts": {
-        "test": "bun test",
-        "cover": "bun test --coverage",
+        "test": "vitest",
+        "cover": "vitest run --coverage",
         "build": "sh scripts/build.sh",
         "deploy": "sh scripts/deploy.sh"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
-        "bun-types": "^1.0.17"
+        "vitest": "^1.0.4",
+        "@vitest/coverage-v8": "^1.0.4"
     }
 }

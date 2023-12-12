@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "types": ["bun-types"],
         "target": "ESNext",
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
