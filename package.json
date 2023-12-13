@@ -20,7 +20,7 @@
         "./svg": { "import": "./dist/plugin/svg.js", "types": "./dist/plugin/svg.d.ts" }
     },
     "scripts": {
-        "test": "vitest",
+        "test": "vitest run",
         "cover": "vitest run --coverage",
         "build": "sh scripts/build.sh",
         "deploy": "sh scripts/deploy.sh"

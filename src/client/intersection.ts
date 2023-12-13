@@ -27,7 +27,6 @@ function handleIntersection(entry: IntersectionObserverEntry, observer: Intersec
     observer.unobserve(entry.target);
 }
 
-
 function isSource(element: Element): element is HTMLSourceElement {
     return "src" in element;
 }
