@@ -1,3 +1,5 @@
+/* v8 ignore start */
+
 // @ts-ignore
 import $afs from "node:fs/promises";
 // @ts-ignore

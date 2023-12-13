@@ -1,3 +1,5 @@
+/* v8 ignore start */
+
 // @ts-ignore
 import * as $fs from "https://deno.land/std/fs/mod.ts";
 // @ts-ignore
