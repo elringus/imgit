@@ -35,20 +35,23 @@ function handleMutation(mutation: MutationRecord) {
 }
 
 function handleAdded(added: Element) {
-    for (const element of added.querySelectorAll("[data-imgit-loadable]")) {
-        if (isImage(element)) {
-            // Height check is a hack for firefox, which returns false-positive on complete.
-            if (element.complete && element.naturalHeight > 0) signalLoaded(element);
-            else element.addEventListener(IMAGE_LOADED_EVENT, handleLoaded);
-        } else if (isVideo(element)) {
-            observeVideo(element);
-            if (element.readyState >= 2) signalLoaded(element);
-            else element.addEventListener(VIDEO_LOADED_EVENT, handleLoaded);
-        }
-    }
-
+    for (const element of added.querySelectorAll("[data-imgit-loadable]"))
+        if (isImage(element)) handleImageAdded(element);
+        else if (isVideo(element)) handleVideoAdded(element);
     for (const handler of handlers)
         handler[0](added);
+}
+
+function handleImageAdded(image: HTMLImageElement) {
+    // Height check is a hack for firefox, which returns false-positive on complete.
+    if (image.complete && image.naturalHeight > 0) signalLoaded(image);
+    else image.addEventListener(IMAGE_LOADED_EVENT, handleLoaded);
+}
+
+function handleVideoAdded(video: HTMLVideoElement) {
+    observeVideo(video);
+    if (video.readyState >= 2) signalLoaded(video);
+    else video.addEventListener(VIDEO_LOADED_EVENT, handleLoaded);
 }
 
 function handleRemoved(removed: Element) {
@@ -57,9 +60,19 @@ function handleRemoved(removed: Element) {
         element.removeEventListener(IMAGE_LOADED_EVENT, handleLoaded);
         element.removeEventListener(VIDEO_LOADED_EVENT, handleLoaded);
     }
-
     for (const handler of handlers)
         handler[1](removed);
+}
+
+function handleLoaded(event: Event) {
+    if (event.currentTarget && isElement(event.currentTarget))
+        signalLoaded(event.currentTarget);
+}
+
+function signalLoaded(element: Element) {
+    const container = element.closest("[data-imgit-container]");
+    if (!container) return;
+    (<HTMLElement>container).dataset.imgitLoaded = "";
 }
 
 function isElement(obj: Node | EventTarget): obj is Element {
@@ -72,15 +85,4 @@ function isVideo(element: Element): element is HTMLVideoElement {
 
 function isImage(element: Element): element is HTMLImageElement {
     return "complete" in element;
-}
-
-function handleLoaded(event: Event) {
-    if (event.currentTarget && isElement(event.currentTarget))
-        signalLoaded(event.currentTarget);
-}
-
-function signalLoaded(element: Element) {
-    const container = element.closest("[data-imgit-container]");
-    if (!container) return;
-    (<HTMLElement>container).dataset.imgitLoaded = "";
 }
