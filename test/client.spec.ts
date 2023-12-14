@@ -1,4 +1,6 @@
-﻿import { describe, it, expect, vi, beforeEach } from "vitest";
+﻿// @vitest-environment happy-dom
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 declare module global {
     let window: unknown;
@@ -44,4 +46,11 @@ describe("intersections", async () => {
         await import("../src/client/intersection.js");
         expect(IntersectionObserver).toHaveBeenCalled();
     });
+
+    // it("assigns src from data-src attribute for intersected video sources", async () => {
+    //     const module = await import("../src/client/intersection.js");
+    //     const source = { src: undefined, dataset: { imgitSrc: "foo" } };
+    //     module.observeVideo(<never>{ load: vi.fn(), children: [source] });
+    //     expect(source.src).toStrictEqual("foo");
+    // });
 });
