@@ -101,10 +101,9 @@ describe("intersections", async () => {
     });
 
     it("assigns src from data-imgit-src attribute and loads video when intersected", async () => {
-        const module = await import("../src/client/intersection.js");
+        await import("../src/client/intersection.js");
         const source: HTMLSourceElement = { src: "", dataset: { imgitSrc: "x" }, type: "", children: [] };
         const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [source] };
-        module.observeVideo(<never>video);
         ctx.intersection.intersect!([{ target: video, isIntersecting: true }]);
         expect(source.src).toStrictEqual("x");
         expect(video.load).toHaveBeenCalled();
@@ -112,10 +111,9 @@ describe("intersections", async () => {
 
     it("doesn't assign av1 source, but still loads the video on edge (workaround for edge bug)", async () => {
         global.window.navigator.userAgent = "Edg/";
-        const module = await import("../src/client/intersection.js");
+        await import("../src/client/intersection.js");
         const source: HTMLSourceElement = { src: "", dataset: { imgitSrc: "x" }, type: "codecs=av01", children: [] };
         const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [source] };
-        module.observeVideo(<never>video);
         ctx.intersection.intersect!([{ target: video, isIntersecting: true }]);
         expect(source.src).toStrictEqual("");
         expect(video.load).toHaveBeenCalled();
