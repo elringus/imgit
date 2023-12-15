@@ -1,24 +1,65 @@
-﻿// @vitest-environment happy-dom
+﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Window } from "happy-dom";
-
+// Mock browser API subset used by the tested client code.
 declare module global {
-    let window: Window & { IntersectionObserver: never };
-    let document: Document;
-    let MutationObserver: MutationObserver;
-    let IntersectionObserver: IntersectionObserver;
+    let window: {
+        navigator: { userAgent: string },
+        IntersectionObserver?: {}
+    };
+    let document: {} | undefined;
+    let IntersectionObserver: typeof IntersectionObserverMock;
 }
 
+// https://developer.mozilla.org/docs/Web/API/HTMLElement
+declare type HTMLElement = {
+    children: HTMLElement[];
+    dataset: DOMStringMap;
+}
+
+// https://developer.mozilla.org/docs/Web/API/HTMLSourceElement
+declare type HTMLSourceElement = HTMLElement & {
+    src: string;
+    type: string
+}
+
+// https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
+declare type HTMLVideoElement = HTMLElement & {
+    load: () => void;
+}
+
+// https://developer.mozilla.org/docs/Web/API/IntersectionObserver
+class IntersectionObserverMock {
+    constructor(handle: (entries: IntersectionObserverEntry[], observer: IntersectionObserverMock) => void) {
+        ctx.intersection.observer = this;
+        ctx.intersection.intersect = entries => handle(entries, this);
+    }
+    observe = vi.fn();
+    unobserve = vi.fn();
+}
+
+// https://developer.mozilla.org/docs/Web/API/IntersectionObserverEntry
+declare type IntersectionObserverEntry = {
+    readonly isIntersecting: boolean;
+    readonly target: HTMLElement;
+}
+
+const ctx: {
+    intersection: {
+        observer?: IntersectionObserverMock,
+        intersect?: (entries: IntersectionObserverEntry[]) => void
+    },
+} = { intersection: {} };
+
 beforeEach(() => {
-    global.window = <never>new Window();
-    global.document = window.document;
+    global.window = {
+        navigator: { userAgent: "" },
+        IntersectionObserver: IntersectionObserverMock
+    };
+    global.document = {};
+    global.IntersectionObserver = vi.fn(handle => new IntersectionObserverMock(handle));
 });
 
-afterEach(() => {
-    global.window.happyDOM.cancelAsync();
-    vi.resetModules();
-});
+afterEach(() => void vi.resetModules());
 
 describe("index", () => {
     it("observes mutations on import", async () => {
@@ -29,18 +70,8 @@ describe("index", () => {
 });
 
 describe("intersections", async () => {
-    let observer: IntersectionObserver;
-    let intersect: (entries: IntersectionObserverEntry[]) => void;
-
-    beforeEach(() => {
-        global.IntersectionObserver = global.window.IntersectionObserver = <never>vi.fn(handle => {
-            intersect = entries => handle(entries, observer);
-            return observer = <never>{ observe: vi.fn(), unobserve: vi.fn() };
-        });
-    });
-
     it("doesn't throw when attempting to observe while document is not defined", async () => {
-        global.document = <never>undefined;
+        delete global.document;
         const module = await import("../src/client/intersection.js");
         expect(() => module.observeVideo(<never>{})).not.toThrow();
         expect(() => module.unobserveVideo(<never>{})).not.toThrow();
@@ -62,36 +93,31 @@ describe("intersections", async () => {
 
     it("invokes observe and unobserve when requested", async () => {
         const module = await import("../src/client/intersection.js");
-        const video = document.createElement("video");
-        module.observeVideo(video);
-        module.unobserveVideo(video);
-        expect(observer.observe).toHaveBeenCalledWith(video);
-        expect(observer.unobserve).toHaveBeenCalledWith(video);
+        const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [] };
+        module.observeVideo(<never>video);
+        module.unobserveVideo(<never>video);
+        expect(ctx.intersection.observer!.observe).toHaveBeenCalledWith(video);
+        expect(ctx.intersection.observer!.unobserve).toHaveBeenCalledWith(video);
     });
 
-    it("assigns src from data-src attribute for intersected video sources", async () => {
+    it("assigns src from data-src attribute and loads video when intersected", async () => {
         const module = await import("../src/client/intersection.js");
-        const video = document.createElement("video");
-        const source = document.createElement("source");
-        source.src = "";
-        source.dataset.imgitSrc = "foo";
-        video.appendChild(source);
-        module.observeVideo(video);
-        intersect([<never>{ target: video, isIntersecting: true }]);
-        expect(source.src).toStrictEqual("foo");
+        const source: HTMLSourceElement = { src: "", dataset: { imgitSrc: "x" }, type: "", children: [] };
+        const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [source] };
+        module.observeVideo(<never>video);
+        ctx.intersection.intersect!([{ target: video, isIntersecting: true }]);
+        expect(source.src).toStrictEqual("x");
+        expect(video.load).toHaveBeenCalled();
     });
 
-    it("doesn't assign av1 source on edge (workaround for edge bug)", async () => {
-        global.window.happyDOM.settings.navigator.userAgent = "Edg/";
+    it("doesn't assign av1 source, but still loads the video on edge (workaround for edge bug)", async () => {
+        global.window.navigator.userAgent = "Edg/";
         const module = await import("../src/client/intersection.js");
-        const video = document.createElement("video");
-        const source = document.createElement("source");
-        source.src = "";
-        source.dataset.imgitSrc = "foo";
-        source.type = `video/mp4; codecs=av01`;
-        video.appendChild(source);
-        module.observeVideo(video);
-        intersect([<never>{ target: video, isIntersecting: true }]);
+        const source: HTMLSourceElement = { src: "", dataset: { imgitSrc: "x" }, type: "codecs=av01", children: [] };
+        const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [source] };
+        module.observeVideo(<never>video);
+        ctx.intersection.intersect!([{ target: video, isIntersecting: true }]);
         expect(source.src).toStrictEqual("");
+        expect(video.load).toHaveBeenCalled();
     });
 });
