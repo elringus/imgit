@@ -22,7 +22,7 @@ class Element extends Node {
     constructor(public tagName: string) { super(); }
     addEventListener = vi.fn();
     removeEventListener = vi.fn();
-    querySelectorAll = vi.fn();
+    querySelectorAll = vi.fn((query: string) => []);
     closest = vi.fn();
 }
 
