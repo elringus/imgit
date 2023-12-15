@@ -32,7 +32,7 @@ function isSource(element: Element): element is HTMLSourceElement {
 }
 
 function av1OnEdge(source: HTMLSourceElement) {
-    // Edge has bug where it thinks it can play av01, while actually can't.
+    // Edge has a bug where it thinks it can play av01, while actually can't.
     // https://stackoverflow.com/questions/64212993 TODO: Find if there is a tracking issue for this.
     return edge && source.type.includes("codecs=av01");
 }

@@ -1,15 +1,24 @@
 ﻿// @vitest-environment happy-dom
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { Window } from "happy-dom";
 
 declare module global {
-    let window: unknown;
-    let document: unknown;
-    let MutationObserver: unknown;
-    let IntersectionObserver: unknown;
+    let window: Window & { IntersectionObserver: never };
+    let document: Document;
+    let MutationObserver: MutationObserver;
+    let IntersectionObserver: IntersectionObserver;
 }
 
-beforeEach(() => void vi.resetModules());
+beforeEach(() => {
+    global.window = <never>new Window();
+    global.document = window.document;
+});
+
+afterEach(() => {
+    global.window.happyDOM.cancelAsync();
+    vi.resetModules();
+});
 
 describe("index", () => {
     it("observes mutations on import", async () => {
@@ -20,14 +29,18 @@ describe("index", () => {
 });
 
 describe("intersections", async () => {
+    let observer: IntersectionObserver;
+    let intersect: (entries: IntersectionObserverEntry[]) => void;
+
     beforeEach(() => {
-        global.window = { navigator: { userAgent: "" }, IntersectionObserver: {} };
-        global.document = {};
-        global.IntersectionObserver = vi.fn();
+        global.IntersectionObserver = global.window.IntersectionObserver = <never>vi.fn(handle => {
+            intersect = entries => handle(entries, observer);
+            return observer = <never>{ observe: vi.fn(), unobserve: vi.fn() };
+        });
     });
 
     it("doesn't throw when attempting to observe while document is not defined", async () => {
-        global.document = undefined;
+        global.document = <never>undefined;
         const module = await import("../src/client/intersection.js");
         expect(() => module.observeVideo(<never>{})).not.toThrow();
         expect(() => module.unobserveVideo(<never>{})).not.toThrow();
@@ -35,7 +48,7 @@ describe("intersections", async () => {
     });
 
     it("doesn't throw when attempting to observe while IntersectionObserver is not in window", async () => {
-        global.window = { navigator: { userAgent: "" } };
+        delete global.window.IntersectionObserver;
         const module = await import("../src/client/intersection.js");
         expect(() => module.observeVideo(<never>{})).not.toThrow();
         expect(() => module.unobserveVideo(<never>{})).not.toThrow();
@@ -47,10 +60,38 @@ describe("intersections", async () => {
         expect(IntersectionObserver).toHaveBeenCalled();
     });
 
-    // it("assigns src from data-src attribute for intersected video sources", async () => {
-    //     const module = await import("../src/client/intersection.js");
-    //     const source = { src: undefined, dataset: { imgitSrc: "foo" } };
-    //     module.observeVideo(<never>{ load: vi.fn(), children: [source] });
-    //     expect(source.src).toStrictEqual("foo");
-    // });
+    it("invokes observe and unobserve when requested", async () => {
+        const module = await import("../src/client/intersection.js");
+        const video = document.createElement("video");
+        module.observeVideo(video);
+        module.unobserveVideo(video);
+        expect(observer.observe).toHaveBeenCalledWith(video);
+        expect(observer.unobserve).toHaveBeenCalledWith(video);
+    });
+
+    it("assigns src from data-src attribute for intersected video sources", async () => {
+        const module = await import("../src/client/intersection.js");
+        const video = document.createElement("video");
+        const source = document.createElement("source");
+        source.src = "";
+        source.dataset.imgitSrc = "foo";
+        video.appendChild(source);
+        module.observeVideo(video);
+        intersect([<never>{ target: video, isIntersecting: true }]);
+        expect(source.src).toStrictEqual("foo");
+    });
+
+    it("doesn't assign av1 source on edge (workaround for edge bug)", async () => {
+        global.window.happyDOM.settings.navigator.userAgent = "Edg/";
+        const module = await import("../src/client/intersection.js");
+        const video = document.createElement("video");
+        const source = document.createElement("source");
+        source.src = "";
+        source.dataset.imgitSrc = "foo";
+        source.type = `video/mp4; codecs=av01`;
+        video.appendChild(source);
+        module.observeVideo(video);
+        intersect([<never>{ target: video, isIntersecting: true }]);
+        expect(source.src).toStrictEqual("");
+    });
 });
