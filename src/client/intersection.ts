@@ -28,7 +28,7 @@ function handleIntersection(entry: IntersectionObserverEntry, observer: Intersec
 }
 
 function isSource(element: Element): element is HTMLSourceElement {
-    return "src" in element;
+    return element.tagName === "SOURCE";
 }
 
 function av1OnEdge(source: HTMLSourceElement) {

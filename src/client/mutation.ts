@@ -76,13 +76,13 @@ function signalLoaded(element: Element) {
 }
 
 function isElement(obj: Node | EventTarget): obj is Element {
-    return "querySelector" in obj;
+    return "tagName" in obj;
 }
 
 function isVideo(element: Element): element is HTMLVideoElement {
-    return "getVideoPlaybackQuality" in element;
+    return element.tagName === "VIDEO";
 }
 
 function isImage(element: Element): element is HTMLImageElement {
-    return "complete" in element;
+    return element.tagName === "IMG";
 }
