@@ -100,7 +100,7 @@ describe("intersections", async () => {
         expect(ctx.intersection.observer!.unobserve).toHaveBeenCalledWith(video);
     });
 
-    it("assigns src from data-src attribute and loads video when intersected", async () => {
+    it("assigns src from data-imgit-src attribute and loads video when intersected", async () => {
         const module = await import("../src/client/intersection.js");
         const source: HTMLSourceElement = { src: "", dataset: { imgitSrc: "x" }, type: "", children: [] };
         const video: HTMLVideoElement = { load: vi.fn(), dataset: {}, children: [source] };
