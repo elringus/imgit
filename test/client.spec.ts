@@ -19,7 +19,7 @@ declare type HTMLElement = {
 // https://developer.mozilla.org/docs/Web/API/HTMLSourceElement
 declare type HTMLSourceElement = HTMLElement & {
     src: string;
-    type: string
+    type: string;
 }
 
 // https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
