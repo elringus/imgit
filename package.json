@@ -23,7 +23,7 @@
         "test": "vitest run",
         "cover": "vitest run --coverage",
         "build": "sh scripts/build.sh",
-        "deploy": "sh scripts/deploy.sh"
+        "deploy": "npm publish --access public"
     },
     "devDependencies": {
         "typescript": "^5.3.3",
