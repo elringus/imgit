@@ -13,7 +13,7 @@ declare module global {
 // https://developer.mozilla.org/docs/Web/API/HTMLElement
 declare type HTMLElement = {
     children: HTMLElement[];
-    dataset: DOMStringMap;
+    dataset: { [name: string]: string | undefined };
 }
 
 // https://developer.mozilla.org/docs/Web/API/HTMLSourceElement
