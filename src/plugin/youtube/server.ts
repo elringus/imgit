@@ -26,8 +26,13 @@ const prefs: Prefs = {};
 export default function ($prefs?: Prefs): Plugin {
     if (!cache.hasOwnProperty("youtube")) cache.youtube = {};
     Object.assign(prefs, $prefs);
-    return { resolve, build, inject: () => `${std.path.dirname(std.path.fileUrlToPath(import.meta.url))}/client.js` };
+    return { resolve, build, inject };
 };
+
+function inject() {
+    const thisFilePath = std.path.fileUrlToPath(import.meta.url);
+    return `${std.path.dirname(thisFilePath)}/client.js`;
+}
 
 async function resolve(asset: ResolvedAsset): Promise<boolean> {
     if (!isYouTube(asset.syntax.url)) return false;
