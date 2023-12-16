@@ -15,8 +15,7 @@ declare module global {
 
 // https://developer.mozilla.org/docs/Web/API/DOMTokenList
 class TokenList {
-    public tokens: string[] = [];
-    add(token: string) { this.tokens.push(token); }
+    add: Mock<[string]> = vi.fn();
 }
 
 // https://developer.mozilla.org/docs/Web/API/Node
@@ -429,7 +428,7 @@ describe("youtube", () => {
             query.includes(".imgit-youtube-poster") ? [poster] : []);
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
         clicked!({ currentTarget: poster });
-        expect(container.classList.tokens).includes("imgit-youtube-loading");
+        expect(container.classList.add).toBeCalledWith("imgit-youtube-loading");
         expect(iframe.src).toStrictEqual("foo");
         expect(iframe.addEventListener).toBeCalledWith("load", expect.anything());
     });
@@ -456,7 +455,7 @@ describe("youtube", () => {
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
         clicked!({ currentTarget: poster });
         loaded!({ currentTarget: iframe });
-        expect(container.classList.tokens).includes("imgit-youtube-playing");
+        expect(container.classList.add).toBeCalledWith("imgit-youtube-playing");
         expect(player.hidden).toBeFalsy();
     });
 });
