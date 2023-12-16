@@ -60,7 +60,7 @@ class SourceElement extends Element {
 
 // https://developer.mozilla.org/docs/Web/API/MutationObserver
 class MutationObserverMock {
-    constructor(handle: (records: MutationRecord[], observer: MutationObserverMock) => void) {
+    constructor(handle: (_: MutationRecord[], __: MutationObserverMock) => void) {
         ctx.mutation.observer = this;
         ctx.mutation.mutate = records => handle(records, this);
     }
