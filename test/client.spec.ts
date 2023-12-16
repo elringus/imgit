@@ -4,6 +4,7 @@
 declare module global {
     let window: {
         navigator: { userAgent: string },
+        open: Mock<[string, string]>,
         MutationObserver?: {},
         IntersectionObserver?: {}
     };
@@ -12,13 +13,24 @@ declare module global {
     let IntersectionObserver: typeof IntersectionObserverMock;
 }
 
+// https://developer.mozilla.org/docs/Web/API/DOMTokenList
+class TokenList {
+    public tokens: string[] = [];
+    add(token: string) { this.tokens.push(token); }
+}
+
 // https://developer.mozilla.org/docs/Web/API/Node
 class Node {}
 
 // https://developer.mozilla.org/docs/Web/API/HTMLElement
 class Element extends Node {
     public children: Element[] = [];
+    public classList = new TokenList();
     public dataset: { [name: string]: string } = {};
+    public parentElement?: Element;
+    public firstChild?: Element;
+    public lastChild?: Element;
+    public hidden?: boolean;
     constructor(public tagName: string) { super(); }
     addEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
     removeEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
@@ -97,6 +109,7 @@ const ctx: {
 beforeEach(() => {
     global.window = {
         navigator: { userAgent: "" },
+        open: vi.fn(),
         MutationObserver: MutationObserverMock,
         IntersectionObserver: IntersectionObserverMock
     };
@@ -332,7 +345,7 @@ describe("intersection", async () => {
         expect(video.load).toBeCalled();
     });
 
-    it("doesn't assign av1 source, but still loads the video on edge (workaround for edge bug)", async () => {
+    it("doesn't assign av1 source, but loads the video on edge (workaround for edge bug)", async () => {
         global.window.navigator.userAgent = "Edg/";
         await import("../src/client/intersection.js");
         const source = new SourceElement();
@@ -343,5 +356,107 @@ describe("intersection", async () => {
         ctx.intersection.intersect!([{ target: video, isIntersecting: true }]);
         expect(source.src).toStrictEqual("");
         expect(video.load).toBeCalled();
+    });
+});
+
+describe("youtube", () => {
+    it("adds mutation handler on import", async () => {
+        const addHandler = vi.spyOn(await import("../src/client/mutation.js"), "addHandler");
+        await import("../src/plugin/youtube/client.js");
+        expect(addHandler).toBeCalled();
+    });
+
+    it("queries document body on import", async () => {
+        await import("../src/plugin/youtube/client.js");
+        expect(document.body.querySelectorAll).toBeCalled();
+    });
+
+    it("doesn't throw when document is not defined on import", async () => {
+        delete global.document;
+        await expect(import("../src/plugin/youtube/client.js")).resolves.not.toThrow();
+    });
+
+    it("adds listener for click event on added poster and banner", async () => {
+        await import("../src/plugin/youtube/client.js");
+        const poster = new Element("DIV");
+        const banner = new Element("DIV");
+        global.document!.body.querySelectorAll.mockImplementation(query =>
+            query.includes(".imgit-youtube-poster") ? [poster] :
+            query.includes(".imgit-youtube-banner") ? [banner] : []);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(poster.addEventListener).toBeCalledWith("click", expect.anything());
+        expect(banner.addEventListener).toBeCalledWith("click", expect.anything());
+    });
+
+    it("removes listener for click event on removed poster and banner", async () => {
+        await import("../src/plugin/youtube/client.js");
+        const poster = new Element("DIV");
+        const banner = new Element("DIV");
+        global.document!.body.querySelectorAll.mockImplementation(query =>
+            query.includes(".imgit-youtube-poster") ? [poster] :
+            query.includes(".imgit-youtube-banner") ? [banner] : []);
+        ctx.mutation.mutate!([{ addedNodes: [], removedNodes: [global.document!.body] }]);
+        expect(poster.removeEventListener).toBeCalledWith("click", expect.anything());
+        expect(banner.removeEventListener).toBeCalledWith("click", expect.anything());
+    });
+
+    it("opens data-href in new tab on banner click", async () => {
+        await import("../src/plugin/youtube/client.js");
+        const banner = new Element("DIV");
+        banner.dataset.href = "foo";
+        let clicked: (evt: Event) => void;
+        banner.addEventListener.mockImplementation((_, handler) => clicked = handler);
+        global.document!.body.querySelectorAll.mockImplementation(query =>
+            query.includes(".imgit-youtube-banner") ? [banner] : []);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        clicked!({ currentTarget: banner });
+        expect(global.window.open).toBeCalledWith("foo", "_blank");
+    });
+
+    it("adds loading class to container, src to iframe and listens load event on poster click", async () => {
+        await import("../src/plugin/youtube/client.js");
+        const poster = new Element("DIV");
+        const iframe = new SourceElement();
+        const player = new Element("DIV");
+        const container = new Element("DIV");
+        poster.parentElement = container;
+        container.lastChild = player;
+        player.firstChild = iframe;
+        iframe.dataset.src = "foo";
+        let clicked: (evt: Event) => void;
+        poster.addEventListener.mockImplementation((_, handler) => clicked = handler);
+        global.document!.body.querySelectorAll.mockImplementation(query =>
+            query.includes(".imgit-youtube-poster") ? [poster] : []);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        clicked!({ currentTarget: poster });
+        expect(container.classList.tokens).includes("imgit-youtube-loading");
+        expect(iframe.src).toStrictEqual("foo");
+        expect(iframe.addEventListener).toBeCalledWith("load", expect.anything());
+    });
+
+    it("adds playing class to container and un-hides player on iframe loaded", async () => {
+        await import("../src/plugin/youtube/client.js");
+        const poster = new Element("DIV");
+        const iframe = new SourceElement();
+        const player = new Element("DIV");
+        const container = new Element("DIV");
+        poster.parentElement = container;
+        container.lastChild = player;
+        player.firstChild = iframe;
+        player.parentElement = container;
+        player.hidden = true;
+        iframe.parentElement = player;
+        iframe.dataset.src = "foo";
+        let clicked: (evt: Event) => void;
+        let loaded: (evt: Event) => void;
+        poster.addEventListener.mockImplementation((_, handler) => clicked = handler);
+        iframe.addEventListener.mockImplementation((_, handler) => loaded = handler);
+        global.document!.body.querySelectorAll.mockImplementation(query =>
+            query.includes(".imgit-youtube-poster") ? [poster] : []);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        clicked!({ currentTarget: poster });
+        loaded!({ currentTarget: iframe });
+        expect(container.classList.tokens).includes("imgit-youtube-playing");
+        expect(player.hidden).toBeFalsy();
     });
 });
