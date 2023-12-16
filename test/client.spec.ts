@@ -75,7 +75,7 @@ declare type MutationRecord = {
 
 // https://developer.mozilla.org/docs/Web/API/IntersectionObserver
 class IntersectionObserverMock {
-    constructor(handle: (entries: IntersectionObserverEntry[], observer: IntersectionObserverMock) => void) {
+    constructor(handle: (_: IntersectionObserverEntry[], __: IntersectionObserverMock) => void) {
         ctx.intersection.observer = this;
         ctx.intersection.intersect = entries => handle(entries, this);
     }
