@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+﻿import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
 
 // Mock browser API subset used by the tested client code.
 declare module global {
@@ -20,10 +20,10 @@ class Element extends Node {
     public children: Element[] = [];
     public dataset: { [name: string]: string } = {};
     constructor(public tagName: string) { super(); }
-    addEventListener = vi.fn();
-    removeEventListener = vi.fn();
-    querySelectorAll = vi.fn(() => []);
-    closest = vi.fn();
+    addEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
+    removeEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
+    querySelectorAll: Mock<[string], Element[]> = vi.fn(_ => []);
+    closest: Mock<[string], Element> = vi.fn();
 }
 
 // https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
@@ -75,6 +75,11 @@ class IntersectionObserverMock {
 declare type IntersectionObserverEntry = {
     readonly isIntersecting: boolean;
     readonly target: Element;
+}
+
+// https://developer.mozilla.org/docs/Web/API/Event
+declare type Event = {
+    currentTarget?: Node;
 }
 
 const ctx: {
@@ -131,6 +136,121 @@ describe("mutation", async () => {
         expect(ctx.mutation.observer!.observe).toBeCalledWith(document.body, expect.anything());
         expect(document.body.querySelectorAll).toBeCalled();
     });
+
+    it("invokes custom handlers on mutation", async () => {
+        const module = await import("../src/client/mutation.js");
+        const added = vi.fn();
+        const removed = vi.fn();
+        module.addHandler([added, removed]);
+        ctx.mutation.mutate!([{ addedNodes: [document.body], removedNodes: [document.body] }]);
+        expect(added).toBeCalledWith(document.body);
+        expect(removed).toBeCalledWith(document.body);
+    });
+
+    it("ignores non-element node mutation", async () => {
+        const module = await import("../src/client/mutation.js");
+        const node = new Node();
+        const added = vi.fn();
+        const removed = vi.fn();
+        module.addHandler([added, removed]);
+        ctx.mutation.mutate!([{ addedNodes: [node], removedNodes: [node] }]);
+        expect(added).not.toBeCalled();
+        expect(removed).not.toBeCalled();
+    });
+
+    it("adds listener for load event on added unloaded images", async () => {
+        await import("../src/client/mutation.js");
+        const img = new ImageElement();
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(img.addEventListener).toBeCalledWith("load", expect.anything());
+    });
+
+    it("removes listener for load event on removed images", async () => {
+        await import("../src/client/mutation.js");
+        const img = new ImageElement();
+        let loaded: (evt: Event) => void;
+        img.addEventListener.mockImplementation((_, handler) => loaded = handler);
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        ctx.mutation.mutate!([{ addedNodes: [], removedNodes: [global.document!.body] }]);
+        expect(img.removeEventListener).toBeCalledWith("load", loaded!);
+    });
+
+    it("assigns loaded attribute to closest container when listened image loads", async () => {
+        await import("../src/client/mutation.js");
+        const container = new Element("DIV");
+        const img = new ImageElement();
+        let loaded: (evt: Event) => void;
+        img.addEventListener.mockImplementation((_, handler) => loaded = handler);
+        img.closest.mockReturnValue(container);
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        loaded!({ currentTarget: img });
+        expect(container.dataset.imgitLoaded).toBeDefined();
+    });
+
+    it("doesn't throw when loaded image event missing target or target is not element", async () => {
+        await import("../src/client/mutation.js");
+        const container = new Element("DIV");
+        const img = new ImageElement();
+        let loaded: (evt: Event) => void;
+        img.addEventListener.mockImplementation((_, handler) => loaded = handler);
+        img.closest.mockReturnValue(container);
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(() => loaded!({ currentTarget: undefined })).not.toThrow();
+        expect(() => loaded!({ currentTarget: new Node() })).not.toThrow();
+    });
+
+    it("assigns loaded attribute to closest container on added loaded images", async () => {
+        await import("../src/client/mutation.js");
+        const container = new Element("DIV");
+        const img = new ImageElement();
+        img.complete = true;
+        img.naturalHeight = 1;
+        img.closest.mockReturnValue(container);
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(img.addEventListener).not.toBeCalledWith("load", expect.anything());
+        expect(container.dataset.imgitLoaded).toBeDefined();
+    });
+
+    it("when no closest container, doesn't throw", async () => {
+        await import("../src/client/mutation.js");
+        const img = new ImageElement();
+        img.complete = true;
+        img.naturalHeight = 1;
+        global.document!.body.querySelectorAll.mockReturnValue([img]);
+        expect(() => ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]))
+        .not.toThrow();
+    });
+
+    it("observers intersection on added videos", async () => {
+        await import("../src/client/mutation.js");
+        const observe = vi.spyOn(await import("../src/client/intersection.js"), "observeVideo");
+        const video = new VideoElement();
+        global.document!.body.querySelectorAll.mockReturnValue([video]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(observe).toBeCalledWith(video);
+    });
+
+    it("un-observers intersection on removed videos", async () => {
+        await import("../src/client/mutation.js");
+        const observe = vi.spyOn(await import("../src/client/intersection.js"), "observeVideo");
+        const video = new VideoElement();
+        global.document!.body.querySelectorAll.mockReturnValue([video]);
+        ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+        expect(observe).toBeCalledWith(video);
+    });
+
+    // it("adds listener for load event on added unloaded images", async () => {
+    //     await import("../src/client/mutation.js");
+    //     const img = new ImageElement();
+    //     global.document!.body.querySelectorAll.mockReturnValue([img]);
+    //     ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
+    //     expect(img.addEventListener).toBeCalledWith("load", expect.anything());
+    // });
 });
 
 describe("intersection", async () => {
