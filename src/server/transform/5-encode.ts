@@ -21,7 +21,6 @@ export async function encodeAsset(asset: EncodedAsset): Promise<void> {
 }
 
 async function encodeWithPlugins(asset: EncodedAsset): Promise<boolean> {
-    if (!cfg.plugins) return false;
     for (const plugin of cfg.plugins)
         if (plugin.encode && await plugin.encode(asset))
             return true;

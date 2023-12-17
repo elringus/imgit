@@ -28,7 +28,6 @@ export function resolveSpec(query: string): AssetSpec {
 }
 
 async function resolveWithPlugins(asset: ResolvedAsset): Promise<boolean> {
-    if (!cfg.plugins) return false;
     for (const plugin of cfg.plugins)
         if (plugin.resolve && await plugin.resolve(asset))
             return true;

@@ -27,7 +27,6 @@ export async function probe(asset: ProbedAsset): Promise<void> {
 }
 
 async function probeWithPlugins(asset: ProbedAsset): Promise<boolean> {
-    if (!cfg.plugins) return false;
     for (const plugin of cfg.plugins)
         if (plugin.probe && await plugin.probe(asset))
             return true;

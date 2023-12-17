@@ -1,11 +1,9 @@
 import { BuiltAsset } from "../asset.js";
-import { ctx, cfg } from "../common.js";
+import { cfg } from "../common.js";
 
 /** Rewrites content of the document with specified assets; returns modified document content. */
 export async function rewriteAll(id: string, content: string, assets: BuiltAsset[]): Promise<string> {
-    content = (await rewriteWithPlugins(id, content, assets)) ?? rewrite(content, assets);
-    poolAssets(assets);
-    return content;
+    return (await rewriteWithPlugins(id, content, assets)) ?? rewrite(content, assets);
 }
 
 /** Default rewrite procedure. */
@@ -23,16 +21,10 @@ function rewriteAsset(asset: BuiltAsset, content: string, replaced: Set<string>)
 }
 
 async function rewriteWithPlugins(id: string, content: string, assets: BuiltAsset[]): Promise<string | null> {
-    if (!cfg.plugins) return null;
     for (const plugin of cfg.plugins)
         if (plugin.rewrite) {
             const result = await plugin.rewrite(id, content, assets);
             if (result) return result;
         }
     return null;
-}
-
-function poolAssets(assets: BuiltAsset[]) {
-    assets.length = 0;
-    ctx.assets.push(assets);
 }

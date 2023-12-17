@@ -26,7 +26,7 @@ export type Options = {
     /** Configure content encoding. */
     encode: EncodeOptions;
     /** External imgit extensions; use to override or extend server behaviour. */
-    plugins?: Plugin[];
+    plugins: Plugin[];
 };
 
 /** Configures server cache. */

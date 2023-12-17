@@ -8,7 +8,7 @@ export { defaults } from "./defaults.js";
 export type Prefs = { [P in keyof Options]?: Partial<Options[P]>; };
 
 /** Current build configuration. */
-export const cfg: Readonly<Options> = defaults;
+export const cfg: Readonly<Options> = { ...defaults };
 
 /** Specifies current build configuration. */
 export function configure(prefs: Prefs) {

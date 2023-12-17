@@ -28,7 +28,6 @@ export function buildContentSource(path: string) {
 }
 
 async function buildWithPlugins(asset: BuiltAsset, merges: BuiltAsset[]): Promise<boolean> {
-    if (!cfg.plugins) return false;
     for (const plugin of cfg.plugins)
         if (plugin.build && await plugin.build(asset, merges))
             return true;

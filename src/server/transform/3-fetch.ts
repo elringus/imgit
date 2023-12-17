@@ -26,7 +26,6 @@ export async function fetch(asset: FetchedAsset): Promise<void> {
 }
 
 async function fetchWithPlugins(asset: FetchedAsset): Promise<boolean> {
-    if (!cfg.plugins) return false;
     for (const plugin of cfg.plugins)
         if (plugin.fetch && await plugin.fetch(asset))
             return true;
