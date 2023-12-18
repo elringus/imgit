@@ -1,4 +1,4 @@
-﻿import { describe, it, expect, vi, afterEach } from "vitest";
+﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Platform, Prefs, boot, exit, defaults } from "../src/server/index.js";
 import { BuiltAsset } from "../src/server/asset.js";
 import { captureAll } from "../src/server/transform/1-capture.js";
@@ -38,13 +38,17 @@ const platform = {
     base64: vi.fn()
 } satisfies Platform;
 
-const asset: BuiltAsset = {
-    syntax: { text: "", index: 0, url: "" },
-    spec: {},
-    dirty: false,
-    content: { src: "", local: "", info: { type: "", alpha: false, height: 0, width: 0 }, encoded: "" },
-    html: ""
-};
+let asset: BuiltAsset;
+
+beforeEach(() => {
+    asset = {
+        syntax: { text: "", index: 0, url: "" },
+        spec: {},
+        dirty: false,
+        content: { src: "", local: "", info: { type: "", alpha: false, height: 0, width: 0 }, encoded: "" },
+        html: ""
+    };
+});
 
 afterEach(exit);
 
@@ -97,6 +101,37 @@ describe("capture", () => {
 });
 
 describe("resolve", () => {
+    it("resolves content src as syntax url", async () => {
+        await init();
+        const assets = await resolveAll([{ ...asset, syntax: { ...asset.syntax, url: "foo" } }]);
+        expect(assets[0].content.src).toStrictEqual("foo");
+    });
+
+    it("resolves spec to empty object when syntax spec is undefined", async () => {
+        await init();
+        const assets = await resolveAll([{ ...asset, syntax: { ...asset.syntax, spec: undefined } }]);
+        expect(assets[0].spec).toStrictEqual({});
+    });
+
+    it("parses captured spec syntax as URL query", async () => {
+        await init();
+        const spec = `?width=1&eager&merge&media=(foo)&class=bar`;
+        const assets = await resolveAll([{ ...asset, syntax: { ...asset.syntax, spec } }]);
+        expect(assets[0].spec).toStrictEqual({
+            eager: true, merge: true, width: 1,
+            media: "(foo)", class: "bar"
+        });
+    });
+
+    it("resolves spec options to undefined when URL query is missing associated params", async () => {
+        await init();
+        const assets = await resolveAll([{ ...asset, syntax: { ...asset.syntax, spec: "?" } }]);
+        expect(assets[0].spec).toStrictEqual({
+            eager: undefined, merge: undefined, width: undefined,
+            media: undefined, class: undefined
+        });
+    });
+
     it("compatible plugin overrides built-in behaviour", async () => {
         await init({ plugins: [{ resolve: () => true }] });
         const spy = vi.spyOn(asset, "content", "set");
@@ -108,6 +143,23 @@ describe("resolve", () => {
         await init({ plugins: [{}, { resolve: () => false }] });
         const spy = vi.spyOn(asset, "content", "set");
         await resolveAll([asset]);
+        expect(spy).toBeCalled();
+    });
+});
+
+describe("fetch", () => {
+    it("compatible plugin overrides built-in behaviour", async () => {
+        await init({ plugins: [{ fetch: () => true }] });
+        const spy = vi.spyOn(asset.content, "local", "set");
+        await fetchAll([asset]);
+        expect(spy).not.toBeCalled();
+    });
+
+    it("incompatible plugins don't override built-in behaviour", async () => {
+        await init({ plugins: [{}, { fetch: () => false }] });
+        asset.content.src = "/";
+        const spy = vi.spyOn(asset.content, "local", "set");
+        await fetchAll([asset]);
         expect(spy).toBeCalled();
     });
 });

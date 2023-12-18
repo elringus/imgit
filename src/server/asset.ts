@@ -90,7 +90,7 @@ export type ContentInfo = {
     /** Height of the media content, in pixels. */
     height: number;
     /** Whether the media content has alpha channel (transparency). */
-    alpha: boolean;
+    alpha?: boolean;
 };
 
 /** Asset with all the applicable encoded/generated content available on local file system. */
