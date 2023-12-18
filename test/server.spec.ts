@@ -38,13 +38,13 @@ const platform = {
     base64: vi.fn()
 } satisfies Platform;
 
-const asset = {
+const asset: BuiltAsset = {
     syntax: { text: "", index: 0, url: "" },
     spec: {},
     dirty: false,
     content: { src: "", local: "", info: { type: "", alpha: false, height: 0, width: 0 }, encoded: "" },
     html: ""
-} satisfies BuiltAsset;
+};
 
 afterEach(exit);
 
