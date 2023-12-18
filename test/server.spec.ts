@@ -1,5 +1,6 @@
 ﻿import { describe, it, expect, vi, afterEach } from "vitest";
 import { Platform, Prefs, boot, exit, defaults } from "../src/server/index.js";
+import { BuiltAsset } from "../src/server/asset.js";
 import { captureAll } from "../src/server/transform/1-capture.js";
 import { resolveAll } from "../src/server/transform/2-resolve.js";
 import { fetchAll } from "../src/server/transform/3-fetch.js";
@@ -36,6 +37,14 @@ const platform = {
     wait: vi.fn(),
     base64: vi.fn()
 } satisfies Platform;
+
+const asset = {
+    syntax: { text: "", index: 0, url: "" },
+    spec: {},
+    dirty: false,
+    content: { src: "", local: "", info: { type: "", alpha: false, height: 0, width: 0 }, encoded: "" },
+    html: ""
+} satisfies BuiltAsset;
 
 afterEach(exit);
 
@@ -84,6 +93,22 @@ describe("capture", () => {
         await init({ plugins: [{}, { capture: () => false }] });
         const assets = await captureAll("", "![](url)");
         expect(assets).toHaveLength(1);
+    });
+});
+
+describe("resolve", () => {
+    it("compatible plugin overrides built-in behaviour", async () => {
+        await init({ plugins: [{ resolve: () => true }] });
+        const spy = vi.spyOn(asset, "content", "set");
+        await resolveAll([asset]);
+        expect(spy).not.toBeCalled();
+    });
+
+    it("incompatible plugins don't override built-in behaviour", async () => {
+        await init({ plugins: [{}, { resolve: () => false }] });
+        const spy = vi.spyOn(asset, "content", "set");
+        await resolveAll([asset]);
+        expect(spy).toBeCalled();
     });
 });
 
