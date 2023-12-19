@@ -389,6 +389,60 @@ describe("probe", () => {
     });
 });
 
+describe("encode", () => {
+    beforeEach(() => {
+        platform.exec.mockReturnValue(Promise.resolve({ out: "" }));
+        asset.content.info = { width: 1, height: 1, type: "image/png" };
+        platform.path.resolve = vi.fn(p => p);
+    });
+
+    it("throws when can't get spec for encoded content type", async () => {
+        await init();
+        asset.content.info.type = "foo";
+        await expect(encodeAll([asset])).rejects.toThrow(/Failed to get encoding spec/);
+    });
+
+    it("encodes to avif when content type is image", async () => {
+        await init({ root: "public", encode: { root: "public/encoded" } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png-imgit.avif");
+    });
+
+    it("encodes to mp4 (with av1 codec) when content type is video", async () => {
+        await init({ root: "public", encode: { root: "public/encoded" } });
+        asset.content.src = "/assets/file.webm";
+        asset.content.local = "public/assets/file.webm";
+        asset.content.info.type = "video/webm";
+        await encodeAll([asset]);
+        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.webm-imgit.mp4");
+    });
+
+    it("logs ffmpeg error", async () => {
+        await init();
+        platform.exec.mockReturnValue(Promise.resolve({ out: "", err: Error("foo") }));
+        await encodeAll([asset]);
+        expect(platform.log.err).toBeCalledWith("ffmpeg error: foo");
+    });
+
+    it("compatible plugin overrides built-in behaviour", async () => {
+        await init({ plugins: [{ encode: () => true }] });
+        const spy = vi.spyOn(asset.content, "encoded", "set");
+        await encodeAll([asset]);
+        expect(spy).not.toBeCalled();
+    });
+
+    it("incompatible plugins don't override built-in behaviour", async () => {
+        await init({ plugins: [{}, { encode: () => false }] });
+        asset.content.src = "/";
+        const spy = vi.spyOn(asset.content, "encoded", "set");
+        await encodeAll([asset]);
+        expect(spy).toBeCalled();
+    });
+});
+
 async function init(prefs?: Prefs): Promise<void> {
     return boot({ ...defaults, ...(prefs ?? []) }, platform);
 }

@@ -126,7 +126,7 @@ function getThreshold(specWidth?: number): number | undefined {
 
 function buildEncodedPath(content: ProbedContent, ext: string, suffix?: string) {
     const local = content.src.startsWith("/")
-        ? content.local.substring(std.path.resolve(cfg.root).length + 2).replaceAll("/", "-")
+        ? content.local.substring(std.path.resolve(cfg.root).length + 1).replaceAll("/", "-")
         : std.path.basename(content.local);
     suffix ??= "";
     return `${std.path.resolve(cfg.encode.root)}/${local}${cfg.encode.suffix}${suffix}.${ext}`;

@@ -6,7 +6,7 @@ export async function ffmpeg(path: string, out: string, info: ContentInfo, spec:
     await ensureDir(std.path.dirname(out));
     const args = buildArgs(path, out, info, spec);
     const { err } = await std.exec(`ffmpeg ${args}`);
-    if (err) std.log.err(`ffmpeg error: ${err}`);
+    if (err) std.log.err(`ffmpeg error: ${err.message}`);
 }
 
 function buildArgs(path: string, out: string, info: ContentInfo, spec: EncodeSpec): string {
@@ -20,7 +20,7 @@ function buildArgs(path: string, out: string, info: ContentInfo, spec: EncodeSpe
     return `-y -loglevel error -i "${(path)}" ${specs} "${out}"`;
 }
 
-function buildFilter(info: ContentInfo, spec: EncodeSpec, mapAlpha: boolean): string | null {
+function buildFilter(info: ContentInfo, spec: EncodeSpec, mapAlpha?: boolean): string | null {
     // https://trac.ffmpeg.org/wiki/FilteringGuide
     const select = spec.select !== undefined ? `select=eq(n\\,${spec.select})` : null;
     const scale = spec.scale ? `scale=iw*${spec.scale}:${spec.codec ? "-1" : "-2"}` : "copy";
