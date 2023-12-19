@@ -176,7 +176,7 @@ describe("fetch", () => {
 
     it("assumes asset dirty when local file doesn't exist", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.exists.mockReturnValue(Promise.resolve(false));
         await fetchAll([asset]);
         expect(asset.dirty).toBeTruthy();
@@ -184,7 +184,7 @@ describe("fetch", () => {
 
     it("assumes asset dirty when local file exist, but sizes cache record is missing", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
         delete cache.sizes[asset.content.src];
         await fetchAll([asset]);
@@ -193,7 +193,7 @@ describe("fetch", () => {
 
     it("assumes asset dirty when local file exist and size cached, but actual size differs", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
         cache.sizes[asset.content.src] = 1;
         platform.fs.size.mockReturnValue(Promise.resolve(2));
@@ -203,7 +203,7 @@ describe("fetch", () => {
 
     it("assumes asset not dirty when local file exist and cached size is actual", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
         cache.sizes[asset.content.src] = 1;
         platform.fs.size.mockReturnValue(Promise.resolve(1));
@@ -213,7 +213,7 @@ describe("fetch", () => {
 
     it("doesn't fetch assets that are not dirty", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
         cache.sizes[asset.content.src] = 1;
         platform.fs.size.mockReturnValue(Promise.resolve(1));
@@ -230,8 +230,8 @@ describe("fetch", () => {
 
     it("reuses fetches with same src", async () => {
         await init();
-        ctx.fetches.set("http://foo.bar/baz.png", Promise.resolve());
-        asset.content.src = "http://foo.bar/baz.png";
+        ctx.fetches.set("http://host.name/file.png", Promise.resolve());
+        asset.content.src = "http://host.name/file.png";
         asset.dirty = true;
         await fetchAll([asset]);
         expect(platform.fetch).not.toBeCalled();
@@ -239,14 +239,14 @@ describe("fetch", () => {
 
     it("stores fetch promise in context", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         await fetchAll([asset]);
         expect(ctx.fetches.has(asset.content.src)).toBeTruthy();
     });
 
     it("creates dir for downloaded file when necessary", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.path.dirname.mockReturnValue("foo");
         await fetchAll([asset]);
         expect(platform.fs.mkdir).toBeCalledWith("foo");
@@ -262,7 +262,7 @@ describe("fetch", () => {
 
     it("caches fetched file size", async () => {
         await init();
-        asset.content.src = "http://foo.bar/baz.png";
+        asset.content.src = "http://host.name/file.png";
         platform.fs.size.mockReturnValue(Promise.resolve(7));
         await fetchAll([asset]);
         expect(cache.sizes[asset.content.src]).toStrictEqual(7);
@@ -274,6 +274,38 @@ describe("fetch", () => {
         platform.fetch.mockReturnValue(Promise.reject("foo"));
         await expect(fetchAll([asset])).rejects.toThrow("foo");
         expect(platform.fetch).toHaveBeenCalledTimes(3);
+    });
+
+    it("handles retry response", async () => {
+        await init();
+        asset.content.src = "http://host.name/file.png";
+        platform.fetch.mockReturnValueOnce(<never>Promise.resolve({
+            status: 429,
+            headers: <never>new Map([["retry-after", "10"]])
+        } satisfies Partial<Response>));
+        await fetchAll([asset]);
+        expect(platform.wait).toBeCalledWith(10);
+        expect(platform.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it("throws when retry response misses retry-after header", async () => {
+        await init({ fetch: { retries: 0 } });
+        asset.content.src = "http://host.name/file.png";
+        platform.fetch.mockReturnValueOnce(<never>Promise.resolve({
+            status: 429,
+            headers: <never>new Map([])
+        } satisfies Partial<Response>));
+        await expect(fetchAll([asset])).rejects.toThrow(/429 without retry-after header/);
+    });
+
+    it("throws when retry response's retry-after header is not a number", async () => {
+        await init({ fetch: { retries: 0 } });
+        asset.content.src = "http://host.name/file.png";
+        platform.fetch.mockReturnValueOnce(<never>Promise.resolve({
+            status: 429,
+            headers: <never>new Map([["retry-after", "later"]])
+        } satisfies Partial<Response>));
+        await expect(fetchAll([asset])).rejects.toThrow(/429 without retry-after header/);
     });
 
     it("compatible plugin overrides built-in behaviour", async () => {
