@@ -69,7 +69,7 @@ async function handleRetryResponse(src: string, out: string, response: Response)
 }
 
 function buildLocalPath(src: string): string {
-    if (src.startsWith("/")) return `${std.path.resolve(cfg.root)}/${src}`;
+    if (src.startsWith("/")) return std.path.resolve(cfg.root) + src;
     const url = new URL(src);
     const root = std.path.resolve(cfg.fetch.root);
     return `${root}/${url.hostname}${url.pathname.replaceAll("/", "-")}`;
