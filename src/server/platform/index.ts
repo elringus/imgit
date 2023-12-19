@@ -12,7 +12,7 @@ export async function bind(api?: Platform) {
 }
 
 async function detect(): Promise<Platform> {
-    // TODO: Bundlers statically parse conditional imports choke on deno's url imports.
+    // TODO: Bundlers choke on deno's url imports.
     // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
     if (typeof process === "object" && "versions" in process) {
         if (process.versions.bun) return (await import("./bun.js")).bun;

@@ -6,15 +6,17 @@ const args = "-loglevel error -select_streams v:0 -show_entries stream=width,hei
 
 export async function ffprobe(path: string): Promise<ContentInfo> {
     const { out, err } = await std.exec(`ffprobe ${args} "${path}"`);
-    if (err) std.log.err(`ffprobe error: ${err}`);
+    if (err) std.log.err(`ffprobe error: ${err.message}`);
     const parts = out.split(",");
     const alpha = alphaFormats.has(parts[2].trim());
-    const type = resolveTypeNaive(path); // TODO: Sniff via file --mime-type (choco file on win)
+    const type = resolveTypeNaive(path);
     return { width: Number(parts[0]), height: Number(parts[1]), alpha, type };
 }
 
+// TODO: Sniff via 'file --mime-type' (choco file on win)
 function resolveTypeNaive(path: string): string {
     const ext = getExtension(path).toLowerCase();
+    /* v8 ignore start */
     if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
     if (ext === "tif" || ext === "tiff") return "image/tiff";
     if (ext === "png") return "image/png";
@@ -30,6 +32,7 @@ function resolveTypeNaive(path: string): string {
     if (ext === "mov") return "video/quicktime";
     if (ext === "avi") return "video/x-msvideo";
     if (ext === "mkv") return "video/x-matroska";
+    /* v8 ignore end */
     std.log.warn(`Failed to resolve MIME type of '${path}'.`);
     return "unknown";
 }

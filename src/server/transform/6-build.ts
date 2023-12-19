@@ -71,8 +71,8 @@ async function buildVideo(content: EncodedContent, asset: BuiltAsset, merges?: B
     const size = buildSizeAttributes(content.info);
     const media = asset.spec.media ? `media="${asset.spec.media}"` : "";
     const cls = `imgit-video ${asset.spec.class ?? ""}`;
-    // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
-    const codec = "av01.0.04M.08"; // TODO: Resolve actual spec at the encoding stage.
+    // TODO: Resolve actual spec at the encoding stage.
+    const codec = "av01.0.04M.08"; // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
     asset.html = `
 <div class="${cls}" data-imgit-container>
     <video data-imgit-loadable preload="none" loop autoplay muted playsinline ${size}>

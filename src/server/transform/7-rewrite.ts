@@ -9,7 +9,7 @@ export async function rewriteAll(id: string, content: string, assets: BuiltAsset
 /** Default rewrite procedure. */
 export function rewrite(content: string, assets: BuiltAsset[]): string {
     const replaced = new Set<string>;
-    for (const asset of assets) // TODO: Something more efficient?
+    for (const asset of assets)
         content = rewriteAsset(asset, content, replaced);
     return content;
 }

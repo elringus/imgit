@@ -1,3 +1,5 @@
+/* v8 ignore start */
+
 /** Asset captured from transformed document. */
 export type CapturedAsset = {
     /** Syntax of the captured asset. */
