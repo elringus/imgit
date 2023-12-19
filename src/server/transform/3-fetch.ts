@@ -34,7 +34,8 @@ async function fetchWithPlugins(asset: FetchedAsset): Promise<boolean> {
 
 async function fetchWithRetries(src: string, out: string): Promise<void> {
     std.log.tty(`Downloading ${src} to ${cfg.fetch.root}`);
-    try { return fetchWithTimeout(src, out); } catch (error) {
+    try { await fetchWithTimeout(src, out); }
+    catch (error) {
         ctx.retries.set(src, (ctx.retries.get(src) ?? 0) + 1);
         if (ctx.retries.get(src)! > cfg.fetch.retries) {
             await std.fs.remove(out);
@@ -46,10 +47,10 @@ async function fetchWithRetries(src: string, out: string): Promise<void> {
     }
 }
 
-function fetchWithTimeout(src: string, out: string): Promise<void> {
+async function fetchWithTimeout(src: string, out: string): Promise<void> {
     const abort = new AbortController();
     const timeoutId = setTimeout(abort.abort, cfg.fetch.timeout * 1000);
-    try { return fetchAndWriteTo(src, out, abort.signal); }
+    try { await fetchAndWriteTo(src, out, abort.signal); }
     finally { clearTimeout(timeoutId); }
 }
 

@@ -237,6 +237,13 @@ describe("fetch", () => {
         expect(platform.fetch).not.toBeCalled();
     });
 
+    it("stores fetch promise in context", async () => {
+        await init();
+        asset.content.src = "http://foo.bar/baz.png";
+        await fetchAll([asset]);
+        expect(ctx.fetches.has(asset.content.src)).toBeTruthy();
+    });
+
     it("creates dir for downloaded file when necessary", async () => {
         await init();
         asset.content.src = "http://foo.bar/baz.png";
@@ -253,19 +260,20 @@ describe("fetch", () => {
         expect(platform.fs.write).toBeCalledWith("root/host.name-file.png", expect.anything());
     });
 
-    it("stores fetch promise in context", async () => {
-        await init();
-        asset.content.src = "http://foo.bar/baz.png";
-        await fetchAll([asset]);
-        expect(ctx.fetches.has(asset.content.src)).toBeTruthy();
-    });
-
     it("caches fetched file size", async () => {
         await init();
         asset.content.src = "http://foo.bar/baz.png";
         platform.fs.size.mockReturnValue(Promise.resolve(7));
         await fetchAll([asset]);
         expect(cache.sizes[asset.content.src]).toStrictEqual(7);
+    });
+
+    it("retries failed fetches up to the limit specified in config, then throws", async () => {
+        await init({ fetch: { retries: 2 } });
+        asset.content.src = "http://host.name/file.png";
+        platform.fetch.mockReturnValue(Promise.reject("foo"));
+        await expect(fetchAll([asset])).rejects.toThrow("foo");
+        expect(platform.fetch).toHaveBeenCalledTimes(3);
     });
 
     it("compatible plugin overrides built-in behaviour", async () => {
