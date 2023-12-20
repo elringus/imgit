@@ -8,7 +8,7 @@ export { defaults } from "./defaults.js";
 export type Prefs = { [P in keyof Options]?: Partial<Options[P]>; };
 
 /** Current build configuration. */
-export const cfg: Readonly<Options> = { ...defaults };
+export const cfg: Readonly<Options> = defaults;
 
 /** Specifies current build configuration. */
 export function configure(prefs: Prefs) {
@@ -17,9 +17,11 @@ export function configure(prefs: Prefs) {
 }
 
 function merge(from: Record<string, unknown>, to: Record<string, unknown>, prop: string) {
-    if (!isSubOptions(from[prop])) to[prop] = from[prop];
-    else for (const sub of Object.getOwnPropertyNames(from[prop]))
-        merge(<never>from[prop], <never>to[prop], sub);
+    if (isSubOptions(from[prop])) {
+        if (to[prop] == null) to[prop] = {};
+        for (const sub of Object.getOwnPropertyNames(from[prop]))
+            merge(<never>from[prop], <never>to[prop], sub);
+    } else to[prop] = from[prop];
 }
 
 function isSubOptions(obj: unknown): obj is Record<string, unknown> {

@@ -95,7 +95,8 @@ async function cacheValid(key: string, out: string, spec: EncodeSpec): Promise<b
 }
 
 function equal(a: EncodeSpec, b: EncodeSpec): boolean {
-    return a.select === b.select &&
+    return a.codec === b.codec &&
+        a.select === b.select &&
         a.scale === b.scale &&
         a.blur === b.blur;
 }

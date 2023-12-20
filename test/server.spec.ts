@@ -1,5 +1,5 @@
 ﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { Platform, Prefs, boot, exit, defaults, cache, ctx } from "../src/server/index.js";
+import { Platform, Prefs, boot, exit, cache, ctx, cfg } from "../src/server/index.js";
 import { BuiltAsset } from "../src/server/asset.js";
 import { captureAll } from "../src/server/transform/1-capture.js";
 import { resolveAll } from "../src/server/transform/2-resolve.js";
@@ -9,6 +9,8 @@ import { encodeAll } from "../src/server/transform/5-encode.js";
 import { buildAll } from "../src/server/transform/6-build.js";
 import { rewriteAll } from "../src/server/transform/7-rewrite.js";
 
+// Prevent leaking config between test.
+const defaults = structuredClone((await import("../src/server/config/defaults.js")).defaults);
 const platform = {
     fs: {
         exists: vi.fn(),
@@ -54,6 +56,18 @@ beforeEach(() => {
 });
 
 afterEach(exit);
+
+describe("meta", () => {
+    it("configures in init", async () => {
+        await init({ encode: { safe: null } });
+        expect(cfg.encode.safe).toBeNull();
+    });
+
+    it("doesn't leak config between runs", async () => {
+        await init();
+        expect(cfg.encode.safe).not.toBeNull();
+    });
+});
 
 describe("capture", () => {
     it("captures markdown syntax by default", async () => {
@@ -396,6 +410,17 @@ describe("encode", () => {
         platform.path.resolve = vi.fn(p => p);
     });
 
+    it("waits for for all fetches to complete before encoding", async () => {
+        await init();
+        ctx.fetches.set("/1.png", Promise.resolve());
+        platform.wait.mockImplementationOnce(() => {
+            ctx.fetches.set("/2.png", Promise.resolve());
+            return Promise.resolve();
+        });
+        await encodeAll([asset]);
+        expect(platform.wait).toBeCalledTimes(2);
+    });
+
     it("throws when can't get spec for encoded content type", async () => {
         await init();
         asset.content.info.type = "foo";
@@ -412,19 +437,118 @@ describe("encode", () => {
     });
 
     it("encodes to mp4 (with av1 codec) when content type is video", async () => {
-        await init({ root: "public", encode: { root: "public/encoded" } });
-        asset.content.src = "/assets/file.webm";
-        asset.content.local = "public/assets/file.webm";
+        await init({ encode: { root: "public/encoded" } });
+        asset.content.src = "http://host.name/file.webm";
+        asset.content.local = "fetched/host.name-file.webm";
+        platform.path.basename.mockReturnValue("host.name-file.webm");
         asset.content.info.type = "video/webm";
         await encodeAll([asset]);
-        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.webm-imgit.mp4");
+        expect(asset.content.encoded).toStrictEqual("public/encoded/host.name-file.webm-imgit.mp4");
+    });
+
+    it("skips encoding when asset is not dirty, encoded file exist and spec cache is valid", async () => {
+        await init({
+            root: "public",
+            encode: {
+                root: "public/encoded",
+                specs: [[/./, { codec: "foo" }]],
+                cover: { suffix: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }
+            }
+        });
+        asset.content.src = "/file.png";
+        asset.content.info.type = "image/png";
+        asset.dirty = false;
+        platform.fs.exists.mockReturnValue(Promise.resolve(true));
+        cache.specs["/file.png@main"] = { codec: "foo", scale: 1 };
+        cache.specs["/file.png@cover"] = { codec: "bar", scale: 0.5, select: 0, blur: 1 };
+        await encodeAll([asset]);
+        expect(platform.exec).not.toBeCalled();
+    });
+
+    it("doesn't skip encoding when cached spec differs", async () => {
+        await init({
+            root: "public",
+            encode: {
+                root: "public/encoded",
+                specs: [[/./, { codec: "foo" }]],
+                cover: { suffix: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }
+            }
+        });
+        asset.content.src = "/file.png";
+        asset.content.info.type = "image/png";
+        asset.dirty = false;
+        platform.fs.exists.mockReturnValue(Promise.resolve(true));
+        cache.specs["/file.png@main"] = { codec: "foo", scale: 2 };
+        cache.specs["/file.png@cover"] = { codec: "baz", scale: 0.5, select: 0, blur: 1 };
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledTimes(2);
+    });
+
+    it("encodes safe variant when content type is not safe", async () => {
+        await init({
+            root: "public",
+            encode: { root: "public/encoded", safe: { types: [], suffix: "" } }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.png-imgit.webp");
+    });
+
+    it("doesnt encode safe variant when content type is safe", async () => {
+        await init({
+            root: "public",
+            encode: { root: "public/encoded", safe: { types: ["image/png"], suffix: "" } }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.safe).toBeUndefined();
+    });
+
+    it("doesn't encode safe variant when disabled", async () => {
+        await init({
+            root: "public",
+            encode: { root: "public/encoded", safe: null }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.safe).toBeUndefined();
     });
 
     it("logs ffmpeg error", async () => {
         await init();
+        if (cfg.encode.safe === null) console.log(">>>>>>>>>>");
         platform.exec.mockReturnValue(Promise.resolve({ out: "", err: Error("foo") }));
         await encodeAll([asset]);
         expect(platform.log.err).toBeCalledWith("ffmpeg error: foo");
+    });
+
+    it("respects custom suffixes", async () => {
+        await init({
+            root: "public",
+            width: 1,
+            encode: {
+                root: "public/encoded",
+                suffix: "-foo",
+                cover: { suffix: "-bar" },
+                dense: { suffix: "-baz" },
+                safe: { types: [], suffix: "-far" }
+            }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.width = 10;
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png-foo.avif");
+        expect(asset.content.cover).toStrictEqual("public/encoded/assets-file.png-foo-bar.avif");
+        expect(asset.content.dense).toStrictEqual("public/encoded/assets-file.png-foo-baz.avif");
+        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.png-foo-far.webp");
     });
 
     it("compatible plugin overrides built-in behaviour", async () => {
@@ -444,5 +568,5 @@ describe("encode", () => {
 });
 
 async function init(prefs?: Prefs): Promise<void> {
-    return boot({ ...defaults, ...(prefs ?? []) }, platform);
+    await boot({ ...defaults, ...prefs }, platform);
 }

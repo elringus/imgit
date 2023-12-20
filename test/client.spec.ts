@@ -381,7 +381,7 @@ describe("youtube", () => {
         const banner = new Element("DIV");
         global.document!.body.querySelectorAll.mockImplementation(query =>
             query.includes(".imgit-youtube-poster") ? [poster] :
-            query.includes(".imgit-youtube-banner") ? [banner] : []);
+                query.includes(".imgit-youtube-banner") ? [banner] : []);
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
         expect(poster.addEventListener).toBeCalledWith("click", expect.anything());
         expect(banner.addEventListener).toBeCalledWith("click", expect.anything());
@@ -393,7 +393,7 @@ describe("youtube", () => {
         const banner = new Element("DIV");
         global.document!.body.querySelectorAll.mockImplementation(query =>
             query.includes(".imgit-youtube-poster") ? [poster] :
-            query.includes(".imgit-youtube-banner") ? [banner] : []);
+                query.includes(".imgit-youtube-banner") ? [banner] : []);
         ctx.mutation.mutate!([{ addedNodes: [], removedNodes: [global.document!.body] }]);
         expect(poster.removeEventListener).toBeCalledWith("click", expect.anything());
         expect(banner.removeEventListener).toBeCalledWith("click", expect.anything());
