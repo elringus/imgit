@@ -110,11 +110,9 @@ function getSpec(specs: EncodeSpecMap, type: string): EncodeSpec {
 }
 
 function evalThresholdScale(srcWidth: number, assetThreshold?: number, srcScale?: number): number {
-    srcScale ??= 1;
-    srcWidth *= srcScale;
     const threshold = assetThreshold ?? cfg.width ?? undefined;
     const width = (threshold && threshold < srcWidth) ? threshold : srcWidth;
-    return srcScale * (width / srcWidth);
+    return (srcScale ?? 1) * (width / srcWidth);
 }
 
 function buildEncodedPath(content: ProbedContent, suffix: string, ext: string): string {

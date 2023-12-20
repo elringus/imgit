@@ -304,6 +304,18 @@ it("doesn't encode cover when disabled via encoding config", async () => {
     expect(asset.content.cover).toBeUndefined();
 });
 
+it("scales covers relative to threshold when content width is larger", async () => {
+    await boot({
+        root: "public",
+        width: 10,
+        encode: { ...defs.encode, cover: { suffix: "", specs: [[/.*/, { ext: "", scale: 0.1 }]] } }
+    });
+    asset.content.info.type = "image/png";
+    asset.content.info.width = 100;
+    await encodeAll([asset]);
+    expect(std.exec).toBeCalledWith(expect.stringContaining("scale=iw*0.01"));
+});
+
 it("logs ffmpeg error", async () => {
     await boot();
     std.exec.mockReturnValue(Promise.resolve({ out: "", err: Error("foo") }));
