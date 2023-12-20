@@ -1,4 +1,5 @@
 ﻿import { describe, it, expect, vi, beforeEach, afterEach, Mock } from "vitest";
+import { Node, Element, ImageElement, VideoElement, SourceElement, Event, ctx, MutationObserverMock, IntersectionObserverMock } from "./setup.js";
 
 // Mock browser API subset used by the tested client code.
 declare module global {
@@ -12,98 +13,6 @@ declare module global {
     let MutationObserver: typeof MutationObserverMock;
     let IntersectionObserver: typeof IntersectionObserverMock;
 }
-
-// https://developer.mozilla.org/docs/Web/API/DOMTokenList
-class TokenList {
-    add: Mock<[string]> = vi.fn();
-}
-
-// https://developer.mozilla.org/docs/Web/API/Node
-class Node {}
-
-// https://developer.mozilla.org/docs/Web/API/HTMLElement
-class Element extends Node {
-    public children: Element[] = [];
-    public classList = new TokenList();
-    public dataset: { [name: string]: string } = {};
-    public parentElement?: Element;
-    public firstChild?: Element;
-    public lastChild?: Element;
-    public hidden?: boolean;
-    constructor(public tagName: string) { super(); }
-    addEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
-    removeEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
-    querySelectorAll: Mock<[string], Element[]> = vi.fn(_ => []);
-    closest: Mock<[string], Element> = vi.fn();
-}
-
-// https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
-class ImageElement extends Element {
-    public complete: boolean = false;
-    public naturalHeight: number = 0;
-    constructor() { super("IMG"); }
-}
-
-// https://developer.mozilla.org/docs/Web/API/HTMLVideoElement
-class VideoElement extends Element {
-    public readyState: number = 0;
-    constructor() { super("VIDEO"); }
-    load = vi.fn();
-}
-
-// https://developer.mozilla.org/docs/Web/API/HTMLSourceElement
-class SourceElement extends Element {
-    public src = "";
-    public type = "";
-    constructor() { super("SOURCE"); }
-}
-
-// https://developer.mozilla.org/docs/Web/API/MutationObserver
-class MutationObserverMock {
-    constructor(handle: (_: MutationRecord[], __: MutationObserverMock) => void) {
-        ctx.mutation.observer = this;
-        ctx.mutation.mutate = records => handle(records, this);
-    }
-    observe = vi.fn();
-}
-
-// https://developer.mozilla.org/docs/Web/API/MutationRecord
-declare type MutationRecord = {
-    readonly addedNodes: Node[];
-    readonly removedNodes: Node[];
-}
-
-// https://developer.mozilla.org/docs/Web/API/IntersectionObserver
-class IntersectionObserverMock {
-    constructor(handle: (_: IntersectionObserverEntry[], __: IntersectionObserverMock) => void) {
-        ctx.intersection.observer = this;
-        ctx.intersection.intersect = entries => handle(entries, this);
-    }
-    observe = vi.fn();
-    unobserve = vi.fn();
-}
-
-// https://developer.mozilla.org/docs/Web/API/IntersectionObserverEntry
-declare type IntersectionObserverEntry = {
-    readonly isIntersecting: boolean;
-    readonly target: Element;
-}
-
-// https://developer.mozilla.org/docs/Web/API/Event
-declare type Event = {
-    currentTarget?: Node;
-}
-
-const ctx: {
-    mutation: {
-        observer?: MutationObserverMock,
-        mutate?: (entries: MutationRecord[]) => void
-    },
-    intersection: {
-        observer?: IntersectionObserverMock,
-        intersect?: (entries: IntersectionObserverEntry[]) => void
-    }
-} = { mutation: {}, intersection: {} };
 
 beforeEach(() => {
     global.window = {
@@ -121,8 +30,8 @@ afterEach(() => void vi.resetModules());
 
 describe("index", () => {
     it("observes mutations on import", async () => {
-        const observe = vi.spyOn(await import("../src/client/mutation.js"), "observeMutations");
-        await import("../src/client/index.js");
+        const observe = vi.spyOn(await import("../../src/client/mutation.js"), "observeMutations");
+        await import("../../src/client/index.js");
         expect(observe).toBeCalled();
     });
 });
@@ -130,20 +39,20 @@ describe("index", () => {
 describe("mutation", async () => {
     it("doesn't throw when attempting to observe while document is not defined", async () => {
         delete global.document;
-        const module = await import("../src/client/mutation.js");
+        const module = await import("../../src/client/mutation.js");
         expect(() => module.observeMutations()).not.toThrow();
         expect(MutationObserver).not.toBeCalled();
     });
 
     it("doesn't throw when attempting to observe while MutationObserver is not in window", async () => {
         delete global.window.MutationObserver;
-        const module = await import("../src/client/mutation.js");
+        const module = await import("../../src/client/mutation.js");
         expect(() => module.observeMutations()).not.toThrow();
         expect(MutationObserver).not.toBeCalled();
     });
 
     it("observes and queries body when window and MutationObserver are available", async () => {
-        const module = await import("../src/client/mutation.js");
+        const module = await import("../../src/client/mutation.js");
         module.observeMutations();
         expect(MutationObserver).toBeCalled();
         expect(ctx.mutation.observer!.observe).toBeCalledWith(document.body, expect.anything());
@@ -151,7 +60,7 @@ describe("mutation", async () => {
     });
 
     it("invokes custom handlers on mutation", async () => {
-        const module = await import("../src/client/mutation.js");
+        const module = await import("../../src/client/mutation.js");
         const added = vi.fn();
         const removed = vi.fn();
         module.addHandler([added, removed]);
@@ -161,7 +70,7 @@ describe("mutation", async () => {
     });
 
     it("ignores non-element node mutation", async () => {
-        const module = await import("../src/client/mutation.js");
+        const module = await import("../../src/client/mutation.js");
         const node = new Node();
         const added = vi.fn();
         const removed = vi.fn();
@@ -172,7 +81,7 @@ describe("mutation", async () => {
     });
 
     it("adds listener for load event on added unloaded images", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const img = new ImageElement();
         global.document!.body.querySelectorAll.mockReturnValue([img]);
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
@@ -180,7 +89,7 @@ describe("mutation", async () => {
     });
 
     it("removes listener for load event on removed images", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const img = new ImageElement();
         let loaded: (evt: Event) => void;
         img.addEventListener.mockImplementation((_, handler) => loaded = handler);
@@ -191,7 +100,7 @@ describe("mutation", async () => {
     });
 
     it("assigns loaded attribute to closest container when listened image loads", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const container = new Element("DIV");
         const img = new ImageElement();
         let loaded: (evt: Event) => void;
@@ -204,7 +113,7 @@ describe("mutation", async () => {
     });
 
     it("doesn't throw when loaded image event missing target or target is not element", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const container = new Element("DIV");
         const img = new ImageElement();
         let loaded: (evt: Event) => void;
@@ -217,7 +126,7 @@ describe("mutation", async () => {
     });
 
     it("assigns loaded attribute to closest container on added loaded images", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const container = new Element("DIV");
         const img = new ImageElement();
         img.complete = true;
@@ -230,7 +139,7 @@ describe("mutation", async () => {
     });
 
     it("when no closest container, doesn't throw", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const img = new ImageElement();
         img.complete = true;
         img.naturalHeight = 1;
@@ -240,8 +149,8 @@ describe("mutation", async () => {
     });
 
     it("observers intersection on added videos", async () => {
-        await import("../src/client/mutation.js");
-        const observe = vi.spyOn(await import("../src/client/intersection.js"), "observeVideo");
+        await import("../../src/client/mutation.js");
+        const observe = vi.spyOn(await import("../../src/client/intersection.js"), "observeVideo");
         const video = new VideoElement();
         global.document!.body.querySelectorAll.mockReturnValue([video]);
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
@@ -249,8 +158,8 @@ describe("mutation", async () => {
     });
 
     it("un-observers intersection on removed videos", async () => {
-        await import("../src/client/mutation.js");
-        const unobserve = vi.spyOn(await import("../src/client/intersection.js"), "unobserveVideo");
+        await import("../../src/client/mutation.js");
+        const unobserve = vi.spyOn(await import("../../src/client/intersection.js"), "unobserveVideo");
         const video = new VideoElement();
         global.document!.body.querySelectorAll.mockReturnValue([video]);
         ctx.mutation.mutate!([{ addedNodes: [], removedNodes: [global.document!.body] }]);
@@ -258,7 +167,7 @@ describe("mutation", async () => {
     });
 
     it("adds listener for load event on added unloaded videos", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const video = new VideoElement();
         global.document!.body.querySelectorAll.mockReturnValue([video]);
         ctx.mutation.mutate!([{ addedNodes: [global.document!.body], removedNodes: [] }]);
@@ -266,7 +175,7 @@ describe("mutation", async () => {
     });
 
     it("removes listener for load event on removed videos", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const video = new VideoElement();
         let loaded: (evt: Event) => void;
         video.addEventListener.mockImplementation((_, handler) => loaded = handler);
@@ -277,7 +186,7 @@ describe("mutation", async () => {
     });
 
     it("assigns loaded attribute to closest container when listened video loads", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const container = new Element("DIV");
         const video = new VideoElement();
         let loaded: (evt: Event) => void;
@@ -290,7 +199,7 @@ describe("mutation", async () => {
     });
 
     it("assigns loaded attribute to closest container on added loaded videos", async () => {
-        await import("../src/client/mutation.js");
+        await import("../../src/client/mutation.js");
         const container = new Element("DIV");
         const img = new VideoElement();
         img.readyState = 2;
@@ -305,7 +214,7 @@ describe("mutation", async () => {
 describe("intersection", async () => {
     it("doesn't throw when attempting to observe while document is not defined", async () => {
         delete global.document;
-        const module = await import("../src/client/intersection.js");
+        const module = await import("../../src/client/intersection.js");
         expect(() => module.observeVideo(<never>{})).not.toThrow();
         expect(() => module.unobserveVideo(<never>{})).not.toThrow();
         expect(IntersectionObserver).not.toBeCalled();
@@ -313,19 +222,19 @@ describe("intersection", async () => {
 
     it("doesn't throw when attempting to observe while IntersectionObserver is not in window", async () => {
         delete global.window.IntersectionObserver;
-        const module = await import("../src/client/intersection.js");
+        const module = await import("../../src/client/intersection.js");
         expect(() => module.observeVideo(<never>{})).not.toThrow();
         expect(() => module.unobserveVideo(<never>{})).not.toThrow();
         expect(IntersectionObserver).not.toBeCalled();
     });
 
     it("creates observer on import when window and IntersectionObserver are available", async () => {
-        await import("../src/client/intersection.js");
+        await import("../../src/client/intersection.js");
         expect(IntersectionObserver).toBeCalled();
     });
 
     it("invokes observe and unobserve when requested", async () => {
-        const module = await import("../src/client/intersection.js");
+        const module = await import("../../src/client/intersection.js");
         const video = new VideoElement();
         module.observeVideo(<never>video);
         module.unobserveVideo(<never>video);
@@ -334,7 +243,7 @@ describe("intersection", async () => {
     });
 
     it("assigns src from data-imgit-src attribute and loads video when intersected", async () => {
-        await import("../src/client/intersection.js");
+        await import("../../src/client/intersection.js");
         const source = new SourceElement();
         source.dataset.imgitSrc = "x";
         const video = new VideoElement();
@@ -346,7 +255,7 @@ describe("intersection", async () => {
 
     it("doesn't assign av1 source, but loads the video on edge (workaround for edge bug)", async () => {
         global.window.navigator.userAgent = "Edg/";
-        await import("../src/client/intersection.js");
+        await import("../../src/client/intersection.js");
         const source = new SourceElement();
         source.dataset.imgitSrc = "x";
         source.type = "video/mp4; codecs=av01";
@@ -360,23 +269,23 @@ describe("intersection", async () => {
 
 describe("youtube", () => {
     it("adds mutation handler on import", async () => {
-        const addHandler = vi.spyOn(await import("../src/client/mutation.js"), "addHandler");
-        await import("../src/plugin/youtube/client.js");
+        const addHandler = vi.spyOn(await import("../../src/client/mutation.js"), "addHandler");
+        await import("../../src/plugin/youtube/client.js");
         expect(addHandler).toBeCalled();
     });
 
     it("queries document body on import", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         expect(document.body.querySelectorAll).toBeCalled();
     });
 
     it("doesn't throw when document is not defined on import", async () => {
         delete global.document;
-        await expect(import("../src/plugin/youtube/client.js")).resolves.not.toThrow();
+        await expect(import("../../src/plugin/youtube/client.js")).resolves.not.toThrow();
     });
 
     it("adds listener for click event on added poster and banner", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         const poster = new Element("DIV");
         const banner = new Element("DIV");
         global.document!.body.querySelectorAll.mockImplementation(query =>
@@ -388,7 +297,7 @@ describe("youtube", () => {
     });
 
     it("removes listener for click event on removed poster and banner", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         const poster = new Element("DIV");
         const banner = new Element("DIV");
         global.document!.body.querySelectorAll.mockImplementation(query =>
@@ -400,7 +309,7 @@ describe("youtube", () => {
     });
 
     it("opens data-href in new tab on banner click", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         const banner = new Element("DIV");
         banner.dataset.href = "foo";
         let clicked: (evt: Event) => void;
@@ -413,7 +322,7 @@ describe("youtube", () => {
     });
 
     it("adds loading class to container, src to iframe and listens load event on poster click", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         const poster = new Element("DIV");
         const iframe = new SourceElement();
         const player = new Element("DIV");
@@ -434,7 +343,7 @@ describe("youtube", () => {
     });
 
     it("adds playing class to container and un-hides player on iframe loaded", async () => {
-        await import("../src/plugin/youtube/client.js");
+        await import("../../src/plugin/youtube/client.js");
         const poster = new Element("DIV");
         const iframe = new SourceElement();
         const player = new Element("DIV");
