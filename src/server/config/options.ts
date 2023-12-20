@@ -55,40 +55,55 @@ export type EncodeOptions = {
     /** Local directory to store encoded content and generated files, such as covers;
      *  <code>./node_modules/.cache/imgit/encoded</code> by default. */
     root: string;
-    /** Encode parameters mapped by content MIME type; matched in order. */
-    specs: [string | Readonly<RegExp>, Readonly<EncodeSpec>][];
+    /** Configure main encoded file generation, ie file to replace source content in the built HTML. */
+    main: {
+        /** Tag to append to the names of generated main files; <code>@main</code> by default. */
+        suffix: string;
+        /** Encode parameters mapped by source content MIME type; matched in order. */
+        specs: EncodeSpecMap;
+    },
     /** Configure cover generation. By default, a tiny blurred webp cover is generated from source
      *  content and embedded as base64-encoded data for image HTML, which is shown while the source
      *  content is lazy-loading; specify <code>null</code> to disable cover generation. */
-    cover: EncodeSpec & {
-        /** Tag to append to the names of generated cover files; <code>-cover</code> by default. */
+    cover: {
+        /** Tag to append to the names of generated cover files; <code>@cover</code> by default. */
         suffix: string;
+        /** Encode parameters mapped by source content MIME type; matched in order. */
+        specs: EncodeSpecMap;
     } | null;
     /** Configure safe files generation, that is fallbacks used in case source content is not considered
      *  compatible with legacy or any browsers, such as AVIF or PSD; specify <code>null</code> to disable. */
     safe: {
+        /** Tag to append to the names of generated safe files; <code>@safe</code> by default. */
+        suffix: string;
         /** MIME content types considered safe or compatible with most browsers. When source asset content is
          *  not of the specified type, will create a fallback content with a compatible type; otherwise will
          *  use source content for fallback. */
-        types: (string | Readonly<RegExp>)[]
-        /** Tag to append to the names of generated safe files; <code>-safe</code> by default. */
-        suffix: string;
+        types: (string | Readonly<RegExp>)[];
+        /** Encode parameters mapped by source content MIME type; matched in order. */
+        specs: EncodeSpecMap;
     } | null;
-    /** Configure dense files generation, that is variants with 2x the resolution of the main content
+    /** Configure dense files generation, that is variants with x the resolution of the main content
      *  shown on high-dpi displays. Dense variants are generated when either global or per-asset spec
-     *  "width" option is specified with value less than the source content width by 2x or more;
-     *  assign <code>null</code> to disable dense file generation. */
+     *  "width" option is specified with value less than the source content width by x or more;
+     *  x is configured via 'factor' parameter; assign <code>null</code> to disable dense generation. */
     dense: {
-        /** Tag to append to the names of generated dense files; <code>-dense</code> by default. */
+        /** Tag to append to the names of generated dense files; <code>@dense</code> by default. */
         suffix: string;
+        /** When width of the source content is larger by the specified factor compared to the
+         *  scaled-down main content (due to per-asset or global width threshold, if any),
+         *  dense variant will be generated; 2 by default. */
+        factor: number;
+        /** Encode parameters mapped by source content MIME type; matched in order. */
+        specs: EncodeSpecMap;
     } | null;
-    /** Tag to append to the names of all the encoded/generated files; <code>-imgit</code> by default. */
-    suffix: string;
 };
 
 /** Configures transformation to use when encoding. */
 export type EncodeSpec = {
-    /** Video codec to use; detects automatically based on out file extension when not specified. */
+    /** Media container to use in format of out file extension, w/o dot; eg, <code>mp4</code>. */
+    ext: string;
+    /** Video codec to use; detects automatically based on container when not specified. */
     codec?: string;
     /** Select frame with specified index (0-based) instead of encoding full stream. */
     select?: number;
@@ -97,3 +112,6 @@ export type EncodeSpec = {
     /** Apply blur with intensity in 0.0 to 1.0 range. */
     blur?: number;
 };
+
+/** Encode parameters mapped by source content MIME type or regex of the type. */
+export type EncodeSpecMap = [string | Readonly<RegExp>, Readonly<EncodeSpec>][];

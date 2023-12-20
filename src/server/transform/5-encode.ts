@@ -1,5 +1,5 @@
 import { ProbedAsset, EncodedAsset, EncodedContent, ProbedContent, ContentInfo } from "../asset.js";
-import { EncodeSpec } from "../config/index.js";
+import { EncodeSpec, EncodeSpecMap } from "../config/index.js";
 import { std, cfg, ctx, cache } from "../common.js";
 import { ffmpeg } from "../ffmpeg/index.js";
 
@@ -40,40 +40,34 @@ async function everythingIsFetched(): Promise<void> {
 }
 
 async function encodeMain(content: EncodedContent, asset: EncodedAsset): Promise<void> {
-    const spec = getSpec(content.info.type, content.info, asset.spec.width);
-    if (!spec) throw Error(`Failed to get encoding spec for ${content.src}.`);
-    const ext = content.info.type.startsWith("image/") ? "avif" : "mp4";
-    content.encoded = buildEncodedPath(content, ext);
+    const spec = getSpec(cfg.encode.main.specs, content.info.type);
+    spec.scale = evalThresholdScale(content.info.width, asset.spec.width, spec.scale);
+    content.encoded = buildEncodedPath(content, cfg.encode.main.suffix, spec.ext);
     await encodeContent(`${content.src}@main`, content.local, content.encoded, content.info, spec);
 }
 
 async function encodeSafe(content: EncodedContent, asset: EncodedAsset): Promise<void> {
     if (!cfg.encode.safe || isSafe(content.info.type, cfg.encode.safe.types)) return;
-    const type = content.info.type.startsWith("image/") ? "image/webp" : "video/mp4";
-    const spec = getSpec(type, content.info, asset.spec.width);
-    if (!spec) return;
-    spec.codec = undefined;
-    const ext = type.substring(type.indexOf("/") + 1);
-    content.safe = buildEncodedPath(content, ext, cfg.encode.safe.suffix);
+    const spec = getSpec(cfg.encode.safe.specs, content.info.type);
+    spec.scale = evalThresholdScale(content.info.width, asset.spec.width, spec.scale);
+    content.safe = buildEncodedPath(content, cfg.encode.safe.suffix, spec.ext);
     await encodeContent(`${content.src}@safe`, content.local, content.safe, content.info, spec);
 }
 
 async function encodeDense(content: EncodedContent, asset: EncodedAsset): Promise<void> {
     if (!cfg.encode.dense || !content.info.type.startsWith("image/")) return;
-    const threshold = getThreshold(asset.spec.width);
-    if (!threshold || content.info.width < threshold * 2) return;
-    const spec = getSpec(content.info.type, content.info, asset.spec.width);
-    if (!spec) return;
-    spec.scale = undefined;
-    content.dense = buildEncodedPath(content, "avif", cfg.encode.dense.suffix);
+    const threshold = asset.spec.width ?? cfg.width ?? undefined;
+    if (!threshold || content.info.width < threshold * cfg.encode.dense.factor) return;
+    const spec = getSpec(cfg.encode.dense.specs, content.info.type);
+    content.dense = buildEncodedPath(content, cfg.encode.dense.suffix, spec.ext);
     await encodeContent(`${content.src}@dense`, content.local, content.dense, content.info, spec);
 }
 
 async function encodeCover(content: EncodedContent, asset: EncodedAsset): Promise<void> {
     if (cfg.cover === null || !cfg.encode.cover) return;
-    const scale = getScale(cfg.encode.cover, content.info, asset.spec.width);
-    const spec = { ...cfg.encode.cover, scale };
-    content.cover = buildEncodedPath(content, "avif", cfg.encode.cover.suffix);
+    const spec = getSpec(cfg.encode.cover.specs, content.info.type);
+    spec.scale = evalThresholdScale(content.info.width, asset.spec.width, spec.scale);
+    content.cover = buildEncodedPath(content, cfg.encode.cover.suffix, spec.ext);
     await encodeContent(`${content.src}@cover`, content.local, content.cover, content.info, spec);
 }
 
@@ -108,27 +102,25 @@ function isSafe(type: string, safe: (string | RegExp)[]): boolean {
     return false;
 }
 
-function getSpec(type: string, info: ContentInfo, specWidth?: number): EncodeSpec | undefined {
-    for (const [regex, spec] of cfg.encode.specs)
+function getSpec(specs: EncodeSpecMap, type: string): EncodeSpec {
+    for (const [regex, spec] of specs)
         if (new RegExp(regex).test(type))
-            return { ...spec, scale: getScale(spec, info, specWidth) };
-    return undefined;
+            return { ...spec };
+    throw Error(`Failed to get encoding spec for '${type}'.`);
 }
 
-function getScale(spec: EncodeSpec, info: ContentInfo, specWidth?: number) {
-    const threshold = getThreshold(specWidth);
-    const width = (threshold && threshold < info.width) ? threshold : info.width;
-    return (spec.scale ?? 1) * (width / info.width);
+function evalThresholdScale(srcWidth: number, assetThreshold?: number, srcScale?: number): number {
+    srcScale ??= 1;
+    srcWidth *= srcScale;
+    const threshold = assetThreshold ?? cfg.width ?? undefined;
+    const width = (threshold && threshold < srcWidth) ? threshold : srcWidth;
+    return srcScale * (width / srcWidth);
 }
 
-function getThreshold(specWidth?: number): number | undefined {
-    return specWidth ?? cfg.width ?? undefined;
-}
-
-function buildEncodedPath(content: ProbedContent, ext: string, suffix?: string) {
+function buildEncodedPath(content: ProbedContent, suffix: string, ext: string): string {
     const local = content.src.startsWith("/")
         ? content.local.substring(std.path.resolve(cfg.root).length + 1).replaceAll("/", "-")
         : std.path.basename(content.local);
     suffix ??= "";
-    return `${std.path.resolve(cfg.encode.root)}/${local}${cfg.encode.suffix}${suffix}.${ext}`;
+    return `${std.path.resolve(cfg.encode.root)}/${local}${suffix}.${ext}`;
 }

@@ -13,7 +13,7 @@ function buildArgs(path: string, out: string, info: ContentInfo, spec: EncodeSpe
     // https://ffmpeg.org/ffmpeg.html
     const codec = spec.codec ? `-c:v ${spec.codec}` : null;
     // AV1 requires mapping out alpha channel to a separate stream.
-    const mapAlpha = info.alpha && out.endsWith(".avif");
+    const mapAlpha = info.alpha && spec.ext === "avif";
     const map = mapAlpha ? `-map "[rgb]" -map "[a]"` : null;
     const filter = buildFilter(info, spec, mapAlpha);
     const specs = [codec, "-an", filter, map].filter(x => x).join(" ");

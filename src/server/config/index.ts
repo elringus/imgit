@@ -1,19 +1,24 @@
 import { Options } from "./options.js";
-import { defaults } from "./defaults.js";
+import { createDefaults } from "./defaults.js";
 
 export * from "./options.js";
-export { defaults } from "./defaults.js";
+export { defaults, createDefaults } from "./defaults.js";
 
 /** User-defined build preferences. */
 export type Prefs = { [P in keyof Options]?: Partial<Options[P]>; };
 
 /** Current build configuration. */
-export const cfg: Readonly<Options> = defaults;
+export let cfg: Readonly<Options> = createDefaults();
 
 /** Specifies current build configuration. */
 export function configure(prefs: Prefs) {
     for (const prop of Object.getOwnPropertyNames(prefs))
         merge(prefs, cfg, prop);
+}
+
+/** Resets the configuration to defaults. */
+export function resetConfig() {
+    cfg = createDefaults();
 }
 
 function merge(from: Record<string, unknown>, to: Record<string, unknown>, prop: string) {

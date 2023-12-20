@@ -1,5 +1,6 @@
 ﻿import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Platform, Prefs, boot, exit, cache, ctx, cfg } from "../src/server/index.js";
+import { createDefaults } from "../src/server/config/index.js";
 import { BuiltAsset } from "../src/server/asset.js";
 import { captureAll } from "../src/server/transform/1-capture.js";
 import { resolveAll } from "../src/server/transform/2-resolve.js";
@@ -9,8 +10,6 @@ import { encodeAll } from "../src/server/transform/5-encode.js";
 import { buildAll } from "../src/server/transform/6-build.js";
 import { rewriteAll } from "../src/server/transform/7-rewrite.js";
 
-// Prevent leaking config between test.
-const defaults = structuredClone((await import("../src/server/config/defaults.js")).defaults);
 const platform = {
     fs: {
         exists: vi.fn(),
@@ -40,12 +39,12 @@ const platform = {
     base64: vi.fn()
 } satisfies Platform;
 
+let defs: Readonly<Prefs>;
 let asset: BuiltAsset;
 
 beforeEach(() => {
     vi.resetAllMocks();
-    for (const prop of Object.getOwnPropertyNames(cache))
-        cache[prop] = {};
+    defs = createDefaults();
     asset = {
         syntax: { text: "", index: 0, url: "" },
         spec: {},
@@ -53,19 +52,25 @@ beforeEach(() => {
         content: { src: "", local: "", info: { type: "", alpha: false, height: 0, width: 0 }, encoded: "" },
         html: ""
     };
+    for (const prop of Object.getOwnPropertyNames(cache))
+        cache[prop] = {};
 });
 
 afterEach(exit);
 
 describe("meta", () => {
     it("configures in init", async () => {
-        await init({ encode: { safe: null } });
-        expect(cfg.encode.safe).toBeNull();
+        await init({ root: "public", cover: null, encode: { ...defs.encode, cover: null } });
+        expect(cfg.root).toStrictEqual("public");
+        expect(cfg.cover).toBeNull();
+        expect(cfg.encode.cover).toBeNull();
     });
 
     it("doesn't leak config between runs", async () => {
         await init();
-        expect(cfg.encode.safe).not.toBeNull();
+        expect(cfg.root).not.toStrictEqual("public");
+        expect(cfg.cover).not.toBeNull();
+        expect(cfg.encode.cover).not.toBeNull();
     });
 });
 
@@ -433,7 +438,7 @@ describe("encode", () => {
         asset.content.local = "public/assets/file.png";
         asset.content.info.type = "image/png";
         await encodeAll([asset]);
-        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png-imgit.avif");
+        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png@main.avif");
     });
 
     it("encodes to mp4 (with av1 codec) when content type is video", async () => {
@@ -443,7 +448,46 @@ describe("encode", () => {
         platform.path.basename.mockReturnValue("host.name-file.webm");
         asset.content.info.type = "video/webm";
         await encodeAll([asset]);
-        expect(asset.content.encoded).toStrictEqual("public/encoded/host.name-file.webm-imgit.mp4");
+        expect(asset.content.encoded).toStrictEqual("public/encoded/host.name-file.webm@main.mp4");
+    });
+
+    it("scales down to specified global width threshold when content width is larger", async () => {
+        await init({ root: "public", width: 1, encode: { root: "public/encoded" } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("scale=iw*0.1"));
+    });
+
+    it("scales down to specified asset width threshold when content width is larger", async () => {
+        await init({ root: "public", encode: { root: "public/encoded" } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        asset.spec.width = 5;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("scale=iw*0.5"));
+    });
+
+    it("respects encode spec scaling when resolving scale factor for width threshold", async () => {
+        await init({
+            root: "public",
+            width: 1,
+            encode: {
+                root: "public/encoded",
+                main: { suffix: "", specs: [[/./, { ext: "", scale: 0.1 }]] }
+            }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        asset.spec.width = 10;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("scale=iw*0.1"));
     });
 
     it("skips encoding when asset is not dirty, encoded file exist and spec cache is valid", async () => {
@@ -451,16 +495,26 @@ describe("encode", () => {
             root: "public",
             encode: {
                 root: "public/encoded",
-                specs: [[/./, { codec: "foo" }]],
-                cover: { suffix: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }
+                main: { suffix: "", specs: [[/./, { ext: "", codec: "foo" }]] },
+                cover: { suffix: "", specs: [[/./, { ext: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }]] }
             }
         });
         asset.content.src = "/file.png";
         asset.content.info.type = "image/png";
         asset.dirty = false;
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
-        cache.specs["/file.png@main"] = { codec: "foo", scale: 1 };
-        cache.specs["/file.png@cover"] = { codec: "bar", scale: 0.5, select: 0, blur: 1 };
+        cache.specs["/file.png@main"] = { ext: "", codec: "foo", scale: 1 };
+        cache.specs["/file.png@cover"] = { ext: "", codec: "bar", scale: 0.5, select: 0, blur: 1 };
+        await encodeAll([asset]);
+        expect(platform.exec).not.toBeCalled();
+    });
+
+    it("skips encoding when content with the same source and profile is already (being) encoded", async () => {
+        await init({ root: "public", encode: { root: "public/encoded" } });
+        asset.content.src = "/file.png";
+        asset.content.info.type = "image/png";
+        ctx.encodes.set("/file.png@main", Promise.resolve());
+        ctx.encodes.set("/file.png@cover", Promise.resolve());
         await encodeAll([asset]);
         expect(platform.exec).not.toBeCalled();
     });
@@ -470,36 +524,36 @@ describe("encode", () => {
             root: "public",
             encode: {
                 root: "public/encoded",
-                specs: [[/./, { codec: "foo" }]],
-                cover: { suffix: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }
+                main: { suffix: "", specs: [[/./, { ext: "", codec: "foo" }]] },
+                cover: { suffix: "", specs: [[/./, { ext: "", codec: "bar", scale: 0.5, select: 0, blur: 1 }]] }
             }
         });
         asset.content.src = "/file.png";
         asset.content.info.type = "image/png";
         asset.dirty = false;
         platform.fs.exists.mockReturnValue(Promise.resolve(true));
-        cache.specs["/file.png@main"] = { codec: "foo", scale: 2 };
-        cache.specs["/file.png@cover"] = { codec: "baz", scale: 0.5, select: 0, blur: 1 };
+        cache.specs["/file.png@main"] = { ext: "", codec: "foo", scale: 2 };
+        cache.specs["/file.png@cover"] = { ext: "", codec: "baz", scale: 0.5, select: 0, blur: 1 };
         await encodeAll([asset]);
         expect(platform.exec).toBeCalledTimes(2);
     });
 
     it("encodes safe variant when content type is not safe", async () => {
-        await init({
-            root: "public",
-            encode: { root: "public/encoded", safe: { types: [], suffix: "" } }
-        });
-        asset.content.src = "/assets/file.png";
-        asset.content.local = "public/assets/file.png";
-        asset.content.info.type = "image/png";
+        await init({ root: "public", encode: { root: "public/encoded" } });
+        asset.content.src = "/assets/file.psd";
+        asset.content.local = "public/assets/file.psd";
+        asset.content.info.type = "image/psd";
         await encodeAll([asset]);
-        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.png-imgit.webp");
+        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.psd@safe.webp");
     });
 
     it("doesnt encode safe variant when content type is safe", async () => {
         await init({
             root: "public",
-            encode: { root: "public/encoded", safe: { types: ["image/png"], suffix: "" } }
+            encode: {
+                root: "public/encoded",
+                safe: { suffix: "", types: ["image/png"], specs: [[/./, { ext: "" }]] }
+            }
         });
         asset.content.src = "/assets/file.png";
         asset.content.local = "public/assets/file.png";
@@ -509,10 +563,7 @@ describe("encode", () => {
     });
 
     it("doesn't encode safe variant when disabled", async () => {
-        await init({
-            root: "public",
-            encode: { root: "public/encoded", safe: null }
-        });
+        await init({ root: "public", encode: { root: "public/encoded", safe: null } });
         asset.content.src = "/assets/file.png";
         asset.content.local = "public/assets/file.png";
         asset.content.info.type = "image/png";
@@ -520,12 +571,171 @@ describe("encode", () => {
         expect(asset.content.safe).toBeUndefined();
     });
 
+    it("encodes dense variant when global width threshold is x factor main encoded width", async () => {
+        await init({
+            root: "public",
+            width: 1,
+            encode: {
+                root: "public/encoded",
+                dense: { suffix: "@dense", factor: 10, specs: [[/./, { ext: "avif" }]] }
+            }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toStrictEqual("public/encoded/assets-file.png@dense.avif");
+    });
+
+    it("encodes dense variant when asset's width threshold is x factor main encoded width", async () => {
+        await init({
+            root: "public",
+            width: undefined,
+            encode: {
+                root: "public/encoded",
+                dense: { suffix: "@dense", factor: 10, specs: [[/./, { ext: "avif" }]] }
+            }
+        });
+        asset.spec.width = 1;
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toStrictEqual("public/encoded/assets-file.png@dense.avif");
+    });
+
+    it("doesn't encodes dense variant when disabled", async () => {
+        await init({ root: "public", width: 1, encode: { root: "public/encoded", dense: null } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toBeUndefined();
+    });
+
+    it("doesn't encodes dense variant when content type is not image", async () => {
+        await init({
+            root: "public",
+            width: 1,
+            encode: {
+                root: "public/encoded",
+                dense: { suffix: "@dense", factor: 10, specs: [[/./, { ext: "avif" }]] }
+            }
+        });
+        asset.content.src = "/assets/file.mp4";
+        asset.content.local = "public/assets/file.mp4";
+        asset.content.info.type = "video/mp4";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toBeUndefined();
+    });
+
+    it("doesn't encode dense variant when neither global, not per-asset threshold is specified", async () => {
+        await init({
+            root: "public",
+            width: undefined,
+            encode: {
+                root: "public/encoded",
+                dense: { suffix: "@dense", factor: 10, specs: [[/./, { ext: "avif" }]] }
+            }
+        });
+        asset.spec.width = undefined;
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toBeUndefined();
+    });
+
+    it("doesn't encode dense variant when content width is below threshold multiplied by factor", async () => {
+        await init({
+            root: "public",
+            width: 2,
+            encode: {
+                root: "public/encoded",
+                dense: { suffix: "@dense", factor: 10, specs: [[/./, { ext: "avif" }]] }
+            }
+        });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
+        await encodeAll([asset]);
+        expect(asset.content.dense).toBeUndefined();
+    });
+
+    it("blurs dense variant when specified in spec config", async () => {
+        await init({
+            root: "public",
+            cover: null,
+            encode: { dense: { suffix: "", factor: 2, specs: [[/./, { ext: "", blur: 1 }]] } }
+        });
+        asset.spec.width = 1;
+        asset.content.info.width = 2;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("boxblur="));
+    });
+
+    it("encodes cover variant by default", async () => {
+        await init({ root: "public", encode: { ...defs.encode, root: "public/encoded" } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.cover).toStrictEqual("public/encoded/assets-file.png@cover.avif");
+    });
+
+    it("doesn't encode cover when disabled globally", async () => {
+        await init({ root: "public", cover: null });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.cover).toBeUndefined();
+    });
+
+    it("doesn't encode cover when disabled via encoding config", async () => {
+        await init({ root: "public", encode: { ...defs.encode, cover: null } });
+        asset.content.src = "/assets/file.png";
+        asset.content.local = "public/assets/file.png";
+        asset.content.info.type = "image/png";
+        await encodeAll([asset]);
+        expect(asset.content.cover).toBeUndefined();
+    });
+
     it("logs ffmpeg error", async () => {
         await init();
-        if (cfg.encode.safe === null) console.log(">>>>>>>>>>");
         platform.exec.mockReturnValue(Promise.resolve({ out: "", err: Error("foo") }));
         await encodeAll([asset]);
         expect(platform.log.err).toBeCalledWith("ffmpeg error: foo");
+    });
+
+    it("maps alpha channel when content has alpha and container is avif", async () => {
+        await init({ root: "public" });
+        asset.content.info.type = "image/png";
+        asset.content.info.alpha = true;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("-map"));
+    });
+
+    it("doesn't maps alpha channel when content has no alpha", async () => {
+        await init({ root: "public" });
+        asset.content.info.type = "image/png";
+        asset.content.info.alpha = false;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.not.stringContaining("-map"));
+    });
+
+    it("doesn't maps alpha channel when content has alpha, but container is not avif", async () => {
+        await init({ root: "public" });
+        asset.content.info.type = "video/webm";
+        asset.content.info.alpha = true;
+        await encodeAll([asset]);
+        expect(platform.exec).toBeCalledWith(expect.stringContaining("-map"));
     });
 
     it("respects custom suffixes", async () => {
@@ -534,21 +744,21 @@ describe("encode", () => {
             width: 1,
             encode: {
                 root: "public/encoded",
-                suffix: "-foo",
-                cover: { suffix: "-bar" },
-                dense: { suffix: "-baz" },
-                safe: { types: [], suffix: "-far" }
+                main: { suffix: "@foo", specs: [[/./, { ext: "avif" }]] },
+                cover: { suffix: "@bar", specs: [[/./, { ext: "avif" }]] },
+                dense: { suffix: "@baz", factor: 2, specs: [[/./, { ext: "avif" }]] },
+                safe: { suffix: "@far", types: [], specs: [[/./, { ext: "webp" }]] }
             }
         });
         asset.content.src = "/assets/file.png";
         asset.content.local = "public/assets/file.png";
-        asset.content.info.width = 10;
         asset.content.info.type = "image/png";
+        asset.content.info.width = 10;
         await encodeAll([asset]);
-        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png-foo.avif");
-        expect(asset.content.cover).toStrictEqual("public/encoded/assets-file.png-foo-bar.avif");
-        expect(asset.content.dense).toStrictEqual("public/encoded/assets-file.png-foo-baz.avif");
-        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.png-foo-far.webp");
+        expect(asset.content.encoded).toStrictEqual("public/encoded/assets-file.png@foo.avif");
+        expect(asset.content.cover).toStrictEqual("public/encoded/assets-file.png@bar.avif");
+        expect(asset.content.dense).toStrictEqual("public/encoded/assets-file.png@baz.avif");
+        expect(asset.content.safe).toStrictEqual("public/encoded/assets-file.png@far.webp");
     });
 
     it("compatible plugin overrides built-in behaviour", async () => {
@@ -568,5 +778,5 @@ describe("encode", () => {
 });
 
 async function init(prefs?: Prefs): Promise<void> {
-    await boot({ ...defaults, ...prefs }, platform);
+    await boot(prefs, platform);
 }

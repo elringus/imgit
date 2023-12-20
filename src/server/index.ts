@@ -1,4 +1,4 @@
-import { Prefs, configure, cfg } from "./config/index.js";
+import { Prefs, configure, cfg, resetConfig } from "./config/index.js";
 import { Platform, bind } from "./platform/index.js";
 import * as cache from "./cache.js";
 import { clear as clearContext } from "./context.js";
@@ -21,6 +21,7 @@ export async function boot(prefs?: Prefs, platform?: Platform): Promise<void> {
 
 /** Resets build context and caches results. */
 export async function exit(): Promise<void> {
-    clearContext();
     if (cfg.cache) await cache.save(cache.cache);
+    clearContext();
+    resetConfig();
 }
