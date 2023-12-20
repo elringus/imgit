@@ -1,11 +1,11 @@
 ﻿import { vi, it, expect, beforeEach, afterEach } from "vitest";
-import { Global, Event, Node, Element, ImageElement, VideoElement, setup, ctx } from "./common.js";
+import { Global, Event, Node, Element, ImageElement, VideoElement, setup, tear, ctx } from "./common.js";
 
 declare let global: Global;
 let module: typeof import("../../src/client/mutation.js");
 
 beforeEach(() => setup(global));
-afterEach(() => void vi.resetModules());
+afterEach(tear);
 
 it("doesn't throw when attempting to observe while document is not defined", async () => {
     delete global.document;

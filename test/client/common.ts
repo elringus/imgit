@@ -116,3 +116,7 @@ export function setup(global: Global): void {
     global.MutationObserver = vi.fn(handle => new MutationObserverMock(handle));
     global.IntersectionObserver = vi.fn(handle => new IntersectionObserverMock(handle));
 }
+
+export function tear() {
+    vi.resetModules();
+}

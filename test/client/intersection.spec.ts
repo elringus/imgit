@@ -1,11 +1,11 @@
-﻿import { vi, it, expect, beforeEach, afterEach } from "vitest";
-import { Global, VideoElement, SourceElement, setup, ctx } from "./common.js";
+﻿import { it, expect, beforeEach, afterEach } from "vitest";
+import { Global, VideoElement, SourceElement, setup, tear, ctx } from "./common.js";
 
 declare let global: Global;
 let module: typeof import("../../src/client/intersection.js");
 
 beforeEach(() => setup(global));
-afterEach(() => void vi.resetModules());
+afterEach(tear);
 
 it("doesn't throw when attempting to observe while document is not defined", async () => {
     delete global.document;

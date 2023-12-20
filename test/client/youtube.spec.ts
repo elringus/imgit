@@ -1,11 +1,11 @@
 ﻿import { vi, it, expect, beforeEach, afterEach } from "vitest";
-import { Global, Event, Element, SourceElement, setup, ctx } from "./common.js";
+import { Global, Event, Element, SourceElement, setup, tear, ctx } from "./common.js";
 
 declare let global: Global;
 let module: typeof import("../../src/plugin/youtube/client.js");
 
 beforeEach(() => setup(global));
-afterEach(() => void vi.resetModules());
+afterEach(tear);
 
 it("adds mutation handler on import", async () => {
     const addHandler = vi.spyOn(await import("../../src/client/mutation.js"), "addHandler");
