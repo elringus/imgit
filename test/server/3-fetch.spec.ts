@@ -163,14 +163,14 @@ it("throws when retry response's retry-after header is not a number", async () =
     await expect(fetchAll([asset])).rejects.toThrow(/429 without retry-after header/);
 });
 
-it("compatible plugin overrides built-in behaviour", async () => {
+it("allows compatible plugin override behaviour", async () => {
     await boot({ plugins: [{ fetch: () => true }] });
     const spy = vi.spyOn(asset.content, "local", "set");
     await fetchAll([asset]);
     expect(spy).not.toBeCalled();
 });
 
-it("incompatible plugins don't override built-in behaviour", async () => {
+it("doesn't allow incompatible plugin override behaviour", async () => {
     await boot({ plugins: [{}, { fetch: () => false }] });
     asset.content.src = "/";
     const spy = vi.spyOn(asset.content, "local", "set");

@@ -24,7 +24,7 @@ async function rewriteWithPlugins(id: string, content: string, assets: BuiltAsse
     for (const plugin of cfg.plugins)
         if (plugin.rewrite) {
             const result = await plugin.rewrite(id, content, assets);
-            if (result) return result;
+            if (result !== null) return result;
         }
     return null;
 }

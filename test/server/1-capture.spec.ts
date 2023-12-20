@@ -39,13 +39,13 @@ it("captures syntax with multiple regex", async () => {
     });
 });
 
-it("compatible plugin overrides built-in behaviour", async () => {
+it("allows compatible plugin override behaviour", async () => {
     await boot({ plugins: [{ capture: () => true }] });
     const assets = await captureAll("", "![](url)");
     expect(assets).toHaveLength(0);
 });
 
-it("incompatible plugins don't override built-in behaviour", async () => {
+it("doesn't allow incompatible plugin override behaviour", async () => {
     await boot({ plugins: [{}, { capture: () => false }] });
     const assets = await captureAll("", "![](url)");
     expect(assets).toHaveLength(1);

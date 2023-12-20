@@ -36,14 +36,14 @@ it("resolves spec options to undefined when URL query is missing associated para
     });
 });
 
-it("compatible plugin overrides built-in behaviour", async () => {
+it("allows compatible plugin override behaviour", async () => {
     await boot({ plugins: [{ resolve: () => true }] });
     const spy = vi.spyOn(asset, "content", "set");
     await resolveAll([asset]);
     expect(spy).not.toBeCalled();
 });
 
-it("incompatible plugins don't override built-in behaviour", async () => {
+it("doesn't allow incompatible plugin override behaviour", async () => {
     await boot({ plugins: [{}, { resolve: () => false }] });
     const spy = vi.spyOn(asset, "content", "set");
     await resolveAll([asset]);

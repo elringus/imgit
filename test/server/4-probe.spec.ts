@@ -54,14 +54,14 @@ it("reuses existing probe result with the same src", async () => {
     expect(std.exec).not.toBeCalled();
 });
 
-it("compatible plugin overrides built-in behaviour", async () => {
+it("allows compatible plugin override behaviour", async () => {
     await boot({ plugins: [{ probe: () => true }] });
     const spy = vi.spyOn(asset.content, "info", "set");
     await probeAll([asset]);
     expect(spy).not.toBeCalled();
 });
 
-it("incompatible plugins don't override built-in behaviour", async () => {
+it("doesn't allow incompatible plugin override behaviour", async () => {
     await boot({ plugins: [{}, { probe: () => false }] });
     asset.content.src = "/";
     const spy = vi.spyOn(asset.content, "info", "set");
