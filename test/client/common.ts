@@ -1,5 +1,18 @@
 ﻿import { Mock, vi } from "vitest";
 
+// Mock browser API subset used by the tested client code.
+export type Global = {
+    window: {
+        navigator: { userAgent: string };
+        open: Mock<[string, string]>;
+        MutationObserver?: {};
+        IntersectionObserver?: {};
+    };
+    document: { body: Element } | undefined;
+    MutationObserver: typeof MutationObserverMock;
+    IntersectionObserver: typeof IntersectionObserverMock;
+};
+
 // https://developer.mozilla.org/docs/Web/API/DOMTokenList
 export class TokenList {
     add: Mock<[string]> = vi.fn();
@@ -55,7 +68,7 @@ export class MutationObserverMock {
 }
 
 // https://developer.mozilla.org/docs/Web/API/MutationRecord
-export declare type MutationRecord = {
+export type MutationRecord = {
     readonly addedNodes: Node[];
     readonly removedNodes: Node[];
 }
@@ -71,13 +84,13 @@ export class IntersectionObserverMock {
 }
 
 // https://developer.mozilla.org/docs/Web/API/IntersectionObserverEntry
-export declare type IntersectionObserverEntry = {
+export type IntersectionObserverEntry = {
     readonly isIntersecting: boolean;
     readonly target: Element;
 }
 
 // https://developer.mozilla.org/docs/Web/API/Event
-export declare type Event = {
+export type Event = {
     currentTarget?: Node;
 }
 
@@ -91,3 +104,15 @@ export const ctx: {
         intersect?: (entries: IntersectionObserverEntry[]) => void
     }
 } = { mutation: {}, intersection: {} };
+
+export function setup(global: Global): void {
+    global.window = {
+        navigator: { userAgent: "" },
+        open: vi.fn(),
+        MutationObserver: MutationObserverMock,
+        IntersectionObserver: IntersectionObserverMock
+    };
+    global.document = { body: new Element("BODY") };
+    global.MutationObserver = vi.fn(handle => new MutationObserverMock(handle));
+    global.IntersectionObserver = vi.fn(handle => new IntersectionObserverMock(handle));
+}
