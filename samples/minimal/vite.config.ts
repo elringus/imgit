@@ -4,5 +4,5 @@ import youtube from "imgit/youtube";
 import svg from "imgit/svg";
 
 export default defineConfig({
-    plugins: [imgit({ root: "../assets", plugins: [youtube(), svg()] })]
+    plugins: [imgit({ plugins: [youtube(), svg()] })]
 });

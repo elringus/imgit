@@ -9,13 +9,13 @@ export function createDefaults(): Readonly<Options> {
         root: "./public",
         regex: [/!\[(?<alt>.*?)(?<spec>\?\S+?)?]\((?<url>.+?)\)/g],
         width: null,
-        cache: { root: "./node_modules/.cache/imgit" },
+        cache: { root: "./public/imgit" },
         fetch: {
-            root: "./node_modules/.cache/imgit/fetched",
+            root: "./public/imgit/fetched",
             timeout: 30, retries: 3, delay: 6
         },
         encode: {
-            root: "./node_modules/.cache/imgit/encoded",
+            root: "./public/imgit/encoded",
             main: {
                 suffix: "@main",
                 specs: [

@@ -3,99 +3,100 @@
 
 <head>
     <title>Minimal Sample</title>
-    <link rel="icon" href="./../assets/svg.svg">
 </head>
 
 <body>
 
-<h1>imgit</h1>
-
-<h2>Image</h2>
+<h1>Image</h1>
 
 <h3>PNG</h3>
 
-![png?eager](/../assets/png.png)
+<!-- When eager option is specified, the image will not be lazy-loaded; use for the
+     above the fold content: https://web.dev/articles/lazy-loading-best-practices. -->
+![?eager](https://github.com/elringus/imgit/raw/main/samples/assets/png.png)
 
 <h3>JPG</h3>
 
-![jpg](/../assets/jpg.jpg)
-
-<h3>JPEG</h3>
-
-![jpeg?width=1920](/../assets/jpeg.jpeg)
+<!-- When width threshold is specified, imgit will down-scale the image
+     and generate additional "dense" variant for high-dpi displays. -->
+![?width=800](https://github.com/elringus/imgit/raw/main/samples/assets/jpg.jpg)
 
 <h3>WEBP</h3>
 
-![webp](/../assets/webp.webp)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/webp.webp)
 
 <h3>AVIF</h3>
 
-![avif](/../assets/avif.avif)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/avif.avif)
 
 <h3>BMP</h3>
 
-![bmp](/../assets/bmp.bmp)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/bmp.bmp)
 
 <h3>TIF</h3>
 
-![tif](/../assets/tif.tif)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/tif.tif)
 
 <h3>TIFF</h3>
 
-![tiff](/../assets/tiff.tiff)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/tiff.tiff)
 
 <h3>TGA</h3>
 
-![tga](/../assets/tga.tga)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/tga.tga)
 
 <h3>PSD</h3>
 
-![psd](/../assets/psd.psd)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/psd.psd)
 
-<h2>Animation</h2>
+<h1>Animation</h1>
 
 <h3>GIF</h3>
 
-![gif](/../assets/gif.gif)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/gif.gif)
 
 <h3>APNG</h3>
 
-![apng](/../assets/apng.apng)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/apng.apng)
 
-<h2>Video</h2>
+<h1>Video</h1>
 
 <h3>MP4</h3>
 
-![mp4](/../assets/mp4.mp4)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/mp4.mp4)
 
 <h3>WEBM</h3>
 
-![webm](/../assets/webm.webm)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/webm.webm)
 
 <h3>AVI</h3>
 
-![mp4](/../assets/avi.avi)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/avi.avi)
 
 <h3>MKV</h3>
 
-![webm](/../assets/mkv.mkv)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/mkv.mkv)
 
 <h3>MOV</h3>
 
-![webm](/../assets/mov.mov)
+![](https://github.com/elringus/imgit/raw/main/samples/assets/mov.mov)
 
-<h2>Art Direction</h2>
+<h1>Art Direction</h1>
 
-![?media=(min-width:800px)](/../assets/art-wide.jpg)
-![?media=(max-width:799px)&merge](/../assets/art-square.jpg)
+<!-- Merge option allows merging multiple assets into one. In this case this will
+     make the image display different sources depending on the window width. -->
+![?media=(min-width:800px)](https://github.com/elringus/imgit/raw/main/samples/assets/art-wide.jpg)
+![?media=(max-width:799px)&merge](https://github.com/elringus/imgit/raw/main/samples/assets/art-square.jpg)
 
-<h2>YouTube</h2>
+<h1>YouTube</h1>
 
-![Oahu Hawaii – Island in the Sun](https://www.youtube.com/watch?v=arbuYnJoLtU)
+<!-- Specify custom title for the generated youtube player via alt spec. -->
+![Oahu Hawaii - Island in the Sun](https://www.youtube.com/watch?v=arbuYnJoLtU)
 
-<h2>SVG</h2>
+<h1>SVG</h1>
 
-![](/../assets/svg.svg)
+<!-- SVG assets loaded via built-in svg plugin will be embedded to the HTML. -->
+![](https://github.com/elringus/imgit/raw/main/samples/assets/svg.svg)
 
 </body>
 

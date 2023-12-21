@@ -33,14 +33,14 @@ export type Options = {
 export type CacheOptions = {
     /** Local directory where the build cache files are stored. When building static apps (SPA) on CI,
      *  consider checking-in the cache directory to boost remote build processes;
-     *  <code>./node_modules/.cache/imgit</code> by default. */
+     *  <code>./public/imgit</code> by default. */
     root: string;
 }
 
 /** Configures remote assets downloading behaviour. */
 export type FetchOptions = {
     /** Local directory to store downloaded remote content files;
-     *  <code>./node_modules/.cache/imgit/fetched</code> by default. */
+     *  <code>./public/imgit/fetched</code> by default. */
     root: string;
     /** How long to wait when downloading remote asset, in seconds; 30 by default. */
     timeout: number;
@@ -53,7 +53,7 @@ export type FetchOptions = {
 /** Configures assets encoding. */
 export type EncodeOptions = {
     /** Local directory to store encoded content and generated files, such as covers;
-     *  <code>./node_modules/.cache/imgit/encoded</code> by default. */
+     *  <code>./public/imgit/encoded</code> by default. */
     root: string;
     /** Configure main encoded file generation, ie file to replace source content in the built HTML. */
     main: {
