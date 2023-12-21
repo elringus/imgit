@@ -5,8 +5,8 @@ import { transform, exit, cfg } from "../../src/server/index.js";
 beforeEach(setup);
 afterEach(tear);
 
-describe("meta", () => {
-    it("configures in init", async () => {
+describe("config", () => {
+    it("configures on boot", async () => {
         await boot({ root: "public", cover: null, encode: { ...defs.encode, cover: null } });
         expect(cfg.root).toStrictEqual("public");
         expect(cfg.cover).toBeNull();
