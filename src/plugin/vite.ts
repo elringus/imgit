@@ -14,10 +14,10 @@ export type VitePrefs = Prefs & {
 declare type VitePlugin = {
     name: string;
     enforce?: "pre" | "post";
-    buildStart?: (options: unknown) => Promise<void> | void;
-    transform?: (code: string, id: string, options?: { ssr?: boolean; }) => Promise<string> | string;
-    transformIndexHtml?: (html: string) => HtmlTagDescriptor[] | string;
-    buildEnd?: (error?: Error) => Promise<void> | void;
+    buildStart: (options: unknown) => Promise<void> | void;
+    transform: (code: string, id: string, options?: { ssr?: boolean; }) => Promise<string> | string;
+    transformIndexHtml: (html: string) => HtmlTagDescriptor[] | string;
+    buildEnd: (error?: Error) => Promise<void> | void;
 };
 
 // https://vitejs.dev/guide/api-plugin#transformindexhtml

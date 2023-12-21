@@ -4,7 +4,6 @@ import { cache } from "../../src/server/index.js";
 import { resolveAll } from "../../src/server/transform/2-resolve.js";
 import { buildAll } from "../../src/server/transform/6-build.js";
 import youtube from "../../src/plugin/youtube/index.js";
-import svg from "../../src/plugin/svg.js";
 
 beforeEach(setup);
 afterEach(tear);
