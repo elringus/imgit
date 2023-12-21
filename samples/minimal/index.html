@@ -3,6 +3,7 @@
 
 <head>
     <title>Minimal Sample</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/imgit/dist/client/styles.css">
 </head>
 
 <body>
@@ -87,6 +88,14 @@
      make the image display different sources depending on the window width. -->
 ![?media=(min-width:800px)](https://github.com/elringus/imgit/raw/main/samples/assets/art-wide.jpg)
 ![?media=(max-width:799px)&merge](https://github.com/elringus/imgit/raw/main/samples/assets/art-square.jpg)
+
+<!-- Client detects when lazy-loaded content is in view (via intersection observer) in loads it.
+     Mutation observer watches for dynamically added lazy-loaded content (eg, in SPA). -->
+<script type="module">
+    import { observeMutations } from "https://unpkg.com/imgit/dist/client/mutation.js";
+
+    observeMutations();
+</script>
 
 </body>
 
