@@ -1,16 +1,8 @@
 .vs
 .idea
-.DS_Store
 
-[Bb]in
-[Oo]bj
-[Pp]ackages
-
-*.suo
-*.user
-
-node_modules
-public/bundle*
 dist
-build
-.nyc_output
+public
+coverage
+node_modules
+package-lock.json
