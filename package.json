@@ -21,7 +21,7 @@
     },
     "scripts": {
         "test": "vitest run",
-        "cover": "vitest run --coverage.enabled --coverage.reporter text",
+        "cover": "vitest run --coverage.enabled --coverage.exclude src/server/platform",
         "build": "sh scripts/build.sh",
         "deploy": "npm publish --access public"
     },

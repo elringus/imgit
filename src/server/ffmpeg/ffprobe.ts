@@ -16,7 +16,7 @@ export async function ffprobe(path: string): Promise<ContentInfo> {
 // TODO: Sniff via 'file --mime-type' (choco file on win)
 function resolveTypeNaive(path: string): string {
     const ext = getExtension(path).toLowerCase();
-    /* v8 ignore start */
+    /* v8 ignore start (no test value) */
     if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
     if (ext === "tif" || ext === "tiff") return "image/tiff";
     if (ext === "png") return "image/png";

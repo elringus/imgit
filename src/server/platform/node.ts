@@ -1,5 +1,3 @@
-/* v8 ignore start */
-
 // @ts-ignore
 import $fs from "node:fs";
 // @ts-ignore
