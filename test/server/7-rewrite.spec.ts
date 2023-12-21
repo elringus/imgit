@@ -7,7 +7,7 @@ afterEach(tear);
 
 it("replaces captured syntax with built HTML", async () => {
     await boot();
-    expect(await rewriteAll("", "foo x baz", [
+    expect(await rewriteAll("foo x baz", [
         <never>{ syntax: { text: "foo" }, html: "bar" },
         <never>{ syntax: { text: "baz" }, html: "far" }
     ])).toStrictEqual("bar x far");
@@ -15,7 +15,7 @@ it("replaces captured syntax with built HTML", async () => {
 
 it("ignores assets with conflicting html", async () => {
     await boot();
-    expect(await rewriteAll("", "foo x baz", [
+    expect(await rewriteAll("foo x baz", [
         <never>{ syntax: { text: "foo" }, html: "bar" },
         <never>{ syntax: { text: "foo" }, html: "xxx" },
         <never>{ syntax: { text: "baz" }, html: "far" }
@@ -25,13 +25,13 @@ it("ignores assets with conflicting html", async () => {
 it("allows compatible plugin override behaviour", async () => {
     await boot({ plugins: [{ rewrite: () => "" }] });
     const spy = vi.spyOn(asset, "html", "get");
-    await rewriteAll("", "", [asset]);
+    await rewriteAll("", [asset]);
     expect(spy).not.toBeCalled();
 });
 
 it("doesn't allow incompatible plugin override behaviour", async () => {
     await boot({ plugins: [{}, { rewrite: () => null }] });
     const spy = vi.spyOn(asset, "html", "get");
-    await rewriteAll("", "", [asset]);
+    await rewriteAll("", [asset]);
     expect(spy).toBeCalled();
 });

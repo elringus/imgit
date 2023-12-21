@@ -12,12 +12,11 @@ export async function bind(api?: Platform) {
 }
 
 async function detect(): Promise<Platform> {
-    // TODO: Bundlers choke on deno's url imports.
-    // if (typeof Deno !== "undefined") return (await import("./deno")).deno;
-    if (typeof process === "object" && "versions" in process) {
+    if (typeof window === "object" && "Deno" in window)
+        return (await import("./deno.js")).deno;
+    if (typeof process === "object" && "versions" in process)
         if (process.versions.bun) return (await import("./bun.js")).bun;
-        if (process.versions.node) return (await import("./node.js")).node;
-    }
+        else if (process.versions.node) return (await import("./node.js")).node;
     throw Error("Failed to detect JavaScript runtime; specify 'platform' via plugin parameter.");
 }
 

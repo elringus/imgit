@@ -5,7 +5,7 @@ export type Plugin = {
     /** Custom procedure to capture asset syntax. Given id (filename) and content (text) of transformed document
      *  populate provided assets array and return true or return false when can't handle the document,
      *  in which case it'll be handled by next procedures in the plugin chain. */
-    capture?: (id: string, content: string, assets: CapturedAsset[]) => boolean | Promise<boolean>;
+    capture?: (content: string, assets: CapturedAsset[], id?: string) => boolean | Promise<boolean>;
     /** Custom asset resolver. Given captured asset syntax, resolves asset type,
      *  content locations and specs (in-place). Return false when the resolver can't
      *  handle the asset, in which case it'll be handled by next resolvers in the plugin chain. */
@@ -35,7 +35,7 @@ export type Plugin = {
     /** Custom procedure to rewrite captured assets syntax with built HTML. Given id (filename) and
      *  content (text) of transformed document return overwritten content or false when can't handle the case,
      *  in which case it'll be handled by next procedures in the plugin chain. */
-    rewrite?: (id: string, content: string, assets: BuiltAsset[]) => (string | null) | Promise<string | null>;
+    rewrite?: (content: string, assets: BuiltAsset[], id?: string) => (string | null) | Promise<string | null>;
     /** When specified, will inject returned file path as client JavaScript module. */
     inject?: () => string;
 };

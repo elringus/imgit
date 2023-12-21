@@ -40,7 +40,7 @@ export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
         name: "imgit",
         enforce: prefs?.enforce,
         buildStart: _ => boot(prefs, platform),
-        transform: (code, id, opt) => prefs?.skip?.(code, id, opt) ? code : transform(id, code),
+        transform: (code, id, opt) => prefs?.skip?.(code, id, opt) ? code : transform(code, id),
         transformIndexHtml: html => prefs?.inject !== false ? inject(<never>prefs?.plugins) : html,
         buildEnd: exit
     };

@@ -2,9 +2,9 @@ import { CapturedAsset, AssetSyntax } from "../asset.js";
 import { cfg } from "../common.js";
 
 /** Finds assets to transform in the document with specified content. */
-export async function captureAll(id: string, content: string): Promise<CapturedAsset[]> {
+export async function captureAll(content: string, id?: string): Promise<CapturedAsset[]> {
     const assets = new Array<CapturedAsset>;
-    if (await captureWithPlugins(id, content, assets)) return assets;
+    if (await captureWithPlugins(content, assets, id)) return assets;
     capture(content, assets);
     return assets;
 }
@@ -26,9 +26,9 @@ function createSyntax(match: RegExpMatchArray): AssetSyntax {
     };
 }
 
-async function captureWithPlugins(id: string, content: string, assets: CapturedAsset[]): Promise<boolean> {
+async function captureWithPlugins(content: string, assets: CapturedAsset[], id?: string): Promise<boolean> {
     for (const plugin of cfg.plugins)
-        if (plugin.capture && await plugin.capture(id, content, assets))
+        if (plugin.capture && await plugin.capture(content, assets, id))
             return true;
     return false;
 }

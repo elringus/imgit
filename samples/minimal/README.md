@@ -1,7 +1,6 @@
 ﻿# Minimal Sample
 
-Example on using imgit with plain HTML and vite.
+Example on using imgit directly, without bundlers:
 
-- Run `min:dev` npm script to run developer server
-- Run `min:build` to build for production
-- Run `min:preview` to preview production build
+1. Run `build.ts` with [deno](https://deno.com): `deno run -A build.ts`
+2. Serve generated `public` directory, eg: `npx serve public`
