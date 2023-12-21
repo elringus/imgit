@@ -59,7 +59,7 @@ async function buildPictureSources(content: EncodedContent, asset: BuiltAsset) {
 }
 
 function buildPictureSource(src: string, type?: string, dense?: string, media?: string): string {
-    const srcset = `${src} 1x${dense ? `, ${dense} 2x` : ""}`;
+    const srcset = `${src} 1x${dense ? `, ${dense} ${cfg.encode.dense!.factor}x` : ""}`;
     const mediaAttr = media ? `media="${media}"` : "";
     const typeAttr = type ? `type="${type}"` : "";
     return `<source srcset="${srcset}" ${typeAttr} ${mediaAttr}/>`;

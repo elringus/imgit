@@ -1,3 +1,5 @@
+/* v8 ignore start */
+
 import { Platform } from "./platform.js";
 export { Platform } from "./platform.js";
 

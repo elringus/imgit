@@ -22,11 +22,10 @@ export function resetConfig() {
 }
 
 function merge(from: Record<string, unknown>, to: Record<string, unknown>, prop: string) {
-    if (isSubOptions(from[prop])) {
-        if (to[prop] == null) to[prop] = {};
+    if (isSubOptions(from[prop]))
         for (const sub of Object.getOwnPropertyNames(from[prop]))
             merge(<never>from[prop], <never>to[prop], sub);
-    } else to[prop] = from[prop];
+    else to[prop] = from[prop];
 }
 
 function isSubOptions(obj: unknown): obj is Record<string, unknown> {

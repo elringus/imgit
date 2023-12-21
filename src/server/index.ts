@@ -16,12 +16,12 @@ export { transform } from "./transform/index.js";
 export async function boot(prefs?: Prefs, platform?: Platform): Promise<void> {
     await bind(platform);
     if (prefs) configure(prefs);
-    if (cfg.cache) Object.assign(cache.cache, await cache.load());
+    if (cfg.cache) Object.assign(cache.cache, await cache.load(cfg.cache.root));
 }
 
 /** Resets build context and caches results. */
 export async function exit(): Promise<void> {
-    if (cfg.cache) await cache.save(cache.cache);
+    if (cfg.cache) await cache.save(cache.cache, cfg.cache.root);
     clearContext();
     resetConfig();
 }

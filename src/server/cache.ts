@@ -1,4 +1,4 @@
-import { std, cfg, ensureDir } from "./common.js";
+import { std, ensureDir } from "./common.js";
 import { ContentInfo } from "./asset.js";
 import { EncodeSpec } from "./config/index.js";
 
@@ -21,21 +21,19 @@ export const empty: Readonly<Cache> = { sizes: {}, probes: {}, specs: {}, covers
 export const cache: Cache = empty;
 
 /** Persists specified cache instance for consequent runs. */
-export async function save(cache: Cache): Promise<void> {
-    if (!cfg.cache) return;
-    await ensureDir(cfg.cache.root);
+export async function save(cache: Cache, root: string): Promise<void> {
+    await ensureDir(root);
     for (const prop of Object.getOwnPropertyNames(cache)) {
-        const filepath = buildCacheFilePath(prop);
+        const filepath = buildCacheFilePath(prop, root);
         await write(filepath, (<Record<string, unknown>>cache)[prop]);
     }
 }
 
 /** Loads cache instance of a previous run. */
-export async function load(): Promise<Cache> {
+export async function load(root: string): Promise<Cache> {
     const cache: Cache = empty;
-    if (!cfg.cache) return cache;
     for (const prop of Object.getOwnPropertyNames(cache)) {
-        const filepath = buildCacheFilePath(prop);
+        const filepath = buildCacheFilePath(prop, root);
         if (await std.fs.exists(filepath))
             (<Record<string, unknown>>cache)[prop] = await read(filepath);
     }
@@ -50,6 +48,6 @@ function write(filepath: string, object: unknown) {
     return std.fs.write(filepath, JSON.stringify(object));
 }
 
-function buildCacheFilePath(prop: string) {
-    return std.path.join(cfg.cache!.root, `${prop}.json`);
+function buildCacheFilePath(prop: string, root: string) {
+    return std.path.join(root, `${prop}.json`);
 }
