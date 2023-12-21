@@ -65,6 +65,28 @@ it("doesn't add lazy attribute when eager spec is defined", async () => {
     expect(asset.html).not.toContain(`loading="lazy"`);
 });
 
+it("assigns imgit-picture css class to images", async () => {
+    await boot();
+    asset.content.info.type = "image/png";
+    await buildAll([asset]);
+    expect(asset.html).toContain(`class="imgit-picture`);
+});
+
+it("assigns imgit-video css class to videos", async () => {
+    await boot();
+    asset.content.info.type = "video/webm";
+    await buildAll([asset]);
+    expect(asset.html).toContain(`class="imgit-video`);
+});
+
+it("includes css class specified in spec", async () => {
+    await boot();
+    asset.content.info.type = "image/png";
+    asset.spec.class = "foo";
+    await buildAll([asset]);
+    expect(asset.html).toContain(`class="imgit-picture foo`);
+});
+
 it("merges image with merge spec and assigns empty HTML to merged asset", async () => {
     await boot({ root: "public" });
     asset.content.info.type = "image/png";
