@@ -1,5 +1,7 @@
 import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/index.js";
 
+/* v8 ignore start (vitest bug: https://github.com/vitest-dev/vitest/issues/4791) */
+
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
     /** Force the vite plugin to run either before are after other plugins. */
@@ -27,6 +29,8 @@ declare type HtmlTagDescriptor = {
     children?: string | HtmlTagDescriptor[];
     injectTo?: "head" | "body" | "head-prepend" | "body-prepend";
 };
+
+/* v8 ignore end */
 
 /** Creates imgit plugin instance for vite.
  *  @param prefs Plugin preferences; will use pre-defined defaults when not assigned.
