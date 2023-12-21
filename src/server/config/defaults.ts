@@ -1,4 +1,4 @@
-import { Options, EncodeSpecMap } from "./options.js";
+import { Options } from "./options.js";
 
 /** Default build server configuration. */
 export const defaults = createDefaults();
