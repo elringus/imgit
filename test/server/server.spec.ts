@@ -1,15 +1,30 @@
 ﻿import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { setup, tear, boot, std } from "./common.js";
-import { transform, exit } from "../../src/server/index.js";
+import { setup, tear, boot, std, defs } from "./common.js";
+import { transform, exit, cfg } from "../../src/server/index.js";
 
 beforeEach(setup);
 afterEach(tear);
 
-describe("transform", () => {
-    it("return empty when input is empty", async () => {
+describe("meta", () => {
+    it("configures in init", async () => {
+        await boot({ root: "public", cover: null, encode: { ...defs.encode, cover: null } });
+        expect(cfg.root).toStrictEqual("public");
+        expect(cfg.cover).toBeNull();
+        expect(cfg.encode.cover).toBeNull();
+    });
+
+    it("doesn't leak config between runs", async () => {
         await boot();
-        const content = await transform("", "");
-        expect(content).toStrictEqual("");
+        expect(cfg.root).not.toStrictEqual("public");
+        expect(cfg.cover).not.toBeNull();
+        expect(cfg.encode.cover).not.toBeNull();
+    });
+});
+
+describe("transform", () => {
+    it("returns empty when input is empty", async () => {
+        await boot();
+        expect(await transform("", "")).toStrictEqual("");
     });
 });
 
