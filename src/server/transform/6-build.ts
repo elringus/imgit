@@ -1,4 +1,4 @@
-import { EncodedAsset, BuiltAsset, EncodedContent, ContentInfo } from "../asset.js";
+import { EncodedAsset, BuiltAsset } from "../asset.js";
 import { std, cfg, cache } from "../common.js";
 
 /** Builds HTML for the optimized assets to overwrite source syntax. */
@@ -17,8 +17,8 @@ export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {
 /** Default HTML builder for supported asset types (images and video). */
 export async function build(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
     if (merges) for (const merge of merges) merge.html = "";
-    if (asset.content.info.type.startsWith("image/")) return buildPicture(asset.content, asset, merges);
-    if (asset.content.info.type.startsWith("video/")) return buildVideo(asset.content, asset, merges);
+    if (asset.content.info.type.startsWith("image/")) return buildPicture(asset, merges);
+    if (asset.content.info.type.startsWith("video/")) return buildVideo(asset, merges);
     throw Error(`Failed to build HTML for '${asset.syntax.url}': unknown type (${asset.content.info.type}).`);
 }
 
@@ -34,14 +34,14 @@ async function buildWithPlugins(asset: BuiltAsset, merges: BuiltAsset[]): Promis
     return false;
 }
 
-async function buildPicture(content: EncodedContent, asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
-    const size = buildSizeAttributes(content.info);
+async function buildPicture(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
+    const size = buildSizeAttributes(asset);
     const lazy = asset.spec.eager == null;
     const load = lazy ? `loading="lazy" decoding="async"` : `decoding="sync"`;
     const cls = `imgit-picture ${asset.spec.class ?? ""}`;
-    let sourcesHtml = await buildPictureSources(content, asset);
+    let sourcesHtml = await buildPictureSources(asset);
     if (merges) for (const merge of merges)
-        if (merge.content) sourcesHtml += await buildPictureSources(merge.content, merge);
+        if (merge.content) sourcesHtml += await buildPictureSources(merge);
     sourcesHtml += `<img data-imgit-loadable alt="${asset.syntax.alt}" ${size} ${load}/>`;
     asset.html = `
 <div class="${cls}" data-imgit-container>
@@ -50,10 +50,10 @@ async function buildPicture(content: EncodedContent, asset: BuiltAsset, merges?:
 </div>`;
 }
 
-async function buildPictureSources(content: EncodedContent, asset: BuiltAsset) {
-    const safe = await serve(content.safe ?? content.local, asset);
-    const encoded = await serve(content.encoded, asset);
-    const dense = content.dense && await serve(content.dense, asset);
+async function buildPictureSources(asset: BuiltAsset) {
+    const safe = await serve(asset.content.safe ?? asset.content.local, asset);
+    const encoded = await serve(asset.content.encoded, asset);
+    const dense = asset.content.dense && await serve(asset.content.dense, asset);
     return buildPictureSource(encoded, "image/avif", dense, asset.spec.media) +
         buildPictureSource(safe, undefined, undefined, asset.spec.media);
 }
@@ -65,10 +65,10 @@ function buildPictureSource(src: string, type?: string, dense?: string, media?: 
     return `<source srcset="${srcset}" ${typeAttr} ${mediaAttr}/>`;
 }
 
-async function buildVideo(content: EncodedContent, asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
-    const safe = await serve(content.safe ?? content.local, asset);
-    const encoded = await serve(content.encoded, asset);
-    const size = buildSizeAttributes(content.info);
+async function buildVideo(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
+    const safe = await serve(asset.content.safe ?? asset.content.local, asset);
+    const encoded = await serve(asset.content.encoded, asset);
+    const size = buildSizeAttributes(asset);
     const media = asset.spec.media ? `media="${asset.spec.media}"` : "";
     const cls = `imgit-video ${asset.spec.class ?? ""}`;
     // TODO: Resolve actual spec at the encoding stage.
@@ -105,8 +105,10 @@ async function getCoverData(asset: BuiltAsset, path: string): Promise<string> {
     return `data:image/avif;base64,${data}`;
 }
 
-function buildSizeAttributes(info: ContentInfo): string {
-    const mod = cfg.width && info.width > cfg.width ? cfg.width / info.width : 1;
+function buildSizeAttributes(asset: BuiltAsset): string {
+    const info = asset.content.info;
+    const threshold = asset.spec.width ?? cfg.width;
+    const mod = threshold && info.width > threshold ? threshold / info.width : 1;
     const width = Math.floor(info.width * mod);
     const height = Math.floor(info.height * mod);
     return `width="${width}" height="${height}"`;

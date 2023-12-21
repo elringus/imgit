@@ -1,8 +1,16 @@
-.imgit-picture, .imgit-video {
+[data-imgit-container] img,
+[data-imgit-container] video {
+    height: auto;
+    max-width: 100%;
+}
+
+.imgit-picture,
+.imgit-video {
     display: grid;
 }
 
-.imgit-picture > *, .imgit-video > * {
+.imgit-picture > *,
+.imgit-video > * {
     grid-area: 1 / 1;
 }
 

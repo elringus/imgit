@@ -50,6 +50,14 @@ it("respects width threshold for specifies width and height", async () => {
     expect(asset.html).toContain(`width="10" height="10"`);
 });
 
+it("respects asset spec threshold for specifies width and height", async () => {
+    await boot({ width: 10, root: "public" });
+    asset.content.info = { type: "image/png", width: 100, height: 100 };
+    asset.spec.width = 50;
+    await buildAll([asset]);
+    expect(asset.html).toContain(`width="50" height="50"`);
+});
+
 it("adds lazy attribute to images by default", async () => {
     await boot({ root: "public" });
     asset.content.info.type = "image/png";
