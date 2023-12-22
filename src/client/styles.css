@@ -1,27 +1,3 @@
-[data-imgit-container] img,
-[data-imgit-container] video {
-    height: auto;
-    max-width: 100%;
-}
-
-.imgit-picture,
-.imgit-video {
-    display: grid;
-}
-
-.imgit-picture > *,
-.imgit-video > * {
-    grid-area: 1 / 1;
-}
-
-.imgit-cover {
-    display: flex;
-}
-
-.imgit-cover img {
-    contain: size;
-}
-
 [data-imgit-loaded] .imgit-cover {
     opacity: 0;
     transition: opacity 0.3s ease-out;

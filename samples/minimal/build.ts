@@ -1,4 +1,6 @@
 import { boot, transform, exit } from "npm:imgit/server";
+import serve from "npm:serve-handler";
+import http from "node:http";
 
 // Configure imgit server. In this case we're setting width threshold
 // to 800px, so that when content is larger it'll be scaled down,
@@ -29,3 +31,7 @@ await Deno.writeTextFile("./public/index.html", html);
 // in case the cache is valid and source file is not modified. Cache files are
 // written under 'public/imgit' directory (can be changed in boot config).
 await exit();
+
+// Serve generated files with a local HTTP server.
+http.createServer((req, res) => serve(req, res, { public: "public" }))
+    .listen(3000, () => console.log("Serving at http://localhost:3000"));

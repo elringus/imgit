@@ -80,6 +80,14 @@ it("assigns imgit-picture css class to images", async () => {
     expect(asset.html).toContain(`class="imgit-picture`);
 });
 
+it("includes css class specified in spec to images", async () => {
+    await boot();
+    asset.content.info.type = "image/png";
+    asset.spec.class = "foo";
+    await buildAll([asset]);
+    expect(asset.html).toContain(`class="imgit-picture foo`);
+});
+
 it("assigns imgit-video css class to videos", async () => {
     await boot();
     asset.content.info.type = "video/webm";
@@ -87,12 +95,12 @@ it("assigns imgit-video css class to videos", async () => {
     expect(asset.html).toContain(`class="imgit-video`);
 });
 
-it("includes css class specified in spec", async () => {
+it("includes css class specified in spec to videos", async () => {
     await boot();
-    asset.content.info.type = "image/png";
+    asset.content.info.type = "video/mp4";
     asset.spec.class = "foo";
     await buildAll([asset]);
-    expect(asset.html).toContain(`class="imgit-picture foo`);
+    expect(asset.html).toContain(`class="imgit-video foo`);
 });
 
 it("merges image with merge spec and assigns empty HTML to merged asset", async () => {

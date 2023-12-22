@@ -1,6 +1,15 @@
 import { EncodedAsset, BuiltAsset } from "../asset.js";
 import { std, cfg, cache } from "../common.js";
 
+/** Attribute expected on containers of HTML generated for imgit content. */
+export const CONTAINER_ATTR = `data-imgit-container`;
+/** Attribute expected on HTML elements loaded by imgit. */
+export const LOADABLE_ATTR = `data-imgit-loadable`;
+/** CSS style applied to container to stack cover on top of covered element. */
+export const CONTAINER_STYLE = `style="display: grid;"`;
+/** CSS style applied to contained element to stack cover on top of covered element. */
+export const CONTAINED_STYLE = `style="grid-area: 1 / 1;"`;
+
 /** Builds HTML for the optimized assets to overwrite source syntax. */
 export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {
     const merges = new Array<BuiltAsset>;
@@ -19,7 +28,7 @@ export async function build(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<v
     if (merges) for (const merge of merges) merge.html = "";
     if (asset.content.info.type.startsWith("image/")) return buildPicture(asset, merges);
     if (asset.content.info.type.startsWith("video/")) return buildVideo(asset, merges);
-    throw Error(`Failed to build HTML for '${asset.syntax.url}': unknown type (${asset.content.info.type}).`);
+    throw Error(`Failed to build HTML: unknown type (${asset.content.info.type}).`);
 }
 
 /** Builds serve url for content file with specified full path based on configured root option. */
@@ -36,18 +45,17 @@ async function buildWithPlugins(asset: BuiltAsset, merges: BuiltAsset[]): Promis
 
 async function buildPicture(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
     const size = buildSizeAttributes(asset);
-    const lazy = asset.spec.eager == null;
-    const load = lazy ? `loading="lazy" decoding="async"` : `decoding="sync"`;
-    const cls = `imgit-picture ${asset.spec.class ?? ""}`;
-    let sourcesHtml = await buildPictureSources(asset);
-    if (merges) for (const merge of merges)
-        if (merge.content) sourcesHtml += await buildPictureSources(merge);
-    sourcesHtml += `<img data-imgit-loadable alt="${asset.syntax.alt}" ${size} ${load}/>`;
-    asset.html = `
-<div class="${cls}" data-imgit-container>
-    <picture>${sourcesHtml}</picture>
-    ${await buildCover(asset, size, merges)}
-</div>`;
+    const load = asset.spec.eager == null ? `loading="lazy" decoding="async"` : `decoding="sync"`;
+    const cls = `imgit-picture` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
+    asset.html = `<div class="${cls}" ${CONTAINER_ATTR} ${CONTAINER_STYLE}>`;
+    asset.html += `<picture ${CONTAINED_STYLE}>`;
+    asset.html += await buildPictureSources(asset);
+    if (merges) for (const merge of merges) if (merge.content)
+        asset.html += await buildPictureSources(merge);
+    asset.html += `<img ${LOADABLE_ATTR} alt="${asset.syntax.alt}" ${size} ${load}/>`;
+    asset.html += `</picture>`;
+    asset.html += await buildCover(asset, size, merges);
+    asset.html += `</div>`;
 }
 
 async function buildPictureSources(asset: BuiltAsset) {
@@ -60,27 +68,27 @@ async function buildPictureSources(asset: BuiltAsset) {
 
 function buildPictureSource(src: string, type?: string, dense?: string, media?: string): string {
     const srcset = `${src} 1x${dense ? `, ${dense} ${cfg.encode.dense!.factor}x` : ""}`;
-    const mediaAttr = media ? `media="${media}"` : "";
-    const typeAttr = type ? `type="${type}"` : "";
-    return `<source srcset="${srcset}" ${typeAttr} ${mediaAttr}/>`;
+    const typeAttr = type ? ` type="${type}"` : "";
+    const mediaAttr = media ? ` media="${media}"` : "";
+    return `<source srcset="${srcset}"${typeAttr}${mediaAttr}/>`;
 }
 
 async function buildVideo(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<void> {
-    const safe = await serve(asset.content.safe ?? asset.content.local, asset);
     const encoded = await serve(asset.content.encoded, asset);
+    const safe = await serve(asset.content.safe ?? asset.content.local, asset);
     const size = buildSizeAttributes(asset);
-    const media = asset.spec.media ? `media="${asset.spec.media}"` : "";
-    const cls = `imgit-video ${asset.spec.class ?? ""}`;
+    const media = asset.spec.media ? ` media="${asset.spec.media}"` : "";
+    const cls = `imgit-video` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
+    const videoAttrs = `preload="none" loop autoplay muted playsinline`;
     // TODO: Resolve actual spec at the encoding stage.
     const codec = "av01.0.04M.08"; // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
-    asset.html = `
-<div class="${cls}" data-imgit-container>
-    <video data-imgit-loadable preload="none" loop autoplay muted playsinline ${size}>
-        <source data-imgit-src="${encoded}" type="video/mp4; codecs=${codec}" ${media}/>
-        <source data-imgit-src="${safe}" type="video/mp4"/>
-    </video>
-    ${await buildCover(asset, size, merges)}
-</div>`;
+    asset.html = `<div class="${cls}" ${CONTAINER_ATTR} ${CONTAINER_STYLE}>`;
+    asset.html += `<video ${LOADABLE_ATTR} ${videoAttrs} ${size} ${CONTAINED_STYLE}>`;
+    asset.html += `<source data-imgit-src="${encoded}" type="video/mp4; codecs=${codec}"${media}/>`;
+    asset.html += `<source data-imgit-src="${safe}"/>`;
+    asset.html += `</video>`;
+    asset.html += await buildCover(asset, size, merges);
+    asset.html += `</div>`;
 }
 
 async function buildCover(asset: BuiltAsset, size: string, merges?: BuiltAsset[]): Promise<string> {
@@ -89,13 +97,13 @@ async function buildCover(asset: BuiltAsset, size: string, merges?: BuiltAsset[]
     if (merges) for (const merge of merges) if (merge.content.cover)
         html += await buildCoverSource(merge, merge.content.cover);
     html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" ${size} decoding="sync"/>`;
-    return `<picture class="imgit-cover">${html}</picture>`;
+    return `<picture class="imgit-cover" ${CONTAINED_STYLE}>${html}</picture>`;
 }
 
 async function buildCoverSource(asset: BuiltAsset, path: string): Promise<string> {
     const data = await getCoverData(asset, path);
-    const mediaAttr = asset.spec.media ? `media="${asset.spec.media}"` : "";
-    return `<source srcset="${data}" type="image/avif" ${mediaAttr}/>`;
+    const mediaAttr = asset.spec.media ? ` media="${asset.spec.media}"` : "";
+    return `<source srcset="${data}" type="image/avif"${mediaAttr}/>`;
 }
 
 async function getCoverData(asset: BuiltAsset, path: string): Promise<string> {

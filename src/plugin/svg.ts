@@ -1,5 +1,6 @@
 import { Plugin, std } from "../server/index.js";
 import { CapturedAsset, BuiltAsset } from "../server/asset.js";
+import { stages } from "../server/transform/index.js";
 
 /** Adds support for inlining SVG assets with imgit.
  *  @example ![](/assets/diagram.svg) */
@@ -14,8 +15,8 @@ function isSvg(asset: CapturedAsset): boolean {
 
 async function build(asset: BuiltAsset): Promise<boolean> {
     if (!isSvg(asset)) return false;
-    const cls = `imgit-svg ${asset.spec.class ?? ""}`;
+    const cls = `imgit-svg` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
     const svg = await std.fs.read(asset.content.local, "utf8");
-    asset.html = `<div class="${cls}" data-imgit-container>${svg}</div>`;
+    asset.html = `<div class="${cls}" ${stages.build.CONTAINER_ATTR}>${svg}</div>`;
     return true;
 }

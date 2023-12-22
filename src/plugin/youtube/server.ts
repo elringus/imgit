@@ -1,7 +1,6 @@
 import { Plugin, Cache, cache as $cache, std } from "../../server/index.js";
 import { BuiltAsset, ResolvedAsset, AssetSyntax } from "../../server/asset.js";
-import { resolveSpec } from "../../server/transform/2-resolve.js";
-import { build as buildDefault } from "../../server/transform/6-build.js";
+import { stages } from "../../server/transform/index.js";
 
 /** YouTube plugin preferences. */
 export type Prefs = {
@@ -38,7 +37,7 @@ async function resolve(asset: ResolvedAsset): Promise<boolean> {
     if (!isYouTube(asset.syntax.url)) return false;
     const id = getYouTubeId(asset.syntax.url);
     asset.content = { src: await resolveThumbnailUrl(id) };
-    asset.spec = asset.syntax.spec ? resolveSpec(asset.syntax.spec) : {};
+    asset.spec = asset.syntax.spec ? stages.resolve.resolveSpec(asset.syntax.spec) : {};
     return true;
 }
 
@@ -48,25 +47,21 @@ async function build(asset: BuiltAsset): Promise<boolean> {
     const cls = `imgit-youtube ${asset.spec.class ?? ""}`;
     const source = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1`;
     const allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
-    const banner = buildBanner(asset.syntax);
-    const title = buildTitle(asset.syntax);
-    asset.html = `
-<div class="${cls}" data-imgit-container>${title}${banner}
-    <div class="imgit-youtube-poster" title="Play YouTube video">
-        <div class="imgit-youtube-play" title="Play YouTube video"/>
-        ${await buildPoster(asset)}
-    </div>
-    <div class="imgit-youtube-player" hidden>
-        <iframe title="${asset.syntax.alt}" data-src="${source}" allow="${allow}" allowfullscreen/>
-    </div>
-</div>`;
+    asset.html = `<div class="${cls}" ${stages.build.CONTAINER_ATTR}>`;
+    asset.html += buildTitle(asset.syntax);
+    asset.html += buildBanner(asset.syntax);
+    asset.html += `<div class="imgit-youtube-poster" title="Play YouTube video">`;
+    asset.html += `<div class="imgit-youtube-play" title="Play YouTube video"/>`;
+    asset.html += await buildPoster(asset);
+    asset.html += `</div><div class="imgit-youtube-player" hidden>`;
+    asset.html += `<iframe title="${asset.syntax.alt}" data-src="${source}" allow="${allow}" allowfullscreen/>`;
+    asset.html += `</div></div>`;
     return true;
 }
 
 function buildTitle(syntax: AssetSyntax) {
     if (prefs.title === false || !syntax.alt) return "";
-    const cls = "imgit-youtube-title";
-    return `<div class="${cls}">${syntax.alt}</div>`;
+    return `<div class="imgit-youtube-title">${syntax.alt}</div>`;
 }
 
 function buildBanner(syntax: AssetSyntax): string {
@@ -78,7 +73,7 @@ function buildBanner(syntax: AssetSyntax): string {
 
 async function buildPoster(asset: BuiltAsset): Promise<string> {
     // Reuse default picture build procedure.
-    await buildDefault(asset);
+    await stages.build.build(asset);
     return asset.html;
 }
 

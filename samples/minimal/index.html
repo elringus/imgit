@@ -4,6 +4,10 @@
 <head>
     <title>Minimal Sample</title>
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/imgit/dist/client/styles.css">
+    <style>
+        body { color: #ccc; background: #222; }
+        img, video { max-width: 100%; object-fit: cover; }
+    </style>
 </head>
 
 <body>
@@ -62,14 +66,6 @@
 
 ![](https://github.com/elringus/imgit/raw/main/samples/assets/apng.apng)
 
-<h1>Merge</h1>
-
-<!-- Merge option allows merging multiple assets into one. In this case this will
-     make the image display different sources depending on the window width. We're
-     also overriding global width threshold for the wider image with the 'width' option. -->
-![?width=1200&media=(min-width:800px)](https://github.com/elringus/imgit/raw/main/samples/assets/art-wide.jpg)
-![?media=(max-width:799px)&merge](https://github.com/elringus/imgit/raw/main/samples/assets/art-square.jpg)
-
 <h1>Video</h1>
 
 <h3>MP4</h3>
@@ -91,6 +87,14 @@
 <h3>MOV</h3>
 
 ![](https://github.com/elringus/imgit/raw/main/samples/assets/mov.mov)
+
+<h1>Merge</h1>
+
+<!-- Merge option allows merging multiple assets into one. In this case this will
+     make the image display different sources depending on the window width. We're
+     also overriding global width threshold for the wider image with the 'width' option. -->
+![?width=1200&media=(min-width:800px)](https://github.com/elringus/imgit/raw/main/samples/assets/art-wide.jpg)
+![?media=(max-width:799px)&merge](https://github.com/elringus/imgit/raw/main/samples/assets/art-square.jpg)
 
 <!-- Client detects when lazy-loaded content is in view (via intersection observer) and loads it.
      Mutation observer watches for dynamically added lazy-loaded content (eg, in SPA). -->
