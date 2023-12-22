@@ -8,18 +8,18 @@ import http from "node:http";
 // Will as well load cached results from previous runs on boot.
 await boot({ width: 800 });
 
-// Read sample HTML file with remote images and video referenced
+// Read sample HTML document with remote images and video referenced
 // via markdown image tags: ![](url). The format can be changed
 // in boot config, for example to capture custom JSX tags instead.
 const content = await Deno.readTextFile("./index.html");
 
-// Run the imgit transformations over sample HTML.
-// This will capture referenced content syntax, fetch the remote files,
-// encode them to AV1/AVIF, generate covers, dense and safe variants
-// when necessary, serve generated files to a CDN (in this minimal case
-// the files will be copied to 'public' directory instead) and return
-// transformed content where captured content syntax is replaced with
-// <picture> and <video> HTML tags referencing generated files.
+// Run the imgit transformations over sample HTML content.
+// This will capture images and video syntax, fetch the remote files,
+// encode them to AV1/AVIF, generate covers, dense and safe variants when
+// necessary, serve generated files (in this minimal case we just write them
+// to 'public' directory; usually you'd upload to a CDN) and return transformed
+// content where captured syntax is replaced with <picture> and <video> HTML
+// tags referencing generated files.
 const html = await transform(content);
 
 // Write the transformed HTML under 'public' directory.
