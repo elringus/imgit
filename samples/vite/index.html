@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <title>Minimal Sample</title>
+    <title>Vite Sample</title>
+    <meta charset="utf-8">
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" type="text/css" href="https://unpkg.com/imgit/dist/client/styles.css">
     <style>
         body { color: #ccc; background: #222; font-family: monospace; }
         img, video { max-width: 100%; object-fit: cover; }
@@ -13,7 +13,7 @@
 
 <body>
 
-<!-- This file will be transformed by imgit when running 'build.ts'. Markdown image
+<!-- This file will be transformed by imgit when bundling with vite. Markdown image
      tags below will be replaced with <picture> and <video> HTML tags referencing
      generated content. Transformed files will be written under 'public' directory. -->
 
@@ -97,12 +97,17 @@
 ![?width=1200&media=(min-width:800px)](https://github.com/elringus/imgit/raw/main/samples/assets/art-wide.jpg)
 ![?media=(max-width:799px)&merge](https://github.com/elringus/imgit/raw/main/samples/assets/art-square.jpg)
 
-<!-- Client detects when lazy-loaded content is in view (via intersection observer) and loads it.
-     Mutation observer watches for dynamically added lazy-loaded content (eg, in SPA). -->
-<script type="module">
-    import { observeMutations } from "https://unpkg.com/imgit/dist/client/mutation.js";
-    observeMutations();
-</script>
+<h1>YouTube</h1>
+
+<!-- When YouTube plugin is installed, will build lazy-loaded picture element with the
+     video's thumbnail, which is transformed into embedded iframe player when licked
+     Custom video title can be defined via alt spec. -->
+![Oahu Hawaii – Island in the Sun](https://www.youtube.com/watch?v=arbuYnJoLtU)
+
+<h1>SVG</h1>
+
+<!-- When SVG plugin is installed, will embed content of the svg file into HTML. -->
+![](https://github.com/elringus/imgit/raw/main/samples/assets/svg.svg)
 
 </body>
 
