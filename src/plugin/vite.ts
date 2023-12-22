@@ -4,7 +4,7 @@ import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/i
 
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
-    /** Force the vite plugin to run either before are after other plugins. */
+    /** Force the vite plugin to run either before are after other plugins; "pre" by default. */
     enforce?: "pre" | "post";
     /** Specify condition when document shouldn't be transformed by the vite plugin. */
     skip?: (code: string, id: string, options?: { ssr?: boolean; }) => boolean;
@@ -38,7 +38,7 @@ declare type HtmlTagDescriptor = {
 export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
     return {
         name: "imgit",
-        enforce: prefs?.enforce,
+        enforce: prefs?.enforce ?? "pre",
         buildStart: _ => boot(prefs, platform),
         transform: (code, id, opt) => prefs?.skip?.(code, id, opt) ? code : transform(code, id),
         transformIndexHtml: html => prefs?.inject !== false ? inject(<never>prefs?.plugins) : html,
