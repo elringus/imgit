@@ -32,6 +32,6 @@ await Deno.writeTextFile("./public/index.html", html);
 // written under 'public/imgit' directory (can be changed in boot config).
 await exit();
 
-// Serve generated files with a local HTTP server.
+console.clear(); // Serve generated files with a local HTTP server.
 http.createServer((req, res) => serve(req, res, { public: "public" }))
     .listen(3000, () => console.log("Serving at http://localhost:3000"));
