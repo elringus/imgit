@@ -1,12 +1,14 @@
 import { boot, transform, exit } from "npm:imgit/server";
+import youtube from "npm:imgit/youtube";
+import svg from "npm:imgit/svg";
 import serve from "npm:serve-handler";
 import http from "node:http";
 
 // Configure imgit server. In this case we're setting width threshold
 // to 800px, so that when content is larger it'll be scaled down,
 // while high-res original will still be shown on high-dpi displays.
-// Will as well load cached results from previous runs on boot.
-await boot({ width: 800 });
+// We also install YouTube and SVG plugins to imgit.
+await boot({ width: 800, plugins: [youtube(), svg()] });
 
 // Read sample HTML document with remote images and video referenced
 // via markdown image tags: ![](url). The format can be changed

@@ -44,31 +44,32 @@ async function resolve(asset: ResolvedAsset): Promise<boolean> {
 async function build(asset: BuiltAsset): Promise<boolean> {
     if (!isYouTube(asset.syntax.url)) return false;
     const id = getYouTubeId(asset.syntax.url);
+    const title = asset.syntax.alt ?? "";
     const cls = `imgit-youtube ${asset.spec.class ?? ""}`;
     const source = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1`;
-    const allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+    const allow = `accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture`;
     asset.html = `<div class="${cls}" ${stages.build.CONTAINER_ATTR}>`;
-    asset.html += buildTitle(asset.syntax);
-    asset.html += buildBanner(asset.syntax);
+    asset.html += buildTitle(title);
+    asset.html += buildBanner(asset.syntax.url);
     asset.html += `<div class="imgit-youtube-poster" title="Play YouTube video">`;
     asset.html += `<div class="imgit-youtube-play" title="Play YouTube video"/>`;
     asset.html += await buildPoster(asset);
     asset.html += `</div><div class="imgit-youtube-player" hidden>`;
-    asset.html += `<iframe title="${asset.syntax.alt}" data-src="${source}" allow="${allow}" allowfullscreen/>`;
+    asset.html += `<iframe title="${title}" data-src="${source}" allow="${allow}" allowfullscreen></iframe>`;
     asset.html += `</div></div>`;
     return true;
 }
 
-function buildTitle(syntax: AssetSyntax) {
-    if (prefs.title === false || !syntax.alt) return "";
-    return `<div class="imgit-youtube-title">${syntax.alt}</div>`;
+function buildTitle(title: string) {
+    if (prefs.title === false || title === "") return "";
+    return `<div class="imgit-youtube-title">${title}</div>`;
 }
 
-function buildBanner(syntax: AssetSyntax): string {
+function buildBanner(url: string): string {
     if (prefs.banner === false) return "";
     const cls = "imgit-youtube-banner";
     const title = "Watch video on YouTube";
-    return `<button class="${cls}" title="${title}" data-href="${syntax.url}">Watch on</button>`;
+    return `<button class="${cls}" title="${title}" data-href="${url}">Watch on</button>`;
 }
 
 async function buildPoster(asset: BuiltAsset): Promise<string> {
