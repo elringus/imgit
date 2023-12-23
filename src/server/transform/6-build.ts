@@ -5,12 +5,17 @@ import { std, cfg, cache } from "../common.js";
 export const CONTAINER_ATTR = `data-imgit-container`;
 /** Attribute expected on HTML elements loaded by imgit. */
 export const LOADABLE_ATTR = `data-imgit-loadable`;
-/** CSS style applied to container to stack cover on top of covered element. */
-export const CONTAINER_STYLE = `style="display: grid;"`;
-/** CSS style applied to contained element to stack cover on top of covered element. */
-export const CONTAINED_STYLE = `style="grid-area: 1 / 1; display: flex;"`;
-/** CSS style applied to images (both main and covers) to fit into container. */
-export const IMG_STYLE = `style="contain: size;"`;
+
+// Inlining styles that affect position and size to prevent layout shift before CSS is applied.
+/** CSS style applied to container for cover layout. */
+export const CONTAINER_STYLE = `display:flex;`;
+/** CSS style applied to contained elements for cover layout. */
+export const CONTAINED_STYLE = `width:100%;`;
+/** CSS style applied to cover element for cover layout. */
+export const COVER_STYLE = `margin-left:-100%;`;
+// Covers are scaled down and exact aspect ratio may not match the original, leaving a bit uncovered.
+/** CSS style applied to cover image for cover layout. */
+export const COVER_IMG_STYLE = `height:100%;`;
 
 /** Builds HTML for the optimized assets to overwrite source syntax. */
 export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {
@@ -49,12 +54,12 @@ async function buildPicture(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<v
     const size = buildSizeAttributes(asset);
     const load = asset.spec.eager == null ? `loading="lazy" decoding="async"` : `decoding="sync"`;
     const cls = `imgit-picture` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
-    asset.html = `<div class="${cls}" ${CONTAINER_ATTR} ${CONTAINER_STYLE}>`;
-    asset.html += `<picture ${CONTAINED_STYLE}>`;
+    asset.html = `<div class="${cls}" style="${CONTAINER_STYLE}" ${CONTAINER_ATTR}>`;
+    asset.html += `<picture style="${CONTAINED_STYLE}">`;
     asset.html += await buildPictureSources(asset);
     if (merges) for (const merge of merges) if (merge.content)
         asset.html += await buildPictureSources(merge);
-    asset.html += `<img ${LOADABLE_ATTR} ${IMG_STYLE} alt="${asset.syntax.alt}" ${size} ${load}/>`;
+    asset.html += `<img ${LOADABLE_ATTR} alt="${asset.syntax.alt}" ${size} ${load}/>`;
     asset.html += `</picture>`;
     asset.html += await buildCover(asset, size, merges);
     asset.html += `</div>`;
@@ -84,8 +89,8 @@ async function buildVideo(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<voi
     const videoAttrs = `preload="none" loop autoplay muted playsinline`;
     // TODO: Resolve actual spec at the encoding stage.
     const codec = "av01.0.04M.08"; // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
-    asset.html = `<div class="${cls}" ${CONTAINER_ATTR} ${CONTAINER_STYLE}>`;
-    asset.html += `<video ${LOADABLE_ATTR} ${videoAttrs} ${size} ${CONTAINED_STYLE}>`;
+    asset.html = `<div class="${cls}" style="${CONTAINER_STYLE}" ${CONTAINER_ATTR}>`;
+    asset.html += `<video style="${CONTAINED_STYLE}" ${LOADABLE_ATTR} ${videoAttrs} ${size}>`;
     asset.html += `<source data-imgit-src="${encoded}" type="video/mp4; codecs=${codec}"${media}/>`;
     asset.html += `<source data-imgit-src="${safe}"/>`;
     asset.html += `</video>`;
@@ -98,8 +103,8 @@ async function buildCover(asset: BuiltAsset, size: string, merges?: BuiltAsset[]
     let html = asset.content.cover ? await buildCoverSource(asset, asset.content.cover) : "";
     if (merges) for (const merge of merges) if (merge.content.cover)
         html += await buildCoverSource(merge, merge.content.cover);
-    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" ${IMG_STYLE} ${size} decoding="sync"/>`;
-    return `<picture class="imgit-cover" ${CONTAINED_STYLE}>${html}</picture>`;
+    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" style="${COVER_IMG_STYLE}" ${size} decoding="sync"/>`;
+    return `<picture class="imgit-cover" style="${CONTAINED_STYLE}${COVER_STYLE}">${html}</picture>`;
 }
 
 async function buildCoverSource(asset: BuiltAsset, path: string): Promise<string> {
