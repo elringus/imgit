@@ -90,10 +90,10 @@ async function buildVideo(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<voi
     // TODO: Resolve actual spec at the encoding stage.
     const codec = "av01.0.04M.08"; // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
     asset.html = `<div class="${cls}" style="${CONTAINER_STYLE}" ${CONTAINER_ATTR}>`;
-    asset.html += `<video style="${CONTAINED_STYLE}" ${LOADABLE_ATTR} ${videoAttrs} ${size}>`;
+    asset.html += `<div style="${CONTAINED_STYLE}"><video ${LOADABLE_ATTR} ${videoAttrs} ${size}>`;
     asset.html += `<source data-imgit-src="${encoded}" type="video/mp4; codecs=${codec}"${media}/>`;
     asset.html += `<source data-imgit-src="${safe}"/>`;
-    asset.html += `</video>`;
+    asset.html += `</video></div>`;
     asset.html += await buildCover(asset, size, merges);
     asset.html += `</div>`;
 }

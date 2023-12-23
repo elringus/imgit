@@ -20,6 +20,15 @@
     cursor: pointer;
 }
 
+.imgit-youtube-poster .imgit-picture {
+    aspect-ratio: 16 / 9;
+}
+
+.imgit-youtube-poster img {
+    width: 100%;
+    height: 100%;
+}
+
 .imgit-youtube-poster::before {
     content: "";
     position: absolute;
