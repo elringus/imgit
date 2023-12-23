@@ -8,7 +8,9 @@ export const LOADABLE_ATTR = `data-imgit-loadable`;
 /** CSS style applied to container to stack cover on top of covered element. */
 export const CONTAINER_STYLE = `style="display: grid;"`;
 /** CSS style applied to contained element to stack cover on top of covered element. */
-export const CONTAINED_STYLE = `style="grid-area: 1 / 1;"`;
+export const CONTAINED_STYLE = `style="grid-area: 1 / 1; display: flex;"`;
+/** CSS style applied to images (both main and covers) to fit into container. */
+export const IMG_STYLE = `style="contain: size;"`;
 
 /** Builds HTML for the optimized assets to overwrite source syntax. */
 export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {
@@ -52,7 +54,7 @@ async function buildPicture(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<v
     asset.html += await buildPictureSources(asset);
     if (merges) for (const merge of merges) if (merge.content)
         asset.html += await buildPictureSources(merge);
-    asset.html += `<img ${LOADABLE_ATTR} alt="${asset.syntax.alt}" ${size} ${load}/>`;
+    asset.html += `<img ${LOADABLE_ATTR} ${IMG_STYLE} alt="${asset.syntax.alt}" ${size} ${load}/>`;
     asset.html += `</picture>`;
     asset.html += await buildCover(asset, size, merges);
     asset.html += `</div>`;
@@ -96,7 +98,7 @@ async function buildCover(asset: BuiltAsset, size: string, merges?: BuiltAsset[]
     let html = asset.content.cover ? await buildCoverSource(asset, asset.content.cover) : "";
     if (merges) for (const merge of merges) if (merge.content.cover)
         html += await buildCoverSource(merge, merge.content.cover);
-    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" ${size} decoding="sync"/>`;
+    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" ${IMG_STYLE} ${size} decoding="sync"/>`;
     return `<picture class="imgit-cover" ${CONTAINED_STYLE}>${html}</picture>`;
 }
 
