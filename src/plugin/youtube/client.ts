@@ -1,5 +1,4 @@
 import { addHandler } from "../../client/mutation.js";
-import "./styles.css";
 
 addHandler([handleAdded, handleRemoved]);
 typeof document === "object" && handleAdded(document.body);

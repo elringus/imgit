@@ -8,9 +8,9 @@ import youtube from "../../src/plugin/youtube/index.js";
 beforeEach(setup);
 afterEach(tear);
 
-it("injects client module", async () => {
+it("injects client module and styles", async () => {
     await boot();
-    expect(youtube().inject!()).toContain("client.js");
+    expect(youtube().inject!()).toHaveLength(2);
 });
 
 it("creates 'youtube' empty cache record on init in case it doesn't exist", async () => {

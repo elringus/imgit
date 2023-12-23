@@ -5,7 +5,7 @@ import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/i
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
     /** Specify condition when document shouldn't be transformed by the vite plugin. */
-    skip?: (code: string, id: string, options?: { ssr?: boolean; }) => boolean;
+    skip?: (filename: string) => boolean;
     /** Whether to inject imgit client JavaScript module to index HTML; enabled by default. */
     inject?: boolean;
 };
@@ -16,15 +16,18 @@ declare type VitePlugin = {
     enforce: "pre" | "post";
     buildStart: (options: unknown) => Promise<void> | void;
     transform: (code: string, id: string, options?: { ssr?: boolean; }) => Promise<string> | string;
-    transformIndexHtml?: { order: "pre" | "post", handler: (html: string) => HtmlTagDescriptor[] | string; }
+    transformIndexHtml: {
+        order: "pre" | "post",
+        handler: (html: string, ctx: { filename: string }) => Promise<{ html: string, tags: HtmlTag[] }>
+    }
     buildEnd: (error?: Error) => Promise<void> | void;
 };
 
 // https://vitejs.dev/guide/api-plugin#transformindexhtml
-declare type HtmlTagDescriptor = {
+declare type HtmlTag = {
     tag: string;
     attrs?: Record<string, string | boolean>;
-    children?: string | HtmlTagDescriptor[];
+    children?: string | HtmlTag[];
     injectTo?: "head" | "body" | "head-prepend" | "body-prepend";
 };
 
@@ -38,28 +41,39 @@ export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
         name: "imgit",
         enforce: "pre",
         buildStart: _ => boot(prefs, platform),
-        transform: (code, id, opt) => prefs?.skip?.(code, id, opt) ? code : transform(code, id),
-        transformIndexHtml: !prefs || prefs.inject !== false ? {
-            order: "pre", handler: () => inject(<never>prefs?.plugins)
-        } : undefined,
+        transform: (code, id) => prefs?.skip?.(id) ? code : transform(code, id),
+        transformIndexHtml: {
+            order: "pre",
+            handler: async (html, ctx) => ({
+                html: prefs?.skip?.(ctx.filename) ? html : await transform(html, ctx.filename),
+                tags: !prefs || prefs.inject !== false ? inject(<never>prefs?.plugins) : []
+            })
+        },
         buildEnd: exit
     };
 }
 
-function inject(plugins?: Plugin[]): HtmlTagDescriptor[] {
+function inject(plugins?: Plugin[]): HtmlTag[] {
     const dir = std.path.dirname(std.path.fileUrlToPath(import.meta.url));
-    const src = "/@fs/" + std.path.resolve(`${dir}/../client/index.js`);
-    const tags = [buildScriptTag(src)];
+    const tags = [
+        buildTag("css", std.path.resolve(`${dir}/../client/styles.css`)),
+        buildTag("module", std.path.resolve(`${dir}/../client/index.js`))
+    ];
     if (plugins) for (const plugin of plugins) if (plugin.inject)
-        tags.push(buildScriptTag("/@fs/" + plugin.inject()));
+        for (const injections of plugin.inject())
+            tags.push(buildTag(injections.type, injections.src));
     return tags;
 }
 
-function buildScriptTag(src: string): HtmlTagDescriptor {
+function buildTag(type: "css" | "module", src: string): HtmlTag {
+    const path = `/@fs/${src}`;
+    if (type === "css") return {
+        tag: "link", injectTo: "head",
+        attrs: { "rel": "stylesheet", "type": "text/css", "href": path }
+    };
     return {
-        tag: "script",
-        injectTo: "body",
+        tag: "script", injectTo: "body",
         attrs: { "type": "module" },
-        children: `import("${src}");`
+        children: `import("${path}");`
     };
 }

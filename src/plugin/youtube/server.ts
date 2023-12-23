@@ -1,5 +1,5 @@
-import { Plugin, Cache, cache as $cache, std } from "../../server/index.js";
-import { BuiltAsset, ResolvedAsset, AssetSyntax } from "../../server/asset.js";
+import { Plugin, PluginInjection, Cache, cache as $cache, std } from "../../server/index.js";
+import { BuiltAsset, ResolvedAsset } from "../../server/asset.js";
 import { stages } from "../../server/transform/index.js";
 
 /** YouTube plugin preferences. */
@@ -28,9 +28,12 @@ export default function ($prefs?: Prefs): Plugin {
     return { resolve, build, inject };
 };
 
-function inject() {
-    const thisFilePath = std.path.fileUrlToPath(import.meta.url);
-    return `${std.path.dirname(thisFilePath)}/client.js`;
+function inject(): PluginInjection[] {
+    const dir = std.path.dirname(std.path.fileUrlToPath(import.meta.url));
+    return [
+        { type: "module", src: `${dir}/client.js` },
+        { type: "css", src: `${dir}/styles.css` }
+    ];
 }
 
 async function resolve(asset: ResolvedAsset): Promise<boolean> {
@@ -45,14 +48,14 @@ async function build(asset: BuiltAsset): Promise<boolean> {
     if (!isYouTube(asset.syntax.url)) return false;
     const id = getYouTubeId(asset.syntax.url);
     const title = asset.syntax.alt ?? "";
-    const cls = `imgit-youtube ${asset.spec.class ?? ""}`;
+    const cls = `imgit-youtube` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
     const source = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1`;
     const allow = `accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture`;
     asset.html = `<div class="${cls}" ${stages.build.CONTAINER_ATTR}>`;
     asset.html += buildTitle(title);
     asset.html += buildBanner(asset.syntax.url);
     asset.html += `<div class="imgit-youtube-poster" title="Play YouTube video">`;
-    asset.html += `<div class="imgit-youtube-play" title="Play YouTube video"/>`;
+    asset.html += `<div class="imgit-youtube-play" title="Play YouTube video"></div>`;
     asset.html += await buildPoster(asset);
     asset.html += `</div><div class="imgit-youtube-player" hidden>`;
     asset.html += `<iframe title="${title}" data-src="${source}" allow="${allow}" allowfullscreen></iframe>`;

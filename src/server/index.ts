@@ -5,7 +5,7 @@ import { clear as clearContext } from "./context.js";
 
 export { Platform, std } from "./platform/index.js";
 export { Prefs, cfg, defaults } from "./config/index.js";
-export { Plugin } from "./config/plugin.js";
+export { Plugin, PluginInjection } from "./config/plugin.js";
 export { ctx } from "./context.js";
 export { Cache, cache } from "./cache.js";
 export { transform } from "./transform/index.js";

@@ -36,6 +36,14 @@ export type Plugin = {
      *  content (text) of transformed document return overwritten content or false when can't handle the case,
      *  in which case it'll be handled by next procedures in the plugin chain. */
     rewrite?: (content: string, assets: BuiltAsset[], id?: string) => (string | null) | Promise<string | null>;
-    /** When specified, will inject returned file path as client JavaScript module. */
-    inject?: () => string;
+    /** When specified, will inject specified client-side content when plugged to bundlers. */
+    inject?: () => PluginInjection[];
+};
+
+/** Used to inject client-side content for a plugin. */
+export type PluginInjection = {
+    /** Whether injected content is a JS module or CSS stylesheet. */
+    type: "module" | "css";
+    /** Full path to the injected file on local file system. */
+    src: string;
 };
