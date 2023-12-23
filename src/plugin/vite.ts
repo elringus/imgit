@@ -4,8 +4,6 @@ import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/i
 
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
-    /** Force the vite plugin to run either before are after other plugins; "pre" by default. */
-    enforce?: "pre" | "post";
     /** Specify condition when document shouldn't be transformed by the vite plugin. */
     skip?: (code: string, id: string, options?: { ssr?: boolean; }) => boolean;
     /** Whether to inject imgit client JavaScript module to index HTML; enabled by default. */
@@ -15,10 +13,10 @@ export type VitePrefs = Prefs & {
 // https://vitejs.dev/guide/api-plugin
 declare type VitePlugin = {
     name: string;
-    enforce?: "pre" | "post";
+    enforce: "pre" | "post";
     buildStart: (options: unknown) => Promise<void> | void;
     transform: (code: string, id: string, options?: { ssr?: boolean; }) => Promise<string> | string;
-    transformIndexHtml: (html: string) => HtmlTagDescriptor[] | string;
+    transformIndexHtml?: { order: "pre" | "post", handler: (html: string) => HtmlTagDescriptor[] | string; }
     buildEnd: (error?: Error) => Promise<void> | void;
 };
 
@@ -38,13 +36,15 @@ declare type HtmlTagDescriptor = {
 export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
     return {
         name: "imgit",
-        enforce: prefs?.enforce ?? "pre",
+        enforce: "pre",
         buildStart: _ => boot(prefs, platform),
         transform: (code, id, opt) => prefs?.skip?.(code, id, opt) ? code : transform(code, id),
-        transformIndexHtml: html => prefs?.inject !== false ? inject(<never>prefs?.plugins) : html,
+        transformIndexHtml: !prefs || prefs.inject !== false ? {
+            order: "pre", handler: () => inject(<never>prefs?.plugins)
+        } : undefined,
         buildEnd: exit
     };
-};
+}
 
 function inject(plugins?: Plugin[]): HtmlTagDescriptor[] {
     const dir = std.path.dirname(std.path.fileUrlToPath(import.meta.url));
@@ -56,5 +56,10 @@ function inject(plugins?: Plugin[]): HtmlTagDescriptor[] {
 }
 
 function buildScriptTag(src: string): HtmlTagDescriptor {
-    return { tag: "script", injectTo: "body", attrs: { "type": "module", "src": src } };
+    return {
+        tag: "script",
+        injectTo: "body",
+        attrs: { "type": "module" },
+        children: `import("${src}");`
+    };
 }
