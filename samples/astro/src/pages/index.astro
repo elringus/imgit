@@ -1,4 +1,6 @@
 ---
+// Unfortunately, Astro decided not to expose Vite's transformIndexHtml hook, hence
+// you have to manually include styles. (https://github.com/withastro/astro/issues/2039)
 import "imgit/styles";
 import "imgit/styles/youtube";
 ---
@@ -115,6 +117,8 @@ import "imgit/styles/youtube";
 ![](https://github.com/elringus/imgit/raw/main/samples/assets/svg.svg)
 
 <!-- Client detects when lazy-loaded content is in view (via intersection observer) and loads it. -->
+<!-- Unfortunately, Astro decided not to expose Vite's transformIndexHtml hook, hence you have to
+     manually include client-side modules. (https://github.com/withastro/astro/issues/2039) -->
 <script src="imgit/client"></script>
 <script src="imgit/client/youtube"></script>
 
