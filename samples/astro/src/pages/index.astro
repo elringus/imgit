@@ -1,3 +1,8 @@
+---
+import "imgit/styles";
+import "imgit/styles/youtube";
+---
+
 <!doctype html>
 <html lang="en">
 
@@ -5,7 +10,7 @@
     <title>Astro Sample</title>
     <meta charset="utf-8">
     <link rel="icon" href="data:,">
-    <style>
+    <style is:global>
         body { color: #ccc; background: #222; font-family: monospace; }
         img, video, svg { max-width: 100%; height: auto; }
     </style>
@@ -108,6 +113,10 @@
 
 <!-- When SVG plugin is installed, will embed content of the svg file into HTML. -->
 ![](https://github.com/elringus/imgit/raw/main/samples/assets/svg.svg)
+
+<!-- Client detects when lazy-loaded content is in view (via intersection observer) and loads it. -->
+<script src="imgit/client"></script>
+<script src="imgit/client/youtube"></script>
 
 </body>
 
