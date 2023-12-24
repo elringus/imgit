@@ -6,7 +6,7 @@
         "preview": "vite preview"
     },
     "devDependencies": {
-        "vite": "latest",
+        "vite": "^5.0.10",
         "imgit": "latest"
     }
 }
