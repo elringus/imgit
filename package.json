@@ -1,6 +1,6 @@
 {
     "name": "imgit",
-    "version": "0.0.0-alpha.38",
+    "version": "0.0.0-alpha.40",
     "description": "Transform images, video and YouTube links to HTML optimized for web vitals.",
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
@@ -17,6 +17,7 @@
         "./client": { "import": "./dist/client/index.js", "types": "./dist/client/index.d.ts" },
         "./styles": { "import": "./dist/client/styles.css" },
         "./vite": { "import": "./dist/plugin/vite.js", "types": "./dist/plugin/vite.d.ts" },
+        "./astro": { "import": "./dist/plugin/astro.js", "types": "./dist/plugin/astro.d.ts" },
         "./youtube": { "import": "./dist/plugin/youtube/index.js", "types": "./dist/plugin/youtube/index.d.ts" },
         "./client/youtube": { "import": "./dist/plugin/youtube/client.js", "types": "./dist/plugin/youtube/client.d.ts" },
         "./styles/youtube": { "import": "./dist/plugin/youtube/styles.css" },
