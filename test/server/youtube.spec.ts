@@ -124,7 +124,7 @@ it("builds title when alt is captured in syntax", async () => {
     asset.syntax.url = "https://youtube.com/watch?v=foo";
     asset.syntax.alt = "bar";
     await buildAll([asset]);
-    expect(asset.html).toContain(`<div class="imgit-youtube-title">bar</div>`);
+    expect(asset.html).toContain(`>bar</div>`);
 });
 
 it("doesn't builds title when disabled in plugin config", async () => {
@@ -133,5 +133,5 @@ it("doesn't builds title when disabled in plugin config", async () => {
     asset.syntax.url = "https://youtube.com/watch?v=foo";
     asset.syntax.alt = "bar";
     await buildAll([asset]);
-    expect(asset.html).not.toContain(`<div class="imgit-youtube-title">bar</div>`);
+    expect(asset.html).not.toContain(`>bar</div>`);
 });

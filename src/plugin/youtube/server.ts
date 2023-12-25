@@ -65,14 +65,16 @@ async function build(asset: BuiltAsset): Promise<boolean> {
 
 function buildTitle(title: string) {
     if (prefs.title === false || title === "") return "";
-    return `<div class="imgit-youtube-title">${title}</div>`;
+    const style = `position:absolute;`; // inlining to prevent layout shift before css applied
+    return `<div class="imgit-youtube-title" style="${style}">${title}</div>`;
 }
 
 function buildBanner(url: string): string {
     if (prefs.banner === false) return "";
     const cls = "imgit-youtube-banner";
     const title = "Watch video on YouTube";
-    return `<button class="${cls}" title="${title}" data-href="${url}">Watch on</button>`;
+    const style = `position:absolute;`; // inlining to prevent layout shift before css applied
+    return `<button class="${cls}" title="${title}" data-href="${url}" style="${style}">Watch on</button>`;
 }
 
 async function buildPoster(asset: BuiltAsset): Promise<string> {
