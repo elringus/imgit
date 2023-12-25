@@ -1,13 +1,11 @@
 import { boot, transform, exit } from "npm:imgit/server";
 import youtube from "npm:imgit/youtube";
 import svg from "npm:imgit/svg";
-import serve from "npm:serve-handler";
-import http from "node:http";
 
 // Configure imgit server. In this case we're setting width threshold
 // to 800px, so that when content is larger it'll be scaled down,
 // while high-res original will still be shown on high-dpi displays.
-// We also install YouTube and SVG plugins to imgit.
+// We also install YouTube and SVG plugins to imgit (optional).
 await boot({ width: 800, plugins: [youtube(), svg()] });
 
 // Read sample HTML document with remote images and video referenced
@@ -33,7 +31,3 @@ await Deno.writeTextFile("./public/index.html", html);
 // in case the cache is valid and source file is not modified. Cache files are
 // written under 'public/imgit' directory (can be changed in boot config).
 await exit();
-
-console.clear(); // Serve generated files with a local HTTP server.
-http.createServer((req, res) => serve(req, res, { public: "public" }))
-    .listen(3000, () => console.log("Serving at http://localhost:3000"));
