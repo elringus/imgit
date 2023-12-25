@@ -6,16 +6,13 @@ export const CONTAINER_ATTR = `data-imgit-container`;
 /** Attribute expected on HTML elements loaded by imgit. */
 export const LOADABLE_ATTR = `data-imgit-loadable`;
 
-// Inlining styles that affect position and size to prevent layout shift before CSS is applied.
+// Inlining styles to prevent layout shift before CSS is applied.
 /** CSS style applied to container for cover layout. */
 export const CONTAINER_STYLE = `display:flex;`;
 /** CSS style applied to contained elements for cover layout. */
 export const CONTAINED_STYLE = `width:100%;`;
 /** CSS style applied to cover element for cover layout. */
 export const COVER_STYLE = `margin-left:-100%;`;
-// Covers are scaled down and exact aspect ratio may not match the original, leaving a bit uncovered.
-/** CSS style applied to cover image for cover layout. */
-export const COVER_IMG_STYLE = `height:100%;`;
 
 /** Builds HTML for the optimized assets to overwrite source syntax. */
 export async function buildAll(assets: EncodedAsset[]): Promise<BuiltAsset[]> {
@@ -103,7 +100,7 @@ async function buildCover(asset: BuiltAsset, size: string, merges?: BuiltAsset[]
     let html = asset.content.cover ? await buildCoverSource(asset, asset.content.cover) : "";
     if (merges) for (const merge of merges) if (merge.content.cover)
         html += await buildCoverSource(merge, merge.content.cover);
-    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" style="${COVER_IMG_STYLE}" ${size} decoding="sync"/>`;
+    html += `<img src="${cfg.cover ?? "//:0"}" alt="cover" ${size} decoding="sync"/>`;
     return `<picture class="imgit-cover" style="${CONTAINED_STYLE}${COVER_STYLE}">${html}</picture>`;
 }
 

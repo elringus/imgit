@@ -7,6 +7,6 @@
     },
     "devDependencies": {
         "vite": "^5.0.10",
-        "imgit": "^0.0.0-alpha.36"
+        "imgit": "^0.0.0-alpha.38"
     }
 }
