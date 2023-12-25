@@ -9,7 +9,7 @@ declare type AstroIntegration = {
         "astro:config:setup"?: (options: {
             injectScript: AstroInjector;
             updateConfig: (config: { vite: { plugins: unknown[] } }) => void;
-        }) => void;
+        }) => void | Promise<void>;
     };
 };
 
