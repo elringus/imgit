@@ -9,6 +9,7 @@ export function createDefaults(): Readonly<Options> {
         root: "./public",
         regex: [/!\[(?<alt>.*?)(?<spec>\?\S+?)?]\((?<url>.+?)\)/g],
         width: null,
+        build: "html",
         cache: { root: "./public/imgit" },
         fetch: {
             root: "./public/imgit/fetched",

@@ -19,6 +19,8 @@ export type Options = {
      *  will as well generate additional "dense" variant that will be shown on high-dpi displays.
      *  This option is ignored when asset has width explicitly assigned via spec syntax. */
     width: number | null;
+    /** The type of syntax to build; html by default. */
+    build: "html" | "jsx";
     /** Configure build artifacts caching; assign <code>null</code> to disable caching. */
     cache: CacheOptions | null;
     /** Configure remote content fetching. */
