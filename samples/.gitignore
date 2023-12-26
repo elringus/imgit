@@ -1,4 +1,5 @@
 public
 build
+cache
 .nuxt
 .output

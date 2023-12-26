@@ -1,5 +1,4 @@
 ﻿{
-    "name": "remix-sample",
     "type": "module",
     "scripts": {
         "dev": "remix vite:dev",

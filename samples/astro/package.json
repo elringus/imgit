@@ -1,5 +1,4 @@
 {
-    "name": "astro-sample",
     "scripts": {
         "dev": "astro dev",
         "build": "astro build",
