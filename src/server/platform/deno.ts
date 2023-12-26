@@ -1,8 +1,8 @@
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import * as $fs from "https://deno.land/std/fs/mod.ts";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import * as $path from "https://deno.land/std/path/mod.ts";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import * as $base64 from "https://deno.land/std/encoding/base64.ts";
 import { Platform } from "./platform.js";
 

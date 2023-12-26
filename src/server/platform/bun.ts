@@ -1,6 +1,6 @@
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import $afs from "node:fs/promises";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import $path from "node:path";
 import type { Platform } from "./platform.js";
 

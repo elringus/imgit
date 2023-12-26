@@ -1,14 +1,14 @@
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import $fs from "node:fs";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import $afs from "node:fs/promises";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import $path from "node:path";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import { promisify } from "node:util";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import { fileURLToPath } from "node:url";
-// @ts-expect-error
+// @ts-expect-error (platform-specific)
 import { exec } from "node:child_process";
 import { Platform } from "./platform.js";
 
