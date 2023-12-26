@@ -21,17 +21,7 @@
 :root {
     --vp-font-family-base: "Inter Variable", sans-serif;
     --vp-font-family-mono: "JetBrains Mono", monospace;
-}
 
-pre {
-    font-variant-ligatures: none;
-}
-
-/**
- * Brand
- * -------------------------------------------------------------------------- */
-
-:root {
     /* Main highlight/link color. */
     --vp-c-brand-1: #00a3e6;
     /* Link hover color. */
@@ -47,6 +37,12 @@ pre {
     --vp-c-brand-dark: #118dc0;
     --vp-c-brand-darker: #0e79a5;
     --vp-c-brand-dimm: rgba(27, 174, 234, 0.08);
+
+    --vp-custom-block-tip-border: var(--vp-c-brand);
+    --vp-custom-block-tip-text: var(--vp-c-brand-darker);
+    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
+
+    --vp-code-color: #476582;
 }
 
 .dark {
@@ -54,19 +50,19 @@ pre {
     --vp-c-brand-1: #1baeea;
     /* Link hover color. */
     --vp-c-brand-2: #7ddaff;
+
+    --vp-custom-block-tip-border: var(--vp-c-brand);
+    --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
+    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
 }
 
-/**
- * Buttons
- * -------------------------------------------------------------------------- */
+pre {
+    font-variant-ligatures: none;
+}
 
 .vp-doc a {
     text-underline-position: from-font;
 }
-
-/**
- * Table
- * -------------------------------------------------------------------------- */
 
 .vp-doc th, .vp-doc td, .vp-doc tr {
     border: inherit !important;
@@ -101,22 +97,6 @@ table > tfoot:not(:last-child) {
     border-bottom: var(--border) !important;
 }
 
-/**
- * Custom Block
- * -------------------------------------------------------------------------- */
-
-:root {
-    --vp-custom-block-tip-border: var(--vp-c-brand);
-    --vp-custom-block-tip-text: var(--vp-c-brand-darker);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
-}
-
-.dark {
-    --vp-custom-block-tip-border: var(--vp-c-brand);
-    --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
-}
-
 .custom-block.tip code,
 .custom-block.info code {
     color: unset;
@@ -126,20 +106,23 @@ table > tfoot:not(:last-child) {
     display: none;
 }
 
-/**
- * Code
- * -------------------------------------------------------------------------- */
-
-:root {
-    --vp-code-color: #476582;
-}
-
 .dark body {
     --vp-code-color: #c9def1;
 }
 
 .vp-doc a:hover > code {
     color: inherit !important;
+}
+
+/* Stretch YouTube embeds with small thumbnails. */
+.imgit-youtube {
+    width: 100% !important;
+}
+
+[data-imgit-container],
+[data-imgit-container] img,
+[data-imgit-container] video {
+    border-radius: 8px;
 }
 
 /**
@@ -183,19 +166,4 @@ table > tfoot:not(:last-child) {
     bottom: 0;
     backdrop-filter: saturate(180%) blur(5px);
     z-index: -1;
-}
-
-/**
- * Custom elements
- * -------------------------------------------------------------------------- */
-
-/* Stretch YouTube embeds with small thumbnails. */
-.imgit-youtube {
-    width: 100% !important;
-}
-
-[data-imgit-container],
-[data-imgit-container] img,
-[data-imgit-container] video {
-    border-radius: 8px;
 }
