@@ -1,0 +1,14 @@
+{
+    "type": "module",
+    "scripts": {
+        "dev": "vite dev -- --open",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "@sveltejs/kit": "^2.0.6",
+        "@sveltejs/vite-plugin-svelte": "^3.0.1",
+        "vite": "^5.0.10",
+        "imgit": "^0.0.0-alpha.44"
+    }
+}

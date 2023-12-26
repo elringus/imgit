@@ -1,5 +1,7 @@
 public
+static
 build
 cache
 .nuxt
+.svelte-kit
 .output
