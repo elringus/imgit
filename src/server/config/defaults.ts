@@ -13,7 +13,7 @@ export function createDefaults(): Readonly<Options> {
         cache: { root: "./public/imgit" },
         fetch: {
             root: "./public/imgit/fetched",
-            timeout: 30, retries: 3, delay: 6
+            timeout: 60, retries: 3, delay: 6
         },
         encode: {
             root: "./public/imgit/encoded",

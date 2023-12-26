@@ -1,0 +1,16 @@
+{
+    "type": "module",
+    "scripts": {
+        "dev": "vinxi dev -- --open",
+        "build": "vinxi build",
+        "start": "node ./.output/server/index.mjs"
+    },
+    "dependencies": {
+        "@solidjs/start": "^0.4.2",
+        "solid-js": "^1.8.7",
+        "vinxi": "^0.0.54"
+    },
+    "devDependencies": {
+        "imgit": "^0.0.0-alpha.45"
+    }
+}

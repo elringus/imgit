@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "module": "esnext",
+        "target": "esnext",
+        "moduleResolution": "bundler",
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js"
+    }
+}
