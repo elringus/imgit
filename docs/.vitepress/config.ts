@@ -22,6 +22,7 @@ export default defineConfig({
         logoLink: "https://imgit.dev",
         socialLinks: [{ icon: "github", link: "https://github.com/elringus/imgit" }],
         externalLinkIcon: true,
+        search: { provider: "local" },
         lastUpdated: { text: "Updated", formatOptions: { dateStyle: "medium" } },
         sidebarMenuLabel: "Menu",
         darkModeSwitchLabel: "Appearance",
@@ -42,7 +43,7 @@ export default defineConfig({
             text: "Edit this page on GitHub"
         },
         sidebar: {
-            "/": [
+            "/guide/": [
                 {
                     text: "Guide",
                     collapsed: true,

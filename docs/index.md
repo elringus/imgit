@@ -7,7 +7,7 @@ titleTemplate: Convert media links to optimized HTML
 hero:
   name: imgit
   text: Convert media links to optimized HTML
-  tagline: Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals).
+  tagline: Images, video and YouTube&#58; fetch, encode, scale, lazyload – for best UX and <a href="https://web.dev/vitals" target="_blank">Web Vitals</a>.
   actions:
     - theme: brand
       text: Get Started
@@ -28,7 +28,7 @@ features:
     details: Encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration.
   - icon: ♻️
     title: Polyglot
-    details: Works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD.
+    details: Works with most known media formats&#58; JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD.
   - icon: 🌊
     title: Smooth
     details: Generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded.
@@ -63,4 +63,11 @@ features:
     --vp-home-hero-image-filter: blur(68px);
   }
 }
+
+/* Disable navbar blur effect when not scrolled */
+.VPNavBar { transition: background-color 0.3s ease-out; }
+.VPNavBar.top { background: transparent !important;  }
+.dark .VPNavBar.top { background: transparent !important; }
+.VPNav::after { transition: opacity 0.3s ease-out; }
+.VPNav.top::after { opacity: 0; }
 </style>
