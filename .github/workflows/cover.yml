@@ -1,0 +1,24 @@
+﻿name: cover
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  cover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: cover
+        run: |
+          npm install
+          npm run cover
+      - name: upload report
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
