@@ -1,14 +1,14 @@
-// @ts-ignore
+// @ts-expect-error
 import $fs from "node:fs";
-// @ts-ignore
+// @ts-expect-error
 import $afs from "node:fs/promises";
-// @ts-ignore
+// @ts-expect-error
 import $path from "node:path";
-// @ts-ignore
+// @ts-expect-error
 import { promisify } from "node:util";
-// @ts-ignore
+// @ts-expect-error
 import { fileURLToPath } from "node:url";
-// @ts-ignore
+// @ts-expect-error
 import { exec } from "node:child_process";
 import { Platform } from "./platform.js";
 
