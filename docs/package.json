@@ -1,0 +1,13 @@
+{
+    "type": "module",
+    "scripts": {
+        "dev": "vitepress dev docs",
+        "build": "vitepress build docs",
+        "preview": "vitepress preview docs"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3",
+        "vitepress": "^1.0.0-rc.33",
+        "imgit": "^0.0.0-alpha.46"
+    }
+}
