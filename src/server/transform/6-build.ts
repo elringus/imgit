@@ -86,7 +86,7 @@ async function buildVideo(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<voi
     const media = asset.spec.media ? ` media="${asset.spec.media}"` : "";
     const cls = `imgit-video` + (asset.spec.class ? ` ${asset.spec.class}` : ``);
     const videoAttrs = `preload="none" loop autoplay muted playsinline`;
-    // TODO: Resolve actual spec at the encoding stage.
+    // TODO: Resolve actual spec at the encoding stage (https://github.com/elringus/imgit/issues/3)
     const codec = "av01.0.04M.08"; // https://jakearchibald.com/2022/html-codecs-parameter-for-av1
     asset.html = `<div class="${cls}" style="${COVER_CONTAINER_STYLE}" ${CONTAINER_ATTR}>`;
     asset.html += `<div style="${COVER_CONTAINED_STYLE}"><video ${LOADABLE_ATTR} ${videoAttrs} ${size}>`;

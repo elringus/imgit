@@ -13,7 +13,7 @@ export async function ffprobe(path: string): Promise<ContentInfo> {
     return { width: Number(parts[0]), height: Number(parts[1]), alpha, type };
 }
 
-// TODO: Sniff via 'file --mime-type' (choco file on win)
+// TODO: Sniff via 'file --mime-type' (https://github.com/elringus/imgit/issues/2)
 function resolveTypeNaive(path: string): string {
     const ext = getExtension(path).toLowerCase();
     /* v8 ignore start (no test value) */
