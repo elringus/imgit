@@ -7,7 +7,7 @@ beforeEach(setup);
 afterEach(tear);
 
 beforeEach(() => {
-    std.path.relative = vi.fn((a, _) => a);
+    std.path.relative = <never>vi.fn(a => a);
     std.path.basename = vi.fn(a => a.replaceAll("/", ""));
     std.base64.mockReturnValue(Promise.resolve("base64"));
 });

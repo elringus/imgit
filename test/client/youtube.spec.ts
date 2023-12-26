@@ -2,7 +2,6 @@
 import { Global, Event, Element, SourceElement, setup, tear, ctx } from "./common.js";
 
 declare let global: Global;
-let module: typeof import("../../src/plugin/youtube/client.js");
 
 beforeEach(() => setup(global));
 afterEach(tear);
@@ -108,5 +107,5 @@ it("adds playing class to container and un-hides player on iframe loaded", async
 });
 
 async function importModule(): Promise<void> {
-    module = await import("../../src/plugin/youtube/client.js");
+    await import("../../src/plugin/youtube/client.js");
 }

@@ -5,8 +5,8 @@ export type Global = {
     window: {
         navigator: { userAgent: string };
         open: Mock<[string, string]>;
-        MutationObserver?: {};
-        IntersectionObserver?: {};
+        MutationObserver?: object;
+        IntersectionObserver?: object;
     };
     document: { body: Element } | undefined;
     MutationObserver: typeof MutationObserverMock;
@@ -33,7 +33,7 @@ export class Element extends Node {
     constructor(public tagName: string) { super(); }
     addEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
     removeEventListener: Mock<[string, (evt: Event) => void]> = vi.fn();
-    querySelectorAll: Mock<[string], Element[]> = vi.fn(_ => []);
+    querySelectorAll: Mock<[string], Element[]> = <never>vi.fn(() => []);
     closest: Mock<[string], Element> = vi.fn();
 }
 

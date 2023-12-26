@@ -26,7 +26,7 @@ export default function ($prefs?: Prefs): Plugin {
     if (!cache.hasOwnProperty("youtube")) cache.youtube = {};
     Object.assign(prefs, $prefs);
     return { resolve, build, inject };
-};
+}
 
 function inject(): PluginInjection[] {
     const dir = std.path.dirname(std.path.fileUrlToPath(import.meta.url));

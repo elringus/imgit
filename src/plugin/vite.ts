@@ -40,7 +40,7 @@ export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
     return {
         name: "imgit",
         enforce: "pre",
-        buildStart: _ => boot(prefs, platform),
+        buildStart: () => boot(prefs, platform),
         transform: (code, id) => prefs?.skip?.(id) ? code : transform(code, id),
         transformIndexHtml: {
             order: "pre",

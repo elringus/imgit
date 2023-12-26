@@ -7,7 +7,7 @@ import { stages } from "../server/transform/index.js";
 export default function (): Plugin {
     // Skipping probe and encode stages; we'll just embed SVG content into HTML.
     return { probe: isSvg, encode: isSvg, build };
-};
+}
 
 function isSvg(asset: CapturedAsset): boolean {
     return asset.syntax.url.endsWith(".svg");

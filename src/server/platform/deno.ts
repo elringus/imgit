@@ -69,7 +69,7 @@ export const deno: Readonly<Platform> = {
         fileUrlToPath: url => path.fromFileUrl(url).replaceAll("\\", "/")
     },
     log: {
-        tty: _ => {}, // TODO: Implement (https://github.com/elringus/imgit/issues/4)
+        tty: () => {}, // TODO: Implement (https://github.com/elringus/imgit/issues/4)
         info: console.info,
         warn: console.warn,
         err: console.error
