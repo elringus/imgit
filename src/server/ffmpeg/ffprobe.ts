@@ -13,29 +13,33 @@ export async function ffprobe(path: string): Promise<ContentInfo> {
     return { width: Number(parts[0]), height: Number(parts[1]), alpha, type };
 }
 
-// TODO: Sniff via 'file --mime-type' (https://github.com/elringus/imgit/issues/2)
 function resolveTypeNaive(path: string): string {
     const ext = getExtension(path).toLowerCase();
-    /* v8 ignore start (no test value) */
-    if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
-    if (ext === "tif" || ext === "tiff") return "image/tiff";
-    if (ext === "png") return "image/png";
-    if (ext === "webp") return "image/webp";
-    if (ext === "avif") return "image/avif";
-    if (ext === "bmp") return "image/bmp";
-    if (ext === "tga") return "image/tga";
-    if (ext === "psd") return "image/psd";
-    if (ext === "gif") return "image/gif";
-    if (ext === "apng") return "image/apng";
-    if (ext === "webm") return "video/webm";
-    if (ext === "mp4") return "video/mp4";
-    if (ext === "mov") return "video/quicktime";
-    if (ext === "avi") return "video/x-msvideo";
-    if (ext === "mkv") return "video/x-matroska";
-    /* v8 ignore end */
+    if (extToMime.has(ext)) return extToMime.get(ext)!;
     std.log.warn(`Failed to resolve MIME type of '${path}'.`);
     return "unknown";
 }
+
+// TODO: Sniff via 'file --mime-type' (https://github.com/elringus/imgit/issues/2)
+const extToMime = new Map([
+    ["jpg", "image/jpeg"],
+    ["jpeg", "image/jpeg"],
+    ["tif", "image/tiff"],
+    ["tiff", "image/tiff"],
+    ["png", "image/png"],
+    ["webp", "image/webp"],
+    ["avif", "image/avif"],
+    ["bmp", "image/bmp"],
+    ["tga", "image/tga"],
+    ["psd", "image/psd"],
+    ["gif", "image/gif"],
+    ["apng", "image/apng"],
+    ["webm", "video/webm"],
+    ["mp4", "video/mp4"],
+    ["mov", "video/quicktime"],
+    ["avi", "video/x-msvideo"],
+    ["mkv", "video/x-matroska"]
+]);
 
 // print list of all the known formats with alpha channel (may vary with ffprobe version):
 // ffprobe -show_entries pixel_format=name:flags=alpha -of csv=p=0
