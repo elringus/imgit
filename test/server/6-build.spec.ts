@@ -235,3 +235,10 @@ it("doesn't allow incompatible serve plugin override served source", async () =>
     await buildAll([asset]);
     expect(asset.html).toContain(`srcset="/public/bar`);
 });
+
+it("wraps in JSX when configured", async () => {
+    await boot({ root: "public", build: "jsx" });
+    asset.content.info.type = "image/png";
+    await buildAll([asset]);
+    expect(asset.html).toContain("dangerouslySetInnerHTML");
+});
