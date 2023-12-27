@@ -1,8 +1,7 @@
 ---
 layout: home
 
-title: imgit
-titleTemplate: Convert media links to optimized HTML
+title: imgit • Convert media links to optimized HTML
 
 hero:
   name: imgit
@@ -46,9 +45,8 @@ features:
 <style>
 :root {
   --vp-home-hero-name-color: transparent;
-  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #bd34fe 30%, #41d1ff);
-
-  --vp-home-hero-image-background-image: linear-gradient(-45deg, #bd34fe 50%, #47caff 50%);
+  --vp-home-hero-name-background: linear-gradient(120deg, #ee3248 30%, #ffba3c);
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, #6719b7 50%, #ee3248 50%);
   --vp-home-hero-image-filter: blur(44px);
 }
 
@@ -65,9 +63,12 @@ features:
 }
 
 /* Disable navbar blur effect when not scrolled */
-.VPNavBar { transition: background-color 0.3s ease-out; }
+.VPNavBar {
+    background: rgba(255, 255, 255, 0.95) !important;
+    transition: background-color 0.3s ease-out;
+}
+.dark .VPNavBar { background: rgba(30, 30, 32, 0.95) !important; }
 .VPNavBar.top { background: transparent !important;  }
 .dark .VPNavBar.top { background: transparent !important; }
-.VPNav::after { transition: opacity 0.3s ease-out; }
-.VPNav.top::after { opacity: 0; }
+.VPNav::after { display: none; }
 </style>

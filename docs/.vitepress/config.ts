@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import md from "./md";
 import imgit from "imgit/vite";
 import svg from "imgit/svg";
 import youtube from "imgit/youtube";
@@ -9,6 +10,8 @@ export default defineConfig({
     titleTemplate: ":title • imgit",
     cleanUrls: true,
     lastUpdated: true,
+    markdown: md,
+    vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube()] })] },
     head: [
         ["link", { rel: "icon", href: "/favicon.svg" }],
         ["link", { rel: "preload", href: "/fonts/inter.woff2", as: "font", type: "font/woff2", crossorigin: "" }],
@@ -21,7 +24,6 @@ export default defineConfig({
         logo: { src: "/favicon.svg" },
         logoLink: "https://imgit.dev",
         socialLinks: [{ icon: "github", link: "https://github.com/elringus/imgit" }],
-        externalLinkIcon: true,
         search: { provider: "local" },
         lastUpdated: { text: "Updated", formatOptions: { dateStyle: "medium" } },
         sidebarMenuLabel: "Menu",
@@ -71,6 +73,5 @@ export default defineConfig({
             ]
         }
     },
-    sitemap: { hostname: "https://imgit.dev" },
-    vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube()] })] }
+    sitemap: { hostname: "https://imgit.dev" }
 });

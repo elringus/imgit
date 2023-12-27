@@ -19,11 +19,9 @@
     --vp-font-family-mono: "JetBrains Mono", monospace;
 
     /* Main highlight/link color. */
-    --vp-c-brand-1: #00a3e6;
+    --vp-c-brand-1: #d22c40;
     /* Link hover color. */
-    --vp-c-brand-2: #006e9b;
-    /* ??? */
-    --vp-c-brand-3: #1baeea;
+    --vp-c-brand-2: #be2033;
     /* Background on `` snippets under tip blocks. */
     --vp-c-brand-soft: var(--vp-c-gray-soft);
 
@@ -43,9 +41,9 @@
 
 .dark {
     /* Main highlight/link color. */
-    --vp-c-brand-1: #1baeea;
+    --vp-c-brand-1: #ee3248;
     /* Link hover color. */
-    --vp-c-brand-2: #7ddaff;
+    --vp-c-brand-2: #f35d44;
 
     --vp-custom-block-tip-border: var(--vp-c-brand);
     --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
@@ -58,6 +56,11 @@ pre {
 
 .vp-doc a {
     text-underline-position: from-font;
+}
+
+.external-link-icon {
+    margin-left: -1px;
+    margin-right: 2px;
 }
 
 .vp-doc th, .vp-doc td, .vp-doc tr {
