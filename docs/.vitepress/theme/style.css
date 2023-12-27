@@ -147,16 +147,16 @@ table > tfoot:not(:last-child) {
 }
 
 /* a bit of tint to make navbar not as transparent */
-.VPNavBar {
+.VPNavBar:not(.top) {
     background: rgba(255, 255, 255, 0.75) !important;
 }
 
-.dark .VPNavBar {
+.dark .VPNavBar:not(.top) {
     background: rgba(30, 30, 32, 0.5) !important;
 }
 
 /* the blur effect */
-.VPNav::after {
+.VPNavBar:not(.top)::after {
     content: "";
     position: absolute;
     top: 0;
@@ -165,4 +165,16 @@ table > tfoot:not(:last-child) {
     bottom: 0;
     backdrop-filter: saturate(180%) blur(5px);
     z-index: -1;
+}
+
+.VPNavBar.top::after {
+    opacity: 0;
+}
+
+.VPNavBar.top {
+    background-color: transparent;
+}
+
+.VPNavBar {
+    transition: border-bottom-color 0.25s, background-color 0.25s, opacity 0.25s;
 }

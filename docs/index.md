@@ -187,16 +187,6 @@ article .details a:hover {
 </style>
 
 <style scoped>
-/* Disable navbar blur effect when not scrolled */
-.VPNavBar {
-    background: rgba(255, 255, 255, 0.95) !important;
-    transition: background-color 0.3s ease-out;
-}
-.dark .VPNavBar { background: rgba(30, 30, 32, 0.95) !important; }
-.VPNavBar.top { background: transparent !important;  }
-.dark .VPNavBar.top { background: transparent !important; }
-.VPNav::after { display: none; }
-
 /* A hack copying home page specific styles, as they're applied with guid attr. */
 .VPFeatures { position: relative; padding: 0 24px; }
 @media (min-width: 640px) { .VPFeatures { padding: 0 48px; } }
