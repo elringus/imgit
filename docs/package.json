@@ -1,9 +1,9 @@
 {
     "type": "module",
     "scripts": {
-        "dev": "vitepress dev",
-        "build": "vitepress build",
-        "preview": "vitepress preview"
+        "docs:dev": "vitepress dev",
+        "docs:build": "vitepress build",
+        "docs:preview": "vitepress preview"
     },
     "devDependencies": {
         "typescript": "^5.3.3",

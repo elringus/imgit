@@ -21,7 +21,7 @@ function resolveTypeNaive(path: string): string {
 }
 
 // TODO: Sniff via 'file --mime-type' (https://github.com/elringus/imgit/issues/2)
-const extToMime = new Map([
+const extToMime = new Map<string, string>([
     ["jpg", "image/jpeg"],
     ["jpeg", "image/jpeg"],
     ["tif", "image/tiff"],
