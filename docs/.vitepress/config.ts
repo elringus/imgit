@@ -8,6 +8,7 @@ import youtube from "imgit/youtube";
 export default defineConfig({
     title: "imgit",
     titleTemplate: ":title • imgit",
+    appearance: "dark",
     cleanUrls: true,
     lastUpdated: true,
     markdown: md,
