@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://imgit.dev" target="_blank" rel="noopener noreferrer">
-    <img width="200" src="https://raw.githubusercontent.com/elringus/imgit/main/.github/logo.svg" alt="imgit logo">
+    <img width="200" src="https://github.com/elringus/imgit/raw/main/docs/public/favicon.svg" alt="imgit logo">
   </a>
 </p>
 <br/>
