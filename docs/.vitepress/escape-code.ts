@@ -1,8 +1,8 @@
-﻿import { Plugin, stages, CapturedAsset } from "imgit/server";
+﻿import { Plugin, CapturedAsset, stages } from "imgit/server";
 
 export default { capture } satisfies Plugin;
 
-type Range = { start: number; end: number };
+type Range = { start: number; end: number; };
 
 // Remove captures inside Markdown code blocks (```code```).
 function capture(content: string, assets: CapturedAsset[]): boolean {
@@ -20,18 +20,18 @@ function findCodeRanges(content: string): Range[] {
         if (content[i] === "`") handleTick(i);
     return ranges;
 
-    function handleTick(index: number) {
+    function handleTick(index: number): void {
         if (++tickCount < 3) return;
         if (openIndex === -1) openRange(index);
         else closeRange(index);
     }
 
-    function openRange(index: number) {
+    function openRange(index: number): void {
         openIndex = index;
         tickCount = 0;
     }
 
-    function closeRange(index: number) {
+    function closeRange(index: number): void {
         ranges.push({ start: openIndex, end: index });
         openIndex = -1;
         tickCount = 0;
