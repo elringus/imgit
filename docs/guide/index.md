@@ -2,7 +2,7 @@
 
 ## What's imgit?
 
-Reads `image it` — imgit is a JavaScript package and set of plugins for popular web frameworks that employs various techniques to enhance user experience when interacting with media-heavy websites, such as blogs, landings, portfolios and documentation sites.
+Reads `image it` — imgit is a JavaScript package and set of plugins for popular web frameworks to enhance user experience when interacting with media-heavy websites, such as blogs, landings, portfolios and documentation sites.
 
 ## Why use imgit?
 
@@ -14,33 +14,37 @@ Consider source markdown page of a website built with static site generator (SSG
 *test* [d](dsff)
 ```
 
-— the page has multiple images and video with sources hosted on an image hosting and a YouTube player embedded via iframe. Should we build without any optimizations and attempt to navigate to an anchor in the midst of the page, it'll look as follows:
+— the page includes multiple images and video hosted remotely and a YouTube embed. Should we build without any optimizations and navigate to an anchor in the midst of the page, it'll look as follows:
 
-The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. These issues are common in modern web and there are services to identify the problems and suggest solutions, such as [PageSpeed Insights](https://pagespeed.web.dev):
+![](https://i.gyazo.com/b2f45680247820c398682d7150fca566.mp4)
+
+The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. These issues are common in modern web; [PageSpeed Insights](https://pagespeed.web.dev) helps identify the causes and suggest solutions:
+
+![](https://i.gyazo.com/b11e66bce122a1eac24730e3e87b43b3.png)
 
 — there are several recommendations to improve performance and UX, each of which imgit will take care of.
 
-### Preventing Layout Shift
+### Prevent Layout Shift
 
-### Encoding to AV1/AVIF
+### Encode to AV1/AVIF
 
-### Lazy Loading
+### Lazy-load
 
-### Covers Generation
+### Generate Covers
 
-### Downscaling
+### Downscale
 
-### Supporting High-DPI Displays
+### Support High-DPI Displays
 
-### Supporting Legacy Browsers
+### Support Legacy Browsers
 
-### Optimizing YouTube Embeds
+### Optimize YouTube Embeds
 
-### Embedding SVG
+### Embed SVG
 
-### Using Exotic Files
+### Use Exotic Files
 
-Aside from performance and UX improvements, imgit also allows referencing most of the known media files directly in the page sources. For example, you can keep banners or logo sources in PSD (Photoshop project file) and directly reference them in sources:
+Aside from performance and UX improvements, imgit also allows referencing most of the known media files directly in the page sources. For example, you can keep banners or logo sources in PSD (Photoshop document) and directly reference them in sources:
 
 ```md
 <span>&#33;</span>[](/banner.psd)
