@@ -1,14 +1,16 @@
 ﻿import { Plugin, CapturedAsset, stages } from "imgit/server";
 
-export default { capture } satisfies Plugin;
-
 type Range = { start: number; end: number; };
+
+export default { capture } satisfies Plugin;
 
 // Remove captures inside Markdown code blocks (```code```).
 function capture(content: string, assets: CapturedAsset[]): boolean {
     stages.capture.capture(content, assets);
+    if (assets.length === 0) return true;
     const ranges = findCodeRanges(content);
-    assets.splice(0, assets.length, ...assets.filter(a => !isInCodeBlock(a, ranges)));
+    if (ranges.length > 0)
+        assets.splice(0, assets.length, ...assets.filter(a => !isInCodeBlock(a, ranges)));
     return true;
 }
 
