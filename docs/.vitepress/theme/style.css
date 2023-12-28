@@ -50,7 +50,7 @@
     /* Link hover color. */
     --vp-c-brand-2: #f35d44;
 
-    --vp-custom-block-tip-border: var(--vp-c-brand);
+    --vp-custom-block-tip-border: var(--vp-c-brand-dark);
     --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
     --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
 }

@@ -1,6 +1,5 @@
-import { Plugin, std } from "../server/index.js";
+import { Plugin, std, stages } from "../server/index.js";
 import { CapturedAsset, BuiltAsset } from "../server/asset.js";
-import { stages } from "../server/transform/index.js";
 
 /** Adds support for inlining SVG assets with imgit.
  *  @example ![](/assets/diagram.svg) */

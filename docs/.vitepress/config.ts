@@ -1,5 +1,6 @@
 import { defineConfig } from "vitepress";
 import md from "./md";
+import escapeCode from "./escape-code";
 import imgit from "imgit/vite";
 import svg from "imgit/svg";
 import youtube from "imgit/youtube";
@@ -12,7 +13,7 @@ export default defineConfig({
     cleanUrls: true,
     lastUpdated: true,
     markdown: md,
-    vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube()] })] },
+    vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube(), escapeCode] })] },
     head: [
         ["link", { rel: "icon", href: "/favicon.svg" }],
         ["link", { rel: "preload", href: "/fonts/inter.woff2", as: "font", type: "font/woff2", crossorigin: "" }],

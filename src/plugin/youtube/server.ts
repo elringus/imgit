@@ -1,6 +1,5 @@
-import { Plugin, PluginInjection, Cache, cache as $cache, std } from "../../server/index.js";
+import { Plugin, PluginInjection, Cache, cache as $cache, std, stages } from "../../server/index.js";
 import { BuiltAsset, ResolvedAsset } from "../../server/asset.js";
-import { stages } from "../../server/transform/index.js";
 
 /** YouTube plugin preferences. */
 export type Prefs = {
