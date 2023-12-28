@@ -28,31 +28,69 @@ Consider source markdown page of a website built with static site generator (SSG
 
 The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. [PageSpeed Insights](https://pagespeed.web.dev) helps identify the issues and suggests solutions:
 
-![](https://i.gyazo.com/70bc3426fa97e71f2f377d1f7819d267.png)
+![](https://i.gyazo.com/57489480e03593abb47d78c5e1374aa7.png)
 
-— there are several recommendations for improving performance and UX, each of which imgit will take care of.
+There are several recommendations for improving performance and UX, most of which imgit will take care of. After applying all the optimizations, we'll get much better results:
 
-::: info NOTICE
-Find sample project discussed here on GitHub: https://github.com/elringus/imgit-showcase. Please note, that the insights screenshot above was modified for brevity. Do not consider this a benchmark of the underlying web framework.
+![](https://i.gyazo.com/cb76bb63fc18f4101b92864095bed1a7.png)
+
+::: info
+ - Insights report before optimizations: [pagespeed.web.dev/analysis/2sjav6lfz2](https://pagespeed.web.dev/analysis/https-grand-figolla-604270-netlify-app-src-unoptimized/2sjav6lfz2?form_factor=mobile)
+ - Insights report after optimizations: [pagespeed.web.dev/analysis/og3qm9vvtr](https://pagespeed.web.dev/analysis/https-grand-figolla-604270-netlify-app-src-optimized/og3qm9vvtr?form_factor=mobile)
+ - Sample project on GitHub: https://github.com/elringus/imgit-showcase
 :::
 
 ### Prevent Layout Shift
 
+The most annoying issue is the page scrolling while the media is being loaded. This is known as [Cumulative Layout Shift](https://web.dev/articles/cls) and happens because browser is not aware of the media height until it's loaded. To fix this, we have to specify content height within HTML. imgit will automatically fetch source content of the media (in case it's hosted remotely), sample the file to determine the dimensions and set the height to the generated HTML.
+
 ### Encode to AV1/AVIF
+
+Another problem is the media size. Our page reference assets with total size of `77MB`. Insights report suggests serving the content in next-gen formats, which imgit will handle as well. By encoding images and video to [AV1/AVIF](https://en.wikipedia.org/wiki/AV1), we'll shrink total size to just `5.7MB` effectively compressing the content by `92%` without noticeable quality loss.
 
 ### Lazy-load
 
+All the images and video are fetched and rendered on page load, while user don't even see most of them. imgit will make sure to only fetch and render assets that are actually visible to user, saving bandwidth and CPU time.
+
 ### Generate Covers
+
+Arguably second most annoying UX issue (after layout shift) is the abrupt display of the loaded content. Especially now that we're lazy-loading the assets, they'll pop on both the initial page load and while scrolling.
+
+<details>
+    <summary>Without covers</summary>
+    ![](https://i.gyazo.com/2f5c124d0bd7c96a91a3bc19a4365850.mp4)
+</details>
+
+imgit will generate tiny blurred covers for each asset and embed them in HTML, so that they're loaded in sync with the page. When the content becomes visible to the user, it'll start loading the full-res original source and, once ready, cross-fade from the blurred cover.
+
+<details>
+    <summary>With covers</summary>
+    ![](https://i.gyazo.com/845ed7b1a635187b00f93a3e7f2730ae.mp4)
+</details>
 
 ### Downscale
 
+Most of our assets have resolution of 1920x1080 pixels, while `max-width` of the HTML content layout is 688px. Not only we're wasting bandwidth, but the assets are also down-scaled by browser at runtime with algorithms that sacrifice quality for speed. When width threshold is specified in configuration, imgit will downscale the media at build time with [Lanczos algorithm](https://en.wikipedia.org/wiki/Lanczos_resampling) for best visual quality.
+
 ### Support High-DPI Displays
+
+The above stands true for "normal" displays, but when viewed on a high-DPI (aka "Retina") display, the media would actually benefit having more pixels than nominal layout width. When downscaling, imgit will as well preserve the original high-resolution asset and show it in such cases.
 
 ### Support Legacy Browsers
 
+While all the mainstream browsers support AV1/AVIF format ([can I use?](https://caniuse.com/avif)), you may still want to ensure the content is visible to users with exotic clients (eg, Internet Explorer) or older versions of the actual browsers. imgit will make sure to generate a "safe" variant for each media element and include a fallback source to the generated HTML.
+
 ### Optimize YouTube Embeds
 
+Official YouTube player embed from Google contains a significant portion of bloatware used mostly for tracking and ad serving, which affect the performance. Instead of embedding the player's `<iframe>` as-is, imgit will build lazy-loaded image poster with fake controls. The player iframe will start loading only when user clicks "play" button ensuring the embed won't affect UX until user starts watching the YouTube video.
+
+Check the YouTube embed below for a demo:
+
+![](https://www.youtube.com/watch?v=arbuYnJoLtU)
+
 ### Embed SVG
+
+Vector graphics rarely exhibit same issues as the raster media discussed above, but in some cases (eg, SVG diagrams mixed with the page content) may benefit from embedding into the page HTML to prevent layout shift and abrupt reveal on load. When configured, imgit will embed SVG assets into HTML on build, so that they're rendered in sync with the rest of the page.
 
 ### Use Exotic Files
 

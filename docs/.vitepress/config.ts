@@ -39,7 +39,7 @@ export default defineConfig({
             {
                 text: `v${(await import("./../../package.json")).version}`, items: [
                     { text: "Changes", link: "https://github.com/elringus/imgit/releases/latest" },
-                    { text: "Contribute", link: "https://github.com/elringus/imgit/labels/help%20wanted" },
+                    { text: "Contribute", link: "https://github.com/elringus/imgit/labels/help%20wanted" }
                 ]
             }
         ],
@@ -51,7 +51,6 @@ export default defineConfig({
             "/guide/": [
                 {
                     text: "Guide",
-                    collapsed: true,
                     items: [
                         { text: "Introduction", link: "/guide/" },
                         { text: "Getting Started", link: "/guide/getting-started" }
@@ -59,7 +58,6 @@ export default defineConfig({
                 },
                 {
                     text: "Integrations",
-                    collapsed: true,
                     items: [
                         { text: "Vite", link: "/guide/vite" },
                         { text: "Astro", link: "/guide/astro" }
@@ -67,7 +65,6 @@ export default defineConfig({
                 },
                 {
                     text: "Plugins",
-                    collapsed: true,
                     items: [
                         { text: "YouTube", link: "/guide/youtube" },
                         { text: "SVG", link: "/guide/svg" }
