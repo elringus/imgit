@@ -21,7 +21,10 @@ Consider source markdown page of a website built with static site generator (SSG
 
 — the page includes multiple images and video hosted remotely and a YouTube embed. Should we build without any optimizations and navigate to an anchor in the midst of the page, it'll look as follows:
 
-![](https://i.gyazo.com/b2f45680247820c398682d7150fca566.mp4)
+<details>
+    <summary>Warning: flashing lights</summary>
+    ![](https://i.gyazo.com/b2f45680247820c398682d7150fca566.mp4)
+</details>
 
 The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. [PageSpeed Insights](https://pagespeed.web.dev) helps identify the issues and suggests solutions:
 
@@ -30,7 +33,7 @@ The page constantly scrolls while loading, the content is shown abruptly and it 
 — there are several recommendations for improving performance and UX, each of which imgit will take care of.
 
 ::: info NOTICE
-Find sample project discussed here on GitHub: https://github.com/elringus/imgit-showcase. Please note, that the insights screenshot above was modified for brevity. Do not consider this as a benchmark of the underlying web framework.
+Find sample project discussed here on GitHub: https://github.com/elringus/imgit-showcase. Please note, that the insights screenshot above was modified for brevity. Do not consider this a benchmark of the underlying web framework.
 :::
 
 ### Prevent Layout Shift

@@ -20,6 +20,7 @@ function findCodeRanges(content: string): Range[] {
     let openIndex = -1;
     for (let i = 0; i < content.length; i++)
         if (content[i] === "`") handleTick(i);
+        else tickCount = 0;
     return ranges;
 
     function handleTick(index: number): void {

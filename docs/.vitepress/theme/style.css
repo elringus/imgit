@@ -23,36 +23,17 @@
     --vp-font-family-mono: "JetBrains", monospace;
     font-optical-sizing: auto;
 
-    /* Main highlight/link color. */
+    /* Main highlight/link color (light mode). */
     --vp-c-brand-1: #d22c40;
-    /* Link hover color. */
+    /* Link hover color (light mode). */
     --vp-c-brand-2: #be2033;
-    /* Background on `` snippets under tip blocks. */
-    --vp-c-brand-soft: var(--vp-c-gray-soft);
-
-    --vp-c-brand-light: #42beef;
-    --vp-c-brand-lighter: #70cbef;
-    --vp-c-brand-lightest: #abe0f5;
-    --vp-c-brand-dark: #118dc0;
-    --vp-c-brand-darker: #0e79a5;
-    --vp-c-brand-dimm: rgba(27, 174, 234, 0.08);
-
-    --vp-custom-block-tip-border: var(--vp-c-brand);
-    --vp-custom-block-tip-text: var(--vp-c-brand-darker);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
-
-    --vp-code-color: #476582;
 }
 
 .dark {
-    /* Main highlight/link color. */
+    /* Main highlight/link color (dark mode). */
     --vp-c-brand-1: #ee3248;
-    /* Link hover color. */
+    /* Link hover color (dark mode). */
     --vp-c-brand-2: #f35d44;
-
-    --vp-custom-block-tip-border: var(--vp-c-brand-dark);
-    --vp-custom-block-tip-text: var(--vp-c-brand-lightest);
-    --vp-custom-block-tip-bg: var(--vp-c-brand-dimm);
 }
 
 pre {
@@ -66,6 +47,20 @@ pre {
 .external-link-icon {
     margin-left: -1px;
     margin-right: 2px;
+}
+
+details summary {
+    font-weight: 500;
+    color: var(--vp-c-brand-1);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.25s, opacity 0.25s;
+    text-underline-position: from-font;
+    cursor: pointer;
+}
+
+details summary:hover {
+    color: var(--vp-c-brand-2);
 }
 
 .vp-doc th, .vp-doc td, .vp-doc tr {
@@ -99,23 +94,6 @@ table > thead:not(:last-child),
 table > tbody:not(:last-child),
 table > tfoot:not(:last-child) {
     border-bottom: var(--border) !important;
-}
-
-.custom-block.tip code,
-.custom-block.info code {
-    color: unset;
-}
-
-.danger .custom-block-title {
-    display: none;
-}
-
-.dark body {
-    --vp-code-color: #c9def1;
-}
-
-.vp-doc a:hover > code {
-    color: inherit !important;
 }
 
 /* Stretch YouTube embeds with small thumbnails. */

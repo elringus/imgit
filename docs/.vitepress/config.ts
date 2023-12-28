@@ -37,8 +37,9 @@ export default defineConfig({
             { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
             { text: "Reference", link: "/api/" },
             {
-                text: "v0.1.0", items: [
-                    { text: "Changelog", link: "https://github.com/elringus/imgit/releases/tag/v0.1.0" }
+                text: `v${(await import("./../../package.json")).version}`, items: [
+                    { text: "Changes", link: "https://github.com/elringus/imgit/releases/latest" },
+                    { text: "Contribute", link: "https://github.com/elringus/imgit/labels/help%20wanted" },
                 ]
             }
         ],
