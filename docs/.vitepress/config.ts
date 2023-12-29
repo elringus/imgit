@@ -24,7 +24,7 @@ export default defineConfig({
     ],
     themeConfig: {
         logo: { src: "/favicon.svg" },
-        logoLink: "https://imgit.dev",
+        logoLink: "/",
         socialLinks: [{ icon: "github", link: "https://github.com/elringus/imgit" }],
         search: { provider: "local" },
         lastUpdated: { text: "Updated", formatOptions: { dateStyle: "medium" } },
@@ -52,23 +52,29 @@ export default defineConfig({
                 {
                     text: "Guide",
                     items: [
-                        { text: "Introduction", link: "/guide/" },
+                        { text: "Introduction", link: "/guide/introduction" },
                         { text: "Getting Started", link: "/guide/getting-started" },
                         { text: "GPU Acceleration", link: "/guide/gpu-acceleration" },
+                        { text: "Plugins", link: "/guide/plugins" }
                     ]
                 },
                 {
                     text: "Integrations",
                     items: [
-                        { text: "Vite", link: "/guide/vite" },
-                        { text: "Astro", link: "/guide/astro" }
+                        { text: "Vite", link: "/guide/integrations/vite" },
+                        { text: "Astro", link: "/guide/integrations/astro" },
+                        { text: "Nuxt", link: "/guide/integrations/nuxt" },
+                        { text: "Remix", link: "/guide/integrations/remix" },
+                        { text: "SolidStart", link: "/guide/integrations/solid" },
+                        { text: "SvelteKit", link: "/guide/integrations/svelte" },
+                        { text: "VitePress", link: "/guide/integrations/vitepress" }
                     ]
                 },
                 {
                     text: "Plugins",
                     items: [
-                        { text: "YouTube", link: "/guide/youtube" },
-                        { text: "SVG", link: "/guide/svg" }
+                        { text: "YouTube", link: "/guide/plugins/youtube" },
+                        { text: "SVG", link: "/guide/plugins/svg" }
                     ]
                 }
             ]
