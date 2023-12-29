@@ -1,7 +1,8 @@
 ---
 layout: home
 
-title: imgit • Convert media links to optimized HTML
+title: Convert media links to optimized HTML
+titleTemplate: imgit • :title
 
 hero:
   name: imgit
