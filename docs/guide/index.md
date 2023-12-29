@@ -17,19 +17,19 @@ Consider source markdown page of a website built with static site generator (SSG
 <iframe src="https://www.youtube.com/embed/id"></iframe>
 ```
 
-— the page includes multiple images and video hosted remotely and a YouTube embed. Should we build without any optimizations and navigate to an anchor in the midst of the page, it'll look as follows:
+— the page includes multiple images and video hosted remotely and a YouTube embed. Should we build as-is and navigate to an anchor in the midst of the page, it'll look as follows:
 
 <details>
     <summary>Warning: flashing lights</summary>
     ![](https://i.gyazo.com/b2f45680247820c398682d7150fca566.mp4)
 </details>
 
-The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. [PageSpeed Insights](https://pagespeed.web.dev) helps identify the issues and suggests solutions:
+The page constantly scrolls while loading, the content is shown abruptly and it takes significant time until everything is finally stable, resulting in poor user experience. [PageSpeed Insights](https://pagespeed.web.dev) helps identify the issues and suggests solutions.
 
 ![?class=dark-only](https://i.gyazo.com/57489480e03593abb47d78c5e1374aa7.png)
 ![?class=light-only](https://i.gyazo.com/d1f5eb93e57799d1a3cd2abdf438c040.png)
 
-There are several recommendations for improving performance and UX, most of which imgit will take care of. After applying all the optimizations, we'll get much better results:
+There are several recommendations for improving performance and UX, most of which imgit will take care of. After applying all the optimizations outlined later in the article, we'll get much better results:
 
 ![?class=dark-only](https://i.gyazo.com/1bd7705bf63b4fa179e45a7b4445d34e.png)
 ![?class=light-only](https://i.gyazo.com/4122593cabf787177589cec34e94263c.png)
@@ -47,7 +47,7 @@ The most annoying issue is the page scrolling while the media is being loaded. T
 
 ### Encode to AV1/AVIF
 
-Another problem is the media size. Our page reference assets with total size of `77MB`. Insights report suggests serving the content in next-gen formats, which imgit will handle as well. By encoding images and video to [AV1/AVIF](https://en.wikipedia.org/wiki/AV1), we'll shrink total size to just `5.7MB` effectively compressing the content by `92%` without noticeable quality loss.
+Another problem is the media size. Our page reference assets with total size of `77MB`. Insights report suggests serving the content in next-gen formats, which imgit will handle as well. After encoding images and video to [AV1/AVIF](https://en.wikipedia.org/wiki/AV1), total size is reduced to `5.7MB` effectively compressing the content by `92%` without noticeable quality loss.
 
 ### Lazy-load
 
@@ -62,7 +62,7 @@ Arguably second most annoying UX issue (after layout shift) is the abrupt displa
     ![](https://i.gyazo.com/2f5c124d0bd7c96a91a3bc19a4365850.mp4)
 </details>
 
-imgit will generate tiny blurred covers for each asset and embed them in HTML, so that they're loaded in sync with the page. When the content becomes visible to the user, it'll start loading the full-res source and, once ready, cross-fade from the blurred cover.
+imgit will generate tiny blurred covers for each asset and embed the content to HTML, making them load in sync with the page. When the content becomes visible to the user, it'll start loading full-res source and, once ready, cross-fade from the blurred cover.
 
 <details>
     <summary>With covers</summary>
@@ -79,19 +79,17 @@ The above stands true for "normal" displays, but when viewed on a high-DPI (aka 
 
 ### Support Legacy Browsers
 
-While all the mainstream browsers support AV1/AVIF format ([can I use?](https://caniuse.com/avif)), you may still want to ensure the content is visible to users with exotic clients (eg, Internet Explorer) or older versions of the actual browsers. imgit will make sure to generate a "safe" variant for each media element and include a fallback source to the generated HTML.
+While all the mainstream browsers support AV1/AVIF format ([can I use?](https://caniuse.com/avif)), you may still want to ensure the content is visible to users with exotic clients (eg, Internet Explorer) or older versions of the actual browsers. imgit will make sure to generate a "safe" variant for each media element and include associated fallback source to the generated HTML.
 
 ### Optimize YouTube Embeds
 
-Official YouTube player embed from Google contains a significant portion of bloatware used mostly for tracking and ad serving, which affect the performance. Instead of embedding the player's `<iframe>` as-is, imgit will build lazy-loaded image poster with fake controls. The player iframe will start loading only when user clicks "play" button ensuring the embed won't affect UX until user starts watching the video.
-
-Check sample YouTube embed below:
+Official YouTube player embed from Google contains a significant portion of bloatware used mostly for tracking and ad serving, which affect the performance. Instead of embedding the player's `<iframe>` as-is, imgit will build lazy-loaded image poster with fake controls. The player iframe will start loading only after user clicks "play" button ensuring the embed won't affect UX until user starts watching the video. Check sample YouTube embed below.
 
 ![Oahu Hawaii – Island in the Sun](https://www.youtube.com/watch?v=arbuYnJoLtU)
 
 ### Embed SVG
 
-Vector graphics doesn't exhibit same issues as the raster media discussed above, but in some cases (eg, SVG diagrams mixed with the page content) may benefit from embedding into the page HTML to prevent layout shift and abrupt reveal on load. When configured, imgit will embed SVG assets into HTML on build, so that they're rendered in sync with the rest of the page.
+Vector graphic doesn't exhibit same issues as the raster media discussed above, but in some cases (eg, SVG diagrams mixed with the page content) may benefit from embedding into the page HTML to prevent layout shift and abrupt reveal on load. When configured, imgit will embed SVG assets into HTML on build, so that they're rendered in sync with the rest of the page.
 
 ### Use Exotic Formats
 
