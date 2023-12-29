@@ -3,6 +3,12 @@ import { std, boot } from "./common.js";
 import vite from "../../src/plugin/vite.js";
 import youtube from "../../src/plugin/youtube/index.js";
 
+it("invokes server boot on build start", async () => {
+    const boot = vi.spyOn(await import("../../src/server/index.js"), "boot");
+    await vite().buildStart({});
+    expect(boot).toHaveBeenCalled();
+});
+
 it("invokes server transform on document transform", async () => {
     const transform = vi.spyOn(await import("../../src/server/transform/index.js"), "transform");
     await vite().transform("", "");
@@ -12,6 +18,21 @@ it("invokes server transform on document transform", async () => {
 it("doesn't invoke transform when document matches skip config", async () => {
     const transform = vi.spyOn(await import("../../src/server/transform/index.js"), "transform");
     await vite({ skip: (filename) => !filename.endsWith(".md") }).transform("", "foo.js");
+    expect(transform).not.toHaveBeenCalled();
+});
+
+it("invokes server transform on index transform", async () => {
+    await boot();
+    const transform = vi.spyOn(await import("../../src/server/transform/index.js"), "transform");
+    await vite().transformIndexHtml.handler("", { filename: "" });
+    expect(transform).toHaveBeenCalled();
+});
+
+it("doesn't invoke transform when index matches skip config", async () => {
+    await boot();
+    const transform = vi.spyOn(await import("../../src/server/transform/index.js"), "transform");
+    await vite({ skip: (filename) => !filename.endsWith(".md") })
+        .transformIndexHtml.handler("", { filename: "foo.js" });
     expect(transform).not.toHaveBeenCalled();
 });
 

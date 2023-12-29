@@ -1,5 +1,3 @@
-/* v8 ignore start (vitest bug: https://github.com/vitest-dev/vitest/issues/3605) */
-
 /** Asset captured from transformed document. */
 export type CapturedAsset = {
     /** Syntax of the captured asset. */

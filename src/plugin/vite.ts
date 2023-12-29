@@ -1,7 +1,5 @@
 import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/index.js";
 
-/* v8 ignore start (vitest bug: https://github.com/vitest-dev/vitest/issues/4791) */
-
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
     /** Specify condition when document shouldn't be transformed by the vite plugin. */
@@ -30,8 +28,6 @@ declare type HtmlTag = {
     children?: string | HtmlTag[];
     injectTo?: "head" | "body" | "head-prepend" | "body-prepend";
 };
-
-/* v8 ignore end */
 
 /** Creates imgit plugin instance for vite.
  *  @param prefs Plugin preferences; will use pre-defined defaults when not assigned.
