@@ -1,0 +1,37 @@
+{
+    "name": "imgit",
+    "version": "0.1.0",
+    "description": "Transform images, video and YouTube links to HTML optimized for web vitals.",
+    "author": "Elringus (https://elringus.me)",
+    "license": "MIT",
+    "keywords": ["CLS", "lazy-load", "embed", "size", "encode", "compress", "md", "avif", "vite-plugin"],
+    "repository": { "type": "git", "url": "https://github.com/elringus/imgit.git" },
+    "funding": "https://github.com/sponsors/elringus",
+    "homepage": "https://imgit.dev",
+    "bugs": { "url": "https://github.com/elringus/imgit/issues" },
+    "engines": { "node": ">=18.0.0", "deno": ">=1.38.0", "bun": ">=1.0.18" },
+    "files": ["dist"],
+    "type": "module",
+    "exports": {
+        "./server": { "import": "./dist/server/index.js", "types": "./dist/server/index.d.ts" },
+        "./client": { "import": "./dist/client/index.js", "types": "./dist/client/index.d.ts" },
+        "./styles": { "import": "./dist/client/styles.css" },
+        "./vite": { "import": "./dist/plugin/vite.js", "types": "./dist/plugin/vite.d.ts" },
+        "./astro": { "import": "./dist/plugin/astro.js", "types": "./dist/plugin/astro.d.ts" },
+        "./youtube": { "import": "./dist/plugin/youtube/index.js", "types": "./dist/plugin/youtube/index.d.ts" },
+        "./client/youtube": { "import": "./dist/plugin/youtube/client.js", "types": "./dist/plugin/youtube/client.d.ts" },
+        "./styles/youtube": { "import": "./dist/plugin/youtube/styles.css" },
+        "./svg": { "import": "./dist/plugin/svg.js", "types": "./dist/plugin/svg.d.ts" }
+    },
+    "scripts": {
+        "test": "vitest run",
+        "cover": "vitest run --coverage.enabled --coverage.include src --coverage.exclude src/server/platform",
+        "build": "sh scripts/build.sh",
+        "deploy": "npm publish --access public"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.3",
+        "vitest": "^1.1.0",
+        "@vitest/coverage-v8": "^1.1.0"
+    }
+}

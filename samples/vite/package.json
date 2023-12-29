@@ -1,0 +1,11 @@
+﻿{
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "vite": "^5.0.10",
+        "imgit": "^0.0.0-alpha.38"
+    }
+}

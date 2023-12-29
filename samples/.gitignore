@@ -1,0 +1,8 @@
+public
+static
+build
+cache
+.nuxt
+.svelte-kit
+.vinxi
+.output
