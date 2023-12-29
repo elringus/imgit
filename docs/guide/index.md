@@ -118,18 +118,32 @@ Transformation function in server module accepts source document (eg, HTML, Mark
 
 <p class="attr">sketched with <a href="https://excalidraw.com" target="_blank">Excalidraw</a></p>
 
-Each input is transformed in parallel over seven stages: from capturing asset syntax to overwriting document sources — every stage can be hooked to or completely overridden with a plugin on per-asset basis.
+Each input is transformed asynchronously over seven stages: from capturing asset syntax to overwriting document sources — every stage can be hooked to or completely overridden with a plugin on per-asset basis.
 
 ### 1. Capture
 
+Given input source document text, captures asset syntax containing references to the source content to be optimized. Regexp used to capture the syntax is configurable via imgit options. Plugin hooks allow controlling how the syntax is captured depending on the source document content and filename; eg, you can completely ignore documents with specific file extensions or reject syntax captured inside specific context.
+
 ### 2. Resolve
+
+Parses captured asset syntax to resolve URL of the source content (local or remote) and associated optional metadata, such as title, CSS class, media attributes, etc. Plugin hooks allow controlling the parsing process for assets with specific syntax. For example, YouTube plugin will resolve thumbnail URL based on video link at this stage.
 
 ### 3. Fetch
 
+Downloads content of the assets with remote sources. Will retry on fail and handle retry responses common to image hosts. Fetched content is cached, so consequent runs won't re-download same files. Directory to store downloaded files, as well as fetch timeout, retry limit and delay are all configurable. Hook into the stage to override fetch behaviour for some or all the assets.
+
 ### 4. Probe
+
+Analyzes the content of the fetched files with [ffrobe](https://ffmpeg.org/ffprobe.html) to resolve media type, size and other parameters required for further processing. Probe results are cached, so the operation is skipped on consequent runs, as long as the cache is valid (source file is not changed). Control the probing with plugin hooks; eg, swap ffrobe with alternative solution.
 
 ### 5. Encode
 
+Encodes the file with [ffmpeg](https://ffmpeg.org) and generate additional content: covers, dense and safe variants, etc. The results are cached as well. Encode parameters, such as quality, filters and encode specs are configurable per asset type in imgit options, as well as directory to store encoded and generated files. Hooks allows customizing the encode behaviour for specific assets; or you can opt out of using ffmpeg entirely in favor of something else, such as remote encoding service.
+
 ### 6. Build
 
+Builds HTML (or JSX, when enabled in options) referencing the encoded/optimized content. Use hooks to override which HTML is built for specific assets. To upload optimized files to a CDN, this stage provides a dedicated async `serve` hook, which expects URL of the uploaded file in exchange for the built asset info; when implemented, imgit will use resolved remote URL as the source for the built HTML.
+
 ### 7. Rewrite
+
+Final stage replaces captured syntax with the built HTML/JSX. Produced document can then be either served as-is or pushed further to the bundler or web framework pipeline for additional transformations.
