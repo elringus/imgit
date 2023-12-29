@@ -32,4 +32,4 @@ Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [W
 
 ### 🎬 Get Started
 
-http://imgit.dev/guide/introduction
+http://imgit.dev/guide

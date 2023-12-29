@@ -34,7 +34,7 @@ export default defineConfig({
         outline: { label: "On this page", level: "deep" },
         docFooter: { prev: "Previous page", next: "Next page" },
         nav: [
-            { text: "Guide", link: "/guide/introduction", activeMatch: "/guide/" },
+            { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
             {
                 text: `v${(await import("./../../package.json")).version}`, items: [
                     { text: "Changes", link: "https://github.com/elringus/imgit/releases/latest" },
@@ -51,7 +51,7 @@ export default defineConfig({
                 {
                     text: "Guide",
                     items: [
-                        { text: "Introduction", link: "/guide/introduction" },
+                        { text: "Introduction", link: "/guide/" },
                         { text: "Getting Started", link: "/guide/getting-started" },
                         { text: "GPU Acceleration", link: "/guide/gpu-acceleration" },
                         { text: "Plugins", link: "/guide/plugins" }

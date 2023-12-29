@@ -1,6 +1,6 @@
 ﻿# Plugins
 
-Each of the seven document [transformation stages](/guide/introduction#how) has hooks allowing to override the default behaviour either completely or on per-asset basis. The hooks are specified in imgit config in form of plugin objects. Below is an example on injecting built-in YouTube plugin:
+Each of the seven document [transformation stages](/guide/#how) has hooks allowing to override the default behaviour either completely or on per-asset basis. The hooks are specified in imgit config in form of plugin objects. Below is an example on injecting built-in YouTube plugin:
 
 ```ts
 import { boot } from "imgit/server";
