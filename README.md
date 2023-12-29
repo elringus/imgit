@@ -16,18 +16,32 @@
 
 Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals).
 
-✨ Builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags.
+### ✨ Transformative
 
-⚡ Encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration.
+Builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags.
 
-♻️ Works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD.
+### ⚡ Accelerating
 
-🌊 Generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded.
+Encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration.
 
-📐 Optionally scales down the content to specified threshold while preserving high-resolution variants for high-DPI displays.
+### ♻️ Polyglot
 
-🌐 Fetches from remote sources, such as image hostings. Uploads optimized content to designated endpoint, such as CDN.
+Works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD.
 
-🗺️ Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes.
+### 🌊 Smooth
 
-Get started: http://imgit.dev/guide/introduction.
+Generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded.
+
+### 📐 Adaptive
+
+Optionally scales down the content to specified threshold while preserving high-resolution variants for high-DPI displays.
+
+### 🌐 Outgoing
+
+Fetches from remote sources, such as image hostings. Uploads optimized content to designated endpoint, such as CDN.
+
+### 🗺️ Omnipresent
+
+Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes.
+
+### Get Started: http://imgit.dev/guide/introduction
