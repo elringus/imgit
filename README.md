@@ -16,12 +16,12 @@
 
 Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals).
 
-- ✨ Transformative: builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags
-- ⚡ Accelerating: encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration
-- ♻️ Polyglot: works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD
-- 🌊 Smooth: generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded
-- 📐 Adaptive: optionally scales down the content to specified threshold while preserving high-resolution variants for high-DPI displays
-- 🌐 Outgoing: fetches from remote sources, such as image hostings. Uploads optimized content to designated endpoint, such as CDN
-- 🗺️ Omnipresent: built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes
+- ✨ Builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags
+- ⚡ Encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration
+- ♻️ Works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD
+- 🌊 Generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded
+- 📐 Optionally scales down the content to specified threshold while preserving high-resolution variants for high-DPI displays
+- 🌐 Fetches from remote sources, such as image hostings. Uploads optimized content to designated endpoint, such as CDN
+- 🗺️ Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes
 
 Get started: http://imgit.dev/guide/introduction
