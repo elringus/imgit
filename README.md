@@ -16,6 +16,8 @@
 
 Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals).
 
+## Get Started: http://imgit.dev/guide/introduction
+
 ### ✨ Transformative
 
 Builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags.
@@ -43,5 +45,3 @@ Fetches from remote sources, such as image hostings. Uploads optimized content t
 ### 🗺️ Omnipresent
 
 Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes.
-
-## Get Started: http://imgit.dev/guide/introduction
