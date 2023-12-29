@@ -34,7 +34,7 @@ export default defineConfig({
         outline: { label: "On this page", level: "deep" },
         docFooter: { prev: "Previous page", next: "Next page" },
         nav: [
-            { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
+            { text: "Guide", link: "/guide/introduction", activeMatch: "/guide/" },
             { text: "Reference", link: "/api/" },
             {
                 text: `v${(await import("./../../package.json")).version}`, items: [
@@ -68,13 +68,6 @@ export default defineConfig({
                         { text: "SolidStart", link: "/guide/integrations/solid" },
                         { text: "SvelteKit", link: "/guide/integrations/svelte" },
                         { text: "VitePress", link: "/guide/integrations/vitepress" }
-                    ]
-                },
-                {
-                    text: "Plugins",
-                    items: [
-                        { text: "YouTube", link: "/guide/plugins/youtube" },
-                        { text: "SVG", link: "/guide/plugins/svg" }
                     ]
                 }
             ]
