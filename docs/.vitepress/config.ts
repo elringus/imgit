@@ -35,7 +35,6 @@ export default defineConfig({
         docFooter: { prev: "Previous page", next: "Next page" },
         nav: [
             { text: "Guide", link: "/guide/introduction", activeMatch: "/guide/" },
-            { text: "Reference", link: "/api/" },
             {
                 text: `v${(await import("./../../package.json")).version}`, items: [
                     { text: "Changes", link: "https://github.com/elringus/imgit/releases/latest" },
