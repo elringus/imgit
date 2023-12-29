@@ -44,4 +44,6 @@ Fetches from remote sources, such as image hostings. Uploads optimized content t
 
 Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes.
 
-### Get Started: http://imgit.dev/guide/introduction
+### 🎬 Get Started
+
+http://imgit.dev/guide/introduction
