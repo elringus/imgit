@@ -1,6 +1,6 @@
 {
     "name": "imgit",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Transform images, video and YouTube links to HTML optimized for web vitals.",
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
@@ -27,6 +27,7 @@
         "test": "vitest run",
         "cover": "vitest run --coverage.enabled --coverage.include src --coverage.exclude src/server/platform",
         "build": "sh scripts/build.sh",
+        "dogen": "sh scripts/dogen.sh",
         "deploy": "npm publish --access public"
     },
     "devDependencies": {
