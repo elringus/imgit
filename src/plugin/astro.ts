@@ -1,4 +1,4 @@
-﻿import { Prefs, Platform, Plugin, std } from "../server/index.js";
+import { Prefs, Platform, Plugin, std } from "../server/index.js";
 import { bind } from "../server/platform/index.js";
 import vite from "../plugin/vite.js";
 
@@ -8,7 +8,7 @@ declare type AstroIntegration = {
     hooks: {
         "astro:config:setup"?: (options: {
             injectScript: AstroInjector;
-            updateConfig: (config: { vite: { plugins: unknown[] } }) => void;
+            updateConfig: (config: { vite: { plugins: [ReturnType<typeof vite>] } }) => void;
         }) => void | Promise<void>;
     };
 };
