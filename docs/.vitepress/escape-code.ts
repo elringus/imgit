@@ -6,7 +6,7 @@ export default { capture } satisfies Plugin;
 
 // Remove captures inside Markdown code blocks (```code```).
 function capture(content: string, assets: CapturedAsset[]): boolean {
-    stages.capture.capture(content, assets);
+    stages.capture.assets(content, assets);
     if (assets.length === 0) return true;
     const ranges = findCodeRanges(content);
     if (ranges.length > 0)
