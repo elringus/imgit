@@ -20,7 +20,10 @@ const cache = <YouTubeCache>$cache;
 const prefs: Prefs = {};
 
 /** Adds support for embedding YouTube videos with imgit.
- *  @example ![](https://www.youtube.com/watch?v=arbuYnJoLtU) */
+ *  @example
+ *  ```md
+ *  ![](https://www.youtube.com/watch?v=arbuYnJoLtU)
+ *  ``` */
 export default function ($prefs?: Prefs): Plugin {
     if (!cache.hasOwnProperty("youtube")) cache.youtube = {};
     Object.assign(prefs, $prefs);
@@ -39,7 +42,7 @@ async function resolve(asset: ResolvedAsset): Promise<boolean> {
     if (!isYouTube(asset.syntax.url)) return false;
     const id = getYouTubeId(asset.syntax.url);
     asset.content = { src: await resolveThumbnailUrl(id) };
-    asset.spec = asset.syntax.spec ? stages.resolve.resolveSpec(asset.syntax.spec) : {};
+    asset.spec = asset.syntax.spec ? stages.resolve.spec(asset.syntax.spec) : {};
     return true;
 }
 
@@ -78,7 +81,7 @@ function buildBanner(url: string): string {
 
 async function buildPoster(asset: BuiltAsset): Promise<string> {
     // Reuse default picture build procedure.
-    await stages.build.build(asset);
+    await stages.build.asset(asset);
     return asset.html;
 }
 

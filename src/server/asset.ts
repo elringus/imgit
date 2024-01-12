@@ -36,20 +36,22 @@ export type ResolvedContent = {
 /** Per-asset specifications assigned by the user. */
 export type AssetSpec = {
     /** Width threshold for the asset content, in pixels.
-     *  Overrides global <code>width</code> parameter. */
+     *  Overrides global `width` parameter. */
     width?: number;
-    /** When set to <code>true</code> the asset will be loaded eagerly (instead of default lazy).
+    /** When set to `true` the asset will be loaded eagerly (instead of default lazy).
      *  Use for above the fold content, ie initially visible w/o scrolling, such as hero image. */
     eager?: boolean;
-    /** When set to <code>true</code> syntax will be merged with the previous one in the document.
+    /** When set to `true` syntax will be merged with the previous one in the document.
      *  Can be used to specify multiple sources with different specs for a single asset. */
     merge?: boolean;
     /** Media attribute to specify for applicable source tag. Can be used with the "merge" spec
      *  for art direction. Example below will show "wide.png" when window width is 800px or more
      *  and switch to "narrow.png" when the window width is equal to or below 799px.
      *  @example
+     *  ```md
      *  ![?media=(min-width:800px)](/wide.png)
-     *  ![?media=(max-width:799px)&merge](/narrow.png) */
+     *  ![?media=(max-width:799px)&merge](/narrow.png)
+     *  ``` */
     media?: string;
     /** When specified, adds specified class attribute to generated HTML container. */
     class?: string;

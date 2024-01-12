@@ -2,7 +2,10 @@ import { Plugin, std, stages } from "../server/index.js";
 import { CapturedAsset, BuiltAsset } from "../server/asset.js";
 
 /** Adds support for inlining SVG assets with imgit.
- *  @example ![](/assets/diagram.svg) */
+ *  @example
+ *  ```md
+ *  ![](/assets/diagram.svg)
+ *  ``` */
 export default function (): Plugin {
     // Skipping probe and encode stages; we'll just embed SVG content into HTML.
     return { probe: isSvg, encode: isSvg, build };

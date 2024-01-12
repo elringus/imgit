@@ -3,7 +3,7 @@ import { bind } from "../server/platform/index.js";
 import vite from "../plugin/vite.js";
 
 // https://docs.astro.build/en/reference/integrations-reference
-declare type AstroIntegration = {
+export type AstroIntegration = {
     name: string;
     hooks: {
         "astro:config:setup"?: (options: {
@@ -14,7 +14,7 @@ declare type AstroIntegration = {
 };
 
 // https://docs.astro.build/en/reference/integrations-reference/#injectscript-option
-declare type AstroInjector = (stage: "page", content: string) => void;
+export type AstroInjector = (stage: "page", content: string) => void;
 
 /** Creates imgit integration instance for astro.
  *  @param prefs Plugin preferences; will use pre-defined defaults when not assigned.
