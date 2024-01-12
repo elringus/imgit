@@ -31,7 +31,7 @@ export default defineConfig({
         sidebarMenuLabel: "Menu",
         darkModeSwitchLabel: "Appearance",
         returnToTopLabel: "Return to top",
-        outline: { label: "On this page", level: "deep" },
+        outline: { label: "On this page", level: [2, 3] },
         docFooter: { prev: "Previous page", next: "Next page" },
         nav: [
             { text: "Guide", link: "/guide/", activeMatch: "/guide/" },
