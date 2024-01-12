@@ -20,4 +20,4 @@ Local directory where the build cache files are stored. When building static app
 
 ## Source
 
-[server/config/options.ts:35](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/options.ts#L35)
+[server/config/options.ts:35](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/options.ts#L35)

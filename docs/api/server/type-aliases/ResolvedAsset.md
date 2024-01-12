@@ -26,4 +26,4 @@ Optional user-defined asset specifications resolved (parsed) from captured synta
 
 ## Source
 
-[server/asset.ts:23](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L23)
+[server/asset.ts:23](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L23)

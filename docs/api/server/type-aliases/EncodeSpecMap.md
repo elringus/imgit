@@ -8,4 +8,4 @@ Encode parameters mapped by source content MIME type or regex of the type.
 
 ## Source
 
-[server/config/options.ts:119](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/options.ts#L119)
+[server/config/options.ts:119](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/options.ts#L119)

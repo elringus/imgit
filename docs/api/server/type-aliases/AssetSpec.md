@@ -62,4 +62,4 @@ Width threshold for the asset content, in pixels.
 
 ## Source
 
-[server/asset.ts:37](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L37)
+[server/asset.ts:37](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L37)

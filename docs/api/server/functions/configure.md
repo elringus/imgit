@@ -16,4 +16,4 @@ Specifies current build configuration.
 
 ## Source
 
-[server/config/index.ts:14](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/index.ts#L14)
+[server/config/index.ts:14](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/index.ts#L14)

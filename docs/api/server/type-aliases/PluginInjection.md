@@ -26,4 +26,4 @@ Whether injected content is a JS module or CSS stylesheet.
 
 ## Source
 
-[server/config/plugin.ts:44](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/plugin.ts#L44)
+[server/config/plugin.ts:44](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/plugin.ts#L44)

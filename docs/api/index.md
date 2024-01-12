@@ -1,5 +1,5 @@
 # API Reference
-Auto-generated with [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org/).
+Auto-generated with [typedoc-plugin-markdown](https://typedoc-plugin-markdown.org).
 
 ## Modules
 

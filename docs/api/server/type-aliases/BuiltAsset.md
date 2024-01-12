@@ -18,4 +18,4 @@ Transformed asset syntax in HTML form.
 
 ## Source
 
-[server/asset.ts:117](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L117)
+[server/asset.ts:117](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L117)

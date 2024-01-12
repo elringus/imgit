@@ -18,4 +18,4 @@ Location (absolute or relative URL) of the source content file.
 
 ## Source
 
-[server/asset.ts:31](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L31)
+[server/asset.ts:31](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L31)

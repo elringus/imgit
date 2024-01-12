@@ -9,7 +9,6 @@ echo '{
         "../src/plugin/vite.ts"
     ],
     "tsconfig": "../src/tsconfig.json",
-    "entryFileName": "index.md",
     "out": "api",
     "readme": "none",
     "githubPages": false,
@@ -24,5 +23,5 @@ echo '{
 }' > typedoc.json
 
 typedoc
-sed -i -z "s/API Reference/API Reference\nAuto-generated with [typedoc-plugin-markdown](https:\/\/typedoc-plugin-markdown.org\/)./" api/index.md
+sed -i -z "s/API Reference/API Reference\nAuto-generated with [typedoc-plugin-markdown](https:\/\/typedoc-plugin-markdown.org)./" api/index.md
 rm typedoc.json

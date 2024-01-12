@@ -26,4 +26,4 @@ Whether to show captured alt syntax as video title; enabled by default.
 
 ## Source
 
-[plugin/youtube/server.ts:5](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/youtube/server.ts#L5)
+[plugin/youtube/server.ts:5](https://github.com/Elringus/Imgit/blob/fc320a2/src/plugin/youtube/server.ts#L5)

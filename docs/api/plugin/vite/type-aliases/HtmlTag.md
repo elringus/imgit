@@ -32,4 +32,4 @@ tag: string;
 
 ## Source
 
-[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/vite.ts#L25)
+[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/fc320a2/src/plugin/vite.ts#L25)

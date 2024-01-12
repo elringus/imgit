@@ -42,4 +42,4 @@ Generated variant of the source content for compatibility/fallback, when applica
 
 ## Source
 
-[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L105)
+[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L105)

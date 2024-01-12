@@ -18,4 +18,4 @@ Source content of the asset.
 
 ## Source
 
-[server/asset.ts:75](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L75)
+[server/asset.ts:75](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L75)

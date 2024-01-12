@@ -22,4 +22,4 @@ Runtime APIs to use; will attempt to detect automatically when not assigned.
 
 ## Source
 
-[server/index.ts:17](https://github.com/Elringus/Imgit/blob/157689c/src/server/index.ts#L17)
+[server/index.ts:17](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/index.ts#L17)

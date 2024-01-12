@@ -43,4 +43,4 @@ How long to wait when downloading remote asset, in seconds; 30 by default.
 
 ## Source
 
-[server/config/options.ts:43](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/options.ts#L43)
+[server/config/options.ts:43](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/options.ts#L43)

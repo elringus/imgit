@@ -12,4 +12,4 @@ Resets the configuration to defaults.
 
 ## Source
 
-[server/config/index.ts:20](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/index.ts#L20)
+[server/config/index.ts:20](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/config/index.ts#L20)

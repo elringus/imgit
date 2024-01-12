@@ -18,4 +18,4 @@ Adds support for inlining SVG assets with imgit.
 
 ## Source
 
-[plugin/svg.ts:9](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/svg.ts#L9)
+[plugin/svg.ts:9](https://github.com/Elringus/Imgit/blob/fc320a2/src/plugin/svg.ts#L9)

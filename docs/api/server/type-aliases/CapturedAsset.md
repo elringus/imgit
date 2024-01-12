@@ -18,4 +18,4 @@ Syntax of the captured asset.
 
 ## Source
 
-[server/asset.ts:2](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L2)
+[server/asset.ts:2](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L2)

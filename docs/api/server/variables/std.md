@@ -8,4 +8,4 @@ Platform-specific APIs.
 
 ## Source
 
-[server/platform/index.ts:5](https://github.com/Elringus/Imgit/blob/157689c/src/server/platform/index.ts#L5)
+[server/platform/index.ts:5](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/platform/index.ts#L5)

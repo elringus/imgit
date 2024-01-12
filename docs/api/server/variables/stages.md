@@ -208,4 +208,4 @@ Default rewrite procedure.
 
 ## Source
 
-[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/157689c/src/server/transform/index.ts#L10)
+[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/transform/index.ts#L10)

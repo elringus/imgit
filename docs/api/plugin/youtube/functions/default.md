@@ -22,4 +22,4 @@ Adds support for embedding YouTube videos with imgit.
 
 ## Source
 
-[plugin/youtube/server.ts:27](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/youtube/server.ts#L27)
+[plugin/youtube/server.ts:27](https://github.com/Elringus/Imgit/blob/fc320a2/src/plugin/youtube/server.ts#L27)

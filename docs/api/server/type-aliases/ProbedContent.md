@@ -18,4 +18,4 @@ Media info about the probed source content.
 
 ## Source
 
-[server/asset.ts:81](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L81)
+[server/asset.ts:81](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/asset.ts#L81)

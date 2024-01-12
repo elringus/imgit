@@ -38,4 +38,4 @@ name: string;
 
 ## Source
 
-[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/astro.ts#L6)
+[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/fc320a2/src/plugin/astro.ts#L6)

@@ -43,4 +43,4 @@ Encode specifications used for the last encode pass, mapped by content URL.
 
 ## Source
 
-[server/cache.ts:7](https://github.com/Elringus/Imgit/blob/157689c/src/server/cache.ts#L7)
+[server/cache.ts:7](https://github.com/Elringus/Imgit/blob/fc320a2/src/server/cache.ts#L7)
