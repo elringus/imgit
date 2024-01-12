@@ -9,7 +9,7 @@ export async function captureAll(content: string, id?: string): Promise<Captured
     return assets;
 }
 
-/** Used regexp defined in options to capture the assets syntax. */
+/** Uses regexp defined in options to capture the assets syntax. */
 export function capture(content: string, assets: CapturedAsset[]) {
     for (const regex of cfg.regex.map(r => new RegExp(r)))
         for (const match of content.matchAll(regex))

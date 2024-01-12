@@ -13,6 +13,7 @@ export default defineConfig({
     cleanUrls: true,
     lastUpdated: true,
     markdown: md,
+    ignoreDeadLinks: true, // typedoc-md doesn't generate files for some types (bug?)
     vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube(), escapeCode] })] },
     head: [
         ["link", { rel: "icon", href: "/favicon.svg" }],
@@ -26,7 +27,7 @@ export default defineConfig({
         logo: { src: "/favicon.svg" },
         logoLink: "/",
         socialLinks: [{ icon: "github", link: "https://github.com/elringus/imgit" }],
-        search: { provider: "local" },
+        search: { provider: "local", options: { detailedView: true } },
         lastUpdated: { text: "Updated", formatOptions: { dateStyle: "medium" } },
         sidebarMenuLabel: "Menu",
         darkModeSwitchLabel: "Appearance",
@@ -70,7 +71,11 @@ export default defineConfig({
                         { text: "VitePress", link: "/guide/integrations/vitepress" }
                     ]
                 }
-            ]
+            ],
+            "/api/": [{
+                text: "Reference",
+                items: (await import("./../api/typedoc-sidebar.json")).default
+            }]
         }
     },
     sitemap: { hostname: "https://imgit.dev" }

@@ -9,7 +9,7 @@ export type VitePrefs = Prefs & {
 };
 
 // https://vitejs.dev/guide/api-plugin
-declare type VitePlugin = {
+export type VitePlugin = {
     name: string;
     enforce: "pre" | "post";
     buildStart: (options: unknown) => Promise<void> | void;
@@ -22,7 +22,7 @@ declare type VitePlugin = {
 };
 
 // https://vitejs.dev/guide/api-plugin#transformindexhtml
-declare type HtmlTag = {
+export type HtmlTag = {
     tag: string;
     attrs?: Record<string, string | boolean>;
     children?: string | HtmlTag[];

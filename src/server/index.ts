@@ -1,14 +1,14 @@
 import { Prefs, configure, cfg, resetConfig } from "./config/index.js";
 import { Platform, bind } from "./platform/index.js";
-import * as cache from "./cache.js";
 import { clear as clearContext } from "./context.js";
+import * as cache from "./cache.js";
 
 export { Platform, std } from "./platform/index.js";
-export { Prefs, cfg, defaults } from "./config/index.js";
 export { Plugin, PluginInjection } from "./config/plugin.js";
 export { ctx } from "./context.js";
 export { Cache, cache } from "./cache.js";
 export { stages, transform } from "./transform/index.js";
+export * from "./config/index.js";
 export * from "./asset.js";
 
 /** Initializes build context with specified options.
