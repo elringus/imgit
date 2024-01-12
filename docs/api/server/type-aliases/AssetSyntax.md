@@ -39,4 +39,4 @@ URL from captured syntax; may be direct location of the asset's source content (
 
 ## Source
 
-[server/asset.ts:8](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/asset.ts#L8)
+[server/asset.ts:8](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L8)

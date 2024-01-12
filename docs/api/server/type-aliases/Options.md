@@ -71,4 +71,4 @@ Default width threshold for the transformed assets, in pixels. When source asset
 
 ## Source
 
-[server/config/options.ts:4](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/config/options.ts#L4)
+[server/config/options.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/options.ts#L4)

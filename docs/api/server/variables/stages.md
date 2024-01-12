@@ -172,4 +172,4 @@ Default rewrite procedure.
 
 ## Source
 
-[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/transform/index.ts#L10)
+[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/transform/index.ts#L10)

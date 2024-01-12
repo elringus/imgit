@@ -20,4 +20,4 @@ Whether any of the source content files were modified since last build.
 
 ## Source
 
-[server/asset.ts:61](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/asset.ts#L61)
+[server/asset.ts:61](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L61)

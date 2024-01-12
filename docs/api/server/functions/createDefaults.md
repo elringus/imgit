@@ -10,4 +10,4 @@ Creates default build server configuration.
 
 ## Source
 
-[server/config/defaults.ts:7](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/config/defaults.ts#L7)
+[server/config/defaults.ts:7](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/defaults.ts#L7)

@@ -328,4 +328,4 @@ Returns promise resolved after specified number of seconds.
 
 ## Source
 
-[server/platform/platform.ts:2](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/platform/platform.ts#L2)
+[server/platform/platform.ts:2](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/platform/platform.ts#L2)

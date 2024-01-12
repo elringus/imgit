@@ -30,4 +30,4 @@
 
 ## Source
 
-[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/f5cda02/src/plugin/astro.ts#L6)
+[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/astro.ts#L6)

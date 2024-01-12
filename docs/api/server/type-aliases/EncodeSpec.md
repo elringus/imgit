@@ -38,4 +38,4 @@ Select frame with specified index (0-based) instead of encoding full stream.
 
 ## Source
 
-[server/config/options.ts:105](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/config/options.ts#L105)
+[server/config/options.ts:105](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/options.ts#L105)

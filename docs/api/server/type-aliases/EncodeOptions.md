@@ -57,4 +57,4 @@ Configure safe files generation, that is fallbacks used in case source content i
 
 ## Source
 
-[server/config/options.ts:56](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/config/options.ts#L56)
+[server/config/options.ts:56](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/options.ts#L56)

@@ -160,4 +160,4 @@ Custom asset server. Given full path to a content file and associated asset info
 
 ## Source
 
-[server/config/plugin.ts:4](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/config/plugin.ts#L4)
+[server/config/plugin.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/plugin.ts#L4)

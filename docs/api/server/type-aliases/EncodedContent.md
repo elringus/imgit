@@ -32,4 +32,4 @@ Generated variant of the source content for compatibility/fallback, when applica
 
 ## Source
 
-[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/asset.ts#L105)
+[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L105)

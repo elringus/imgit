@@ -28,4 +28,4 @@ Specify condition when document shouldn't be transformed by the vite plugin.
 
 ## Source
 
-[plugin/vite.ts:4](https://github.com/Elringus/Imgit/blob/f5cda02/src/plugin/vite.ts#L4)
+[plugin/vite.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L4)

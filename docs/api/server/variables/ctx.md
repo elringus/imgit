@@ -32,4 +32,4 @@ Fetch retry count mapped by fetched content location (URL).
 
 ## Source
 
-[server/context.ts:4](https://github.com/Elringus/Imgit/blob/f5cda02/src/server/context.ts#L4)
+[server/context.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/context.ts#L4)

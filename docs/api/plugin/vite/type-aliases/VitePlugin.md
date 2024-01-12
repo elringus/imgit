@@ -89,4 +89,4 @@
 
 ## Source
 
-[plugin/vite.ts:12](https://github.com/Elringus/Imgit/blob/f5cda02/src/plugin/vite.ts#L12)
+[plugin/vite.ts:12](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L12)

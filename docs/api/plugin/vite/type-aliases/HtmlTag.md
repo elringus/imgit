@@ -22,4 +22,4 @@
 
 ## Source
 
-[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/f5cda02/src/plugin/vite.ts#L25)
+[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L25)

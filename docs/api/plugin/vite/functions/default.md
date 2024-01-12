@@ -20,4 +20,4 @@ Runtime APIs to use; will attempt to detect automatically when not assigned.
 
 ## Source
 
-[plugin/vite.ts:35](https://github.com/Elringus/Imgit/blob/f5cda02/src/plugin/vite.ts#L35)
+[plugin/vite.ts:35](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L35)

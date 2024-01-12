@@ -13,7 +13,6 @@ export default defineConfig({
     cleanUrls: true,
     lastUpdated: true,
     markdown: md,
-    ignoreDeadLinks: true, // typedoc-md doesn't generate files for some types (bug?)
     vite: { plugins: [imgit({ width: 688, plugins: [svg(), youtube(), escapeCode] })] },
     head: [
         ["link", { rel: "icon", href: "/favicon.svg" }],
