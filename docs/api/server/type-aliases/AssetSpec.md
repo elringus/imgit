@@ -1,6 +1,8 @@
 # AssetSpec
 
-> **AssetSpec**: `Object`
+```ts
+type AssetSpec: Object;
+```
 
 Per-asset specifications assigned by the user.
 
@@ -8,20 +10,26 @@ Per-asset specifications assigned by the user.
 
 ### class?
 
-> **class**?: `string`
+```ts
+class?: string;
+```
 
 When specified, adds specified class attribute to generated HTML container.
 
 ### eager?
 
-> **eager**?: `boolean`
+```ts
+eager?: boolean;
+```
 
 When set to `true` the asset will be loaded eagerly (instead of default lazy).
  Use for above the fold content, ie initially visible w/o scrolling, such as hero image.
 
 ### media?
 
-> **media**?: `string`
+```ts
+media?: string;
+```
 
 Media attribute to specify for applicable source tag. Can be used with the "merge" spec
  for art direction. Example below will show "wide.png" when window width is 800px or more
@@ -36,18 +44,22 @@ Media attribute to specify for applicable source tag. Can be used with the "merg
 
 ### merge?
 
-> **merge**?: `boolean`
+```ts
+merge?: boolean;
+```
 
 When set to `true` syntax will be merged with the previous one in the document.
  Can be used to specify multiple sources with different specs for a single asset.
 
 ### width?
 
-> **width**?: `number`
+```ts
+width?: number;
+```
 
 Width threshold for the asset content, in pixels.
  Overrides global `width` parameter.
 
 ## Source
 
-[server/asset.ts:37](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L37)
+[server/asset.ts:37](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L37)

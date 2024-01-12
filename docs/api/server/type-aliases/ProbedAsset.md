@@ -1,6 +1,8 @@
 # ProbedAsset
 
-> **ProbedAsset**: [`FetchedAsset`](FetchedAsset.md) & `Object`
+```ts
+type ProbedAsset: FetchedAsset & Object;
+```
 
 Asset with identified source content.
 
@@ -8,10 +10,12 @@ Asset with identified source content.
 
 ### content
 
-> **content**: [`ProbedContent`](ProbedContent.md)
+```ts
+content: ProbedContent;
+```
 
 Source content of the asset.
 
 ## Source
 
-[server/asset.ts:75](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L75)
+[server/asset.ts:75](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L75)

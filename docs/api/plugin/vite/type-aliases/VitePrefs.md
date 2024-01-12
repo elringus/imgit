@@ -1,6 +1,8 @@
 # VitePrefs
 
-> **VitePrefs**: [`Prefs`](../../../server/type-aliases/Prefs.md) & `Object`
+```ts
+type VitePrefs: Prefs & Object;
+```
 
 Configures vite plugin behaviour.
 
@@ -8,13 +10,17 @@ Configures vite plugin behaviour.
 
 ### inject?
 
-> **inject**?: `boolean`
+```ts
+inject?: boolean;
+```
 
 Whether to inject imgit client JavaScript module to index HTML; enabled by default.
 
 ### skip?
 
-> **skip**?: (`filename`) => `boolean`
+```ts
+skip?: (filename) => boolean;
+```
 
 Specify condition when document shouldn't be transformed by the vite plugin.
 
@@ -28,4 +34,4 @@ Specify condition when document shouldn't be transformed by the vite plugin.
 
 ## Source
 
-[plugin/vite.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L4)
+[plugin/vite.ts:4](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/vite.ts#L4)

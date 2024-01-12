@@ -1,6 +1,8 @@
 # transform()
 
-> **transform**(`content`, `id`?): `Promise`\<`string`\>
+```ts
+transform(content, id?): Promise<string>
+```
 
 Transforms source document (eg, `.md`, `.jsx` or `.html`)
  with specified content replacing configured asset syntax with optimized HTML.
@@ -23,4 +25,4 @@ Transformed content of the document.
 
 ## Source
 
-[server/transform/index.ts:25](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/transform/index.ts#L25)
+[server/transform/index.ts:25](https://github.com/Elringus/Imgit/blob/157689c/src/server/transform/index.ts#L25)

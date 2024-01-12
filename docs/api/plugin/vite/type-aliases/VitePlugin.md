@@ -1,12 +1,16 @@
 # VitePlugin
 
-> **VitePlugin**: `Object`
+```ts
+type VitePlugin: Object;
+```
 
 ## Type declaration
 
 ### buildEnd
 
-> **buildEnd**: (`error`?) => `Promise`\<`void`\> \| `void`
+```ts
+buildEnd: (error?) => Promise<void> | void;
+```
 
 #### Parameters
 
@@ -18,7 +22,9 @@
 
 ### buildStart
 
-> **buildStart**: (`options`) => `Promise`\<`void`\> \| `void`
+```ts
+buildStart: (options) => Promise<void> | void;
+```
 
 #### Parameters
 
@@ -30,15 +36,21 @@
 
 ### enforce
 
-> **enforce**: `"pre"` \| `"post"`
+```ts
+enforce: "pre" | "post";
+```
 
 ### name
 
-> **name**: `string`
+```ts
+name: string;
+```
 
 ### transform
 
-> **transform**: (`code`, `id`, `options`?) => `Promise`\<`string`\> \| `string`
+```ts
+transform: (code, id, options?) => Promise<string> | string;
+```
 
 #### Parameters
 
@@ -56,11 +68,15 @@
 
 ### transformIndexHtml
 
-> **transformIndexHtml**: `Object`
+```ts
+transformIndexHtml: Object;
+```
 
 ### transformIndexHtml.handler
 
-> **transformIndexHtml.handler**: (`html`, `ctx`) => `Promise`\<`Object`\>
+```ts
+transformIndexHtml.handler: (html, ctx) => Promise<Object>;
+```
 
 #### Parameters
 
@@ -76,17 +92,23 @@
 
 > ##### html
 >
-> > **html**: `string`
+> ```ts
+> html: string;
+> ```
 >
 > ##### tags
 >
-> > **tags**: [`HtmlTag`](HtmlTag.md)[]
+> ```ts
+> tags: HtmlTag[];
+> ```
 >
 
 ### transformIndexHtml.order
 
-> **transformIndexHtml.order**: `"pre"` \| `"post"`
+```ts
+transformIndexHtml.order: "pre" | "post";
+```
 
 ## Source
 
-[plugin/vite.ts:12](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L12)
+[plugin/vite.ts:12](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/vite.ts#L12)

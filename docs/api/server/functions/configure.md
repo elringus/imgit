@@ -1,6 +1,8 @@
 # configure()
 
-> **configure**(`prefs`): `void`
+```ts
+configure(prefs): void
+```
 
 Specifies current build configuration.
 
@@ -14,4 +16,4 @@ Specifies current build configuration.
 
 ## Source
 
-[server/config/index.ts:14](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/index.ts#L14)
+[server/config/index.ts:14](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/index.ts#L14)

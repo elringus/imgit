@@ -1,6 +1,8 @@
 # default()
 
-> **default**(): [`Plugin`](../../../server/type-aliases/Plugin.md)
+```ts
+default(): Plugin
+```
 
 Adds support for inlining SVG assets with imgit.
 
@@ -16,4 +18,4 @@ Adds support for inlining SVG assets with imgit.
 
 ## Source
 
-[plugin/svg.ts:9](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/svg.ts#L9)
+[plugin/svg.ts:9](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/svg.ts#L9)

@@ -1,6 +1,8 @@
 # EncodedContent
 
-> **EncodedContent**: [`ProbedContent`](ProbedContent.md) & `Object`
+```ts
+type EncodedContent: ProbedContent & Object;
+```
 
 Optimized source of an asset with optional generated content.
 
@@ -8,28 +10,36 @@ Optimized source of an asset with optional generated content.
 
 ### cover?
 
-> **cover**?: `string`
+```ts
+cover?: string;
+```
 
 Generated variant of the source content to cover loading process, when applicable.
 
 ### dense?
 
-> **dense**?: `string`
+```ts
+dense?: string;
+```
 
 Generated variant of the source content for high-dpi displays, when applicable.
 
 ### encoded
 
-> **encoded**: `string`
+```ts
+encoded: string;
+```
 
 Full path to the asset's encoded/optimized content file on local file system.
 
 ### safe?
 
-> **safe**?: `string`
+```ts
+safe?: string;
+```
 
 Generated variant of the source content for compatibility/fallback, when applicable.
 
 ## Source
 
-[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L105)
+[server/asset.ts:105](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L105)

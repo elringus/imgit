@@ -1,6 +1,8 @@
 # Platform
 
-> **Platform**: `Record`\<`string`, `unknown`\> & `Object`
+```ts
+type Platform: Record<string, unknown> & Object;
+```
 
 Platform-specific APIs used in build operations.
 
@@ -8,7 +10,9 @@ Platform-specific APIs used in build operations.
 
 ### base64
 
-> **base64**: (`data`) => `Promise`\<`string`\>
+```ts
+base64: (data) => Promise<string>;
+```
 
 Encodes specified binary data to base64 string.
 
@@ -22,7 +26,9 @@ Encodes specified binary data to base64 string.
 
 ### exec
 
-> **exec**: (`cmd`) => `Promise`\<`Object`\>
+```ts
+exec: (cmd) => Promise<Object>;
+```
 
 Executes specified command in system shell.
 
@@ -36,16 +42,22 @@ Executes specified command in system shell.
 
 > ##### err?
 >
-> > **err**?: `Error`
+> ```ts
+> err?: Error;
+> ```
 >
 > ##### out
 >
-> > **out**: `string`
+> ```ts
+> out: string;
+> ```
 >
 
 ### fetch
 
-> **fetch**: (`url`, `abort`?) => `Promise`\<`Response`\>
+```ts
+fetch: (url, abort?) => Promise<Response>;
+```
 
 Fetches a remote resource with specified url.
 
@@ -61,13 +73,17 @@ Fetches a remote resource with specified url.
 
 ### fs
 
-> **fs**: `Object`
+```ts
+fs: Object;
+```
 
 Local file system access APIs.
 
 ### fs.exists
 
-> **fs.exists**: (`path`) => `Promise`\<`boolean`\>
+```ts
+fs.exists: (path) => Promise<boolean>;
+```
 
 Returns whether directory or file with specified path exists.
 
@@ -81,7 +97,9 @@ Returns whether directory or file with specified path exists.
 
 ### fs.mkdir
 
-> **fs.mkdir**: (`path`) => `Promise`\<`void`\>
+```ts
+fs.mkdir: (path) => Promise<void>;
+```
 
 Creates directory with specified path (recursive).
 
@@ -95,7 +113,9 @@ Creates directory with specified path (recursive).
 
 ### fs.read
 
-> **fs.read**: \<`T`\>(`path`, `encoding`) => `Promise`\<`T` extends `"bin"` ? `Uint8Array` : `string`\>
+```ts
+fs.read: <T>(path, encoding) => Promise<T extends "bin" ? Uint8Array : string>;
+```
 
 Returns content of the file with specified path and encoding.
 
@@ -115,7 +135,9 @@ Returns content of the file with specified path and encoding.
 
 ### fs.remove
 
-> **fs.remove**: (`path`) => `Promise`\<`void`\>
+```ts
+fs.remove: (path) => Promise<void>;
+```
 
 Deletes file with specified path.
 
@@ -129,7 +151,9 @@ Deletes file with specified path.
 
 ### fs.size
 
-> **fs.size**: (`path`) => `Promise`\<`number`\>
+```ts
+fs.size: (path) => Promise<number>;
+```
 
 Returns size of the file with specified path, in bytes.
 
@@ -143,7 +167,9 @@ Returns size of the file with specified path, in bytes.
 
 ### fs.write
 
-> **fs.write**: (`path`, `content`) => `Promise`\<`void`\>
+```ts
+fs.write: (path, content) => Promise<void>;
+```
 
 Writes binary array or UTF-8 encoded string to the file with specified path.
 
@@ -159,13 +185,17 @@ Writes binary array or UTF-8 encoded string to the file with specified path.
 
 ### log
 
-> **log**: `Object`
+```ts
+log: Object;
+```
 
 Logging and reporting APIs.
 
 ### log.err
 
-> **log.err**: (`msg`) => `void`
+```ts
+log.err: (msg) => void;
+```
 
 Logs error message.
 
@@ -179,7 +209,9 @@ Logs error message.
 
 ### log.info
 
-> **log.info**: (`msg`) => `void`
+```ts
+log.info: (msg) => void;
+```
 
 Logs informational message.
 
@@ -193,7 +225,9 @@ Logs informational message.
 
 ### log.tty
 
-> **log.tty**: (`msg`) => `void`
+```ts
+log.tty: (msg) => void;
+```
 
 Clears current line and writes to stdout when text terminal is available,
  ignores otherwise; used for reporting build progress.
@@ -208,7 +242,9 @@ Clears current line and writes to stdout when text terminal is available,
 
 ### log.warn
 
-> **log.warn**: (`msg`) => `void`
+```ts
+log.warn: (msg) => void;
+```
 
 Logs warning message.
 
@@ -222,13 +258,17 @@ Logs warning message.
 
 ### path
 
-> **path**: `Object`
+```ts
+path: Object;
+```
 
 File system path APIs. All results are expected with forward slashes (even on Windows).
 
 ### path.basename
 
-> **path.basename**: (`path`) => `string`
+```ts
+path.basename: (path) => string;
+```
 
 Extracts file name with extension from specified path.
 
@@ -242,7 +282,9 @@ Extracts file name with extension from specified path.
 
 ### path.dirname
 
-> **path.dirname**: (`path`) => `string`
+```ts
+path.dirname: (path) => string;
+```
 
 Extracts directory name from specified path and normalizes the result.
 
@@ -256,7 +298,9 @@ Extracts directory name from specified path and normalizes the result.
 
 ### path.fileUrlToPath
 
-> **path.fileUrlToPath**: (`url`) => `string`
+```ts
+path.fileUrlToPath: (url) => string;
+```
 
 Converts specified file URL (usually `import.meta.url`) to local file path.
 
@@ -270,7 +314,9 @@ Converts specified file URL (usually `import.meta.url`) to local file path.
 
 ### path.join
 
-> **path.join**: (...`paths`) => `string`
+```ts
+path.join: (...paths) => string;
+```
 
 Joins specified path parts and normalizes the result.
 
@@ -284,7 +330,9 @@ Joins specified path parts and normalizes the result.
 
 ### path.relative
 
-> **path.relative**: (`from`, `to`) => `string`
+```ts
+path.relative: (from, to) => string;
+```
 
 Builds relative path from specified 'from' path to 'to' path.
 
@@ -300,7 +348,9 @@ Builds relative path from specified 'from' path to 'to' path.
 
 ### path.resolve
 
-> **path.resolve**: (...`paths`) => `string`
+```ts
+path.resolve: (...paths) => string;
+```
 
 Builds absolute path from specified parts and normalizes the result.
 
@@ -314,7 +364,9 @@ Builds absolute path from specified parts and normalizes the result.
 
 ### wait
 
-> **wait**: (`seconds`) => `Promise`\<`void`\>
+```ts
+wait: (seconds) => Promise<void>;
+```
 
 Returns promise resolved after specified number of seconds.
 
@@ -328,4 +380,4 @@ Returns promise resolved after specified number of seconds.
 
 ## Source
 
-[server/platform/platform.ts:2](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/platform/platform.ts#L2)
+[server/platform/platform.ts:2](https://github.com/Elringus/Imgit/blob/157689c/src/server/platform/platform.ts#L2)

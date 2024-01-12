@@ -1,6 +1,8 @@
 # EncodedAsset
 
-> **EncodedAsset**: [`ProbedAsset`](ProbedAsset.md) & `Object`
+```ts
+type EncodedAsset: ProbedAsset & Object;
+```
 
 Asset with all the applicable encoded/generated content available on local file system.
 
@@ -8,10 +10,12 @@ Asset with all the applicable encoded/generated content available on local file 
 
 ### content
 
-> **content**: [`EncodedContent`](EncodedContent.md)
+```ts
+content: EncodedContent;
+```
 
 Source content of the asset.
 
 ## Source
 
-[server/asset.ts:99](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L99)
+[server/asset.ts:99](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L99)

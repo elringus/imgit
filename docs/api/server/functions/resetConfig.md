@@ -1,6 +1,8 @@
 # resetConfig()
 
-> **resetConfig**(): `void`
+```ts
+resetConfig(): void
+```
 
 Resets the configuration to defaults.
 
@@ -10,4 +12,4 @@ Resets the configuration to defaults.
 
 ## Source
 
-[server/config/index.ts:20](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/index.ts#L20)
+[server/config/index.ts:20](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/index.ts#L20)

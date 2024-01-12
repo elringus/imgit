@@ -1,6 +1,8 @@
 # default()
 
-> **default**(`prefs`?, `platform`?): [`VitePlugin`](../type-aliases/VitePlugin.md)
+```ts
+default(prefs?, platform?): VitePlugin
+```
 
 Creates imgit plugin instance for vite.
 
@@ -20,4 +22,4 @@ Runtime APIs to use; will attempt to detect automatically when not assigned.
 
 ## Source
 
-[plugin/vite.ts:35](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L35)
+[plugin/vite.ts:35](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/vite.ts#L35)

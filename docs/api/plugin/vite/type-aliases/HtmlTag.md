@@ -1,25 +1,35 @@
 # HtmlTag
 
-> **HtmlTag**: `Object`
+```ts
+type HtmlTag: Object;
+```
 
 ## Type declaration
 
 ### attrs?
 
-> **attrs**?: `Record`\<`string`, `string` \| `boolean`\>
+```ts
+attrs?: Record<string, string | boolean>;
+```
 
 ### children?
 
-> **children**?: `string` \| [`HtmlTag`](HtmlTag.md)[]
+```ts
+children?: string | HtmlTag[];
+```
 
 ### injectTo?
 
-> **injectTo**?: `"head"` \| `"body"` \| `"head-prepend"` \| `"body-prepend"`
+```ts
+injectTo?: "head" | "body" | "head-prepend" | "body-prepend";
+```
 
 ### tag
 
-> **tag**: `string`
+```ts
+tag: string;
+```
 
 ## Source
 
-[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/vite.ts#L25)
+[plugin/vite.ts:25](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/vite.ts#L25)

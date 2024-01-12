@@ -1,6 +1,8 @@
 # ctx
 
-> **`const`** **ctx**: `Object`
+```ts
+const ctx: Object;
+```
 
 Shared mutable state of the current build operation.
 
@@ -8,28 +10,36 @@ Shared mutable state of the current build operation.
 
 ### encodes
 
-> **encodes**: `Map`\<`string`, `Promise`\<`void`\>\>
+```ts
+encodes: Map<string, Promise<void>>;
+```
 
 Encode operations mapped by source content location (URL) + encode target.
 
 ### fetches
 
-> **fetches**: `Map`\<`string`, `Promise`\<`void`\>\>
+```ts
+fetches: Map<string, Promise<void>>;
+```
 
 Fetched remote content mapped by source location (URL).
 
 ### probes
 
-> **probes**: `Map`\<`string`, `Promise`\<[`ContentInfo`](../type-aliases/ContentInfo.md)\>\>
+```ts
+probes: Map<string, Promise<ContentInfo>>;
+```
 
 Probing operations mapped by source content location (URL).
 
 ### retries
 
-> **retries**: `Map`\<`string`, `number`\>
+```ts
+retries: Map<string, number>;
+```
 
 Fetch retry count mapped by fetched content location (URL).
 
 ## Source
 
-[server/context.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/context.ts#L4)
+[server/context.ts:4](https://github.com/Elringus/Imgit/blob/157689c/src/server/context.ts#L4)

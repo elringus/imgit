@@ -1,6 +1,8 @@
 # FetchedContent
 
-> **FetchedContent**: [`ResolvedContent`](ResolvedContent.md) & `Object`
+```ts
+type FetchedContent: ResolvedContent & Object;
+```
 
 Fetched source content of an asset.
 
@@ -8,10 +10,12 @@ Fetched source content of an asset.
 
 ### local
 
-> **local**: `string`
+```ts
+local: string;
+```
 
 Full path to the asset's source content file on local file system.
 
 ## Source
 
-[server/asset.ts:69](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L69)
+[server/asset.ts:69](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L69)

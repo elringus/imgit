@@ -1,6 +1,8 @@
 # stages
 
-> **`const`** **stages**: `Object`
+```ts
+const stages: Object;
+```
 
 Individual document transformation stages.
 
@@ -8,15 +10,21 @@ Individual document transformation stages.
 
 ### build
 
-> **build**: `Object`
+```ts
+build: Object;
+```
 
 ### build.CONTAINER\_ATTR
 
-> **build.CONTAINER\_ATTR**: `string`
+```ts
+build.CONTAINER_ATTR: string;
+```
 
 ### build.asset
 
-> **build.asset**: (`asset`, `merges`?) => `Promise`\<`void`\> = `build`
+```ts
+build.asset: (asset, merges?) => Promise<void> = build;
+```
 
 Default HTML builder for supported asset types (images and video).
 
@@ -32,7 +40,9 @@ Default HTML builder for supported asset types (images and video).
 
 ### build.source
 
-> **build.source**: (`path`) => `string` = `buildContentSource`
+```ts
+build.source: (path) => string = buildContentSource;
+```
 
 Builds serve url for content file with specified full path based on configured root option.
 
@@ -46,11 +56,15 @@ Builds serve url for content file with specified full path based on configured r
 
 ### capture
 
-> **capture**: `Object`
+```ts
+capture: Object;
+```
 
 ### capture.assets
 
-> **capture.assets**: (`content`, `assets`) => `void` = `capture`
+```ts
+capture.assets: (content, assets) => void = capture;
+```
 
 Uses regexp defined in options to capture the assets syntax.
 
@@ -66,11 +80,15 @@ Uses regexp defined in options to capture the assets syntax.
 
 ### encode
 
-> **encode**: `Object`
+```ts
+encode: Object;
+```
 
 ### encode.asset
 
-> **encode.asset**: (`asset`) => `Promise`\<`void`\> = `encodeAsset`
+```ts
+encode.asset: (asset) => Promise<void> = encodeAsset;
+```
 
 Encodes asset content with ffmpeg.
 
@@ -84,11 +102,15 @@ Encodes asset content with ffmpeg.
 
 ### fetch
 
-> **fetch**: `Object`
+```ts
+fetch: Object;
+```
 
 ### fetch.asset
 
-> **fetch.asset**: (`asset`) => `Promise`\<`void`\> = `fetch`
+```ts
+fetch.asset: (asset) => Promise<void> = fetch;
+```
 
 Fetches asset's source content.
 
@@ -102,11 +124,15 @@ Fetches asset's source content.
 
 ### probe
 
-> **probe**: `Object`
+```ts
+probe: Object;
+```
 
 ### probe.asset
 
-> **probe.asset**: (`asset`) => `Promise`\<`void`\> = `probe`
+```ts
+probe.asset: (asset) => Promise<void> = probe;
+```
 
 Probes asset content with ffprobe.
 
@@ -120,11 +146,15 @@ Probes asset content with ffprobe.
 
 ### resolve
 
-> **resolve**: `Object`
+```ts
+resolve: Object;
+```
 
 ### resolve.asset
 
-> **resolve.asset**: (`asset`) => `void` = `resolve`
+```ts
+resolve.asset: (asset) => void = resolve;
+```
 
 Resolves asset types supported by default.
 
@@ -138,7 +168,9 @@ Resolves asset types supported by default.
 
 ### resolve.spec
 
-> **resolve.spec**: (`query`) => [`AssetSpec`](../type-aliases/AssetSpec.md) = `resolveSpec`
+```ts
+resolve.spec: (query) => AssetSpec = resolveSpec;
+```
 
 Resolves spec formatted as URL query parameters.
 
@@ -152,11 +184,15 @@ Resolves spec formatted as URL query parameters.
 
 ### rewrite
 
-> **rewrite**: `Object`
+```ts
+rewrite: Object;
+```
 
 ### rewrite.content
 
-> **rewrite.content**: (`content`, `assets`) => `string` = `rewrite`
+```ts
+rewrite.content: (content, assets) => string = rewrite;
+```
 
 Default rewrite procedure.
 
@@ -172,4 +208,4 @@ Default rewrite procedure.
 
 ## Source
 
-[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/transform/index.ts#L10)
+[server/transform/index.ts:10](https://github.com/Elringus/Imgit/blob/157689c/src/server/transform/index.ts#L10)

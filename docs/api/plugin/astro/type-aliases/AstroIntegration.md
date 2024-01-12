@@ -1,16 +1,22 @@
 # AstroIntegration
 
-> **AstroIntegration**: `Object`
+```ts
+type AstroIntegration: Object;
+```
 
 ## Type declaration
 
 ### hooks
 
-> **hooks**: `Object`
+```ts
+hooks: Object;
+```
 
 ### hooks.astro:config:setup?
 
-> **hooks.astro:config:setup**?: (`options`) => `void` \| `Promise`\<`void`\>
+```ts
+hooks.astro:config:setup?: (options) => void | Promise<void>;
+```
 
 #### Parameters
 
@@ -26,8 +32,10 @@
 
 ### name
 
-> **name**: `string`
+```ts
+name: string;
+```
 
 ## Source
 
-[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/astro.ts#L6)
+[plugin/astro.ts:6](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/astro.ts#L6)

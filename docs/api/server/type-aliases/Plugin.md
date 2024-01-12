@@ -1,6 +1,8 @@
 # Plugin
 
-> **Plugin**: `Object`
+```ts
+type Plugin: Object;
+```
 
 External imgit extension.
 
@@ -8,7 +10,9 @@ External imgit extension.
 
 ### build?
 
-> **build**?: (`asset`, `merges`?) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+build?: (asset, merges?) => boolean | Promise<boolean>;
+```
 
 Custom asset HTML builder. Given encoded asset(s), build HTML (in-place for all the input
  assets) to replace captured syntax in the transformed document. May include additional merged
@@ -27,7 +31,9 @@ Custom asset HTML builder. Given encoded asset(s), build HTML (in-place for all 
 
 ### capture?
 
-> **capture**?: (`content`, `assets`, `id`?) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+capture?: (content, assets, id?) => boolean | Promise<boolean>;
+```
 
 Custom procedure to capture asset syntax. Given id (filename) and content (text) of transformed document
  populate provided assets array and return true or return false when can't handle the document,
@@ -47,7 +53,9 @@ Custom procedure to capture asset syntax. Given id (filename) and content (text)
 
 ### encode?
 
-> **encode**?: (`asset`) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+encode?: (asset) => boolean | Promise<boolean>;
+```
 
 Custom content encoder. Given probed asset, encodes and assigns full file paths to the encoded content
  files (in-place). Return false when the implementation can't encode the asset,
@@ -63,7 +71,9 @@ Custom content encoder. Given probed asset, encodes and assigns full file paths 
 
 ### fetch?
 
-> **fetch**?: (`asset`) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+fetch?: (asset) => boolean | Promise<boolean>;
+```
 
 Custom asset downloader. Given resolved asset, fetches source content and assigns file's full path on
  local file system to the asset (in-place). Return false when the fetcher can't handle the asset,
@@ -79,7 +89,9 @@ Custom asset downloader. Given resolved asset, fetches source content and assign
 
 ### inject?
 
-> **inject**?: () => [`PluginInjection`](PluginInjection.md)[]
+```ts
+inject?: () => PluginInjection[];
+```
 
 When specified, will inject specified client-side content when plugged to bundlers.
 
@@ -89,7 +101,9 @@ When specified, will inject specified client-side content when plugged to bundle
 
 ### probe?
 
-> **probe**?: (`asset`) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+probe?: (asset) => boolean | Promise<boolean>;
+```
 
 Custom content info resolver. Given fetched asset, resolves and assigns media content
  information (in-place). Return false when the implementation can't or shouldn't handle the asset,
@@ -105,7 +119,9 @@ Custom content info resolver. Given fetched asset, resolves and assigns media co
 
 ### resolve?
 
-> **resolve**?: (`asset`) => `boolean` \| `Promise`\<`boolean`\>
+```ts
+resolve?: (asset) => boolean | Promise<boolean>;
+```
 
 Custom asset resolver. Given captured asset syntax, resolves asset type,
  content locations and specs (in-place). Return false when the resolver can't
@@ -121,7 +137,9 @@ Custom asset resolver. Given captured asset syntax, resolves asset type,
 
 ### rewrite?
 
-> **rewrite**?: (`content`, `assets`, `id`?) => `string` \| `null` \| `Promise`\<`string` \| `null`\>
+```ts
+rewrite?: (content, assets, id?) => string | null | Promise<string | null>;
+```
 
 Custom procedure to rewrite captured assets syntax with built HTML. Given id (filename) and
  content (text) of transformed document return overwritten content or false when can't handle the case,
@@ -141,7 +159,9 @@ Custom procedure to rewrite captured assets syntax with built HTML. Given id (fi
 
 ### serve?
 
-> **serve**?: (`path`, `asset`) => `null` \| `Promise`\<`string` \| `null`\>
+```ts
+serve?: (path, asset) => null | Promise<string | null>;
+```
 
 Custom asset server. Given full path to a content file and associated asset info,
  return URL under which the file will be served and prepare the file to be served (eg, copy to
@@ -160,4 +180,4 @@ Custom asset server. Given full path to a content file and associated asset info
 
 ## Source
 
-[server/config/plugin.ts:4](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/plugin.ts#L4)
+[server/config/plugin.ts:4](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/plugin.ts#L4)

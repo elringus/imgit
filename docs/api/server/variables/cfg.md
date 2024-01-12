@@ -1,9 +1,11 @@
 # cfg
 
-> **cfg**: `Readonly`\<[`Options`](../type-aliases/Options.md)\>
+```ts
+cfg: Readonly<Options>;
+```
 
 Current build configuration.
 
 ## Source
 
-[server/config/index.ts:11](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/index.ts#L11)
+[server/config/index.ts:11](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/index.ts#L11)

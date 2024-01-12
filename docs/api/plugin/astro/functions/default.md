@@ -1,6 +1,8 @@
 # default()
 
-> **default**(`prefs`?, `platform`?): [`AstroIntegration`](../type-aliases/AstroIntegration.md)
+```ts
+default(prefs?, platform?): AstroIntegration
+```
 
 Creates imgit integration instance for astro.
 
@@ -20,4 +22,4 @@ Runtime APIs to use; will attempt to detect automatically when not assigned.
 
 ## Source
 
-[plugin/astro.ts:22](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/astro.ts#L22)
+[plugin/astro.ts:22](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/astro.ts#L22)

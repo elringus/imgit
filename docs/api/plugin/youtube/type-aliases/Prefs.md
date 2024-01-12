@@ -1,6 +1,8 @@
 # Prefs
 
-> **Prefs**: `Object`
+```ts
+type Prefs: Object;
+```
 
 YouTube plugin preferences.
 
@@ -8,16 +10,20 @@ YouTube plugin preferences.
 
 ### banner?
 
-> **banner**?: `boolean`
+```ts
+banner?: boolean;
+```
 
 Whether to show "Watch on YouTube" banner; enabled by default.
 
 ### title?
 
-> **title**?: `boolean`
+```ts
+title?: boolean;
+```
 
 Whether to show captured alt syntax as video title; enabled by default.
 
 ## Source
 
-[plugin/youtube/server.ts:5](https://github.com/Elringus/Imgit/blob/cf06d86/src/plugin/youtube/server.ts#L5)
+[plugin/youtube/server.ts:5](https://github.com/Elringus/Imgit/blob/157689c/src/plugin/youtube/server.ts#L5)

@@ -1,6 +1,8 @@
 # CacheOptions
 
-> **CacheOptions**: `Object`
+```ts
+type CacheOptions: Object;
+```
 
 Configures server cache.
 
@@ -8,7 +10,9 @@ Configures server cache.
 
 ### root
 
-> **root**: `string`
+```ts
+root: string;
+```
 
 Local directory where the build cache files are stored. When building static apps (SPA) on CI,
  consider checking-in the cache directory to boost remote build processes;
@@ -16,4 +20,4 @@ Local directory where the build cache files are stored. When building static app
 
 ## Source
 
-[server/config/options.ts:35](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/options.ts#L35)
+[server/config/options.ts:35](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/options.ts#L35)

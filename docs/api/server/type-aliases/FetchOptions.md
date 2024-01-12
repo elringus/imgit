@@ -1,6 +1,8 @@
 # FetchOptions
 
-> **FetchOptions**: `Object`
+```ts
+type FetchOptions: Object;
+```
 
 Configures remote assets downloading behaviour.
 
@@ -8,29 +10,37 @@ Configures remote assets downloading behaviour.
 
 ### delay
 
-> **delay**: `number`
+```ts
+delay: number;
+```
 
 How long to wait before restarting a failed download, in seconds; 6 by default.
 
 ### retries
 
-> **retries**: `number`
+```ts
+retries: number;
+```
 
 How many times to restart the download when request fails; 3 by default.
 
 ### root
 
-> **root**: `string`
+```ts
+root: string;
+```
 
 Local directory to store downloaded remote content files;
  `./public/imgit/fetched` by default.
 
 ### timeout
 
-> **timeout**: `number`
+```ts
+timeout: number;
+```
 
 How long to wait when downloading remote asset, in seconds; 30 by default.
 
 ## Source
 
-[server/config/options.ts:43](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/config/options.ts#L43)
+[server/config/options.ts:43](https://github.com/Elringus/Imgit/blob/157689c/src/server/config/options.ts#L43)

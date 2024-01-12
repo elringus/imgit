@@ -1,6 +1,8 @@
 # FetchedAsset
 
-> **FetchedAsset**: [`ResolvedAsset`](ResolvedAsset.md) & `Object`
+```ts
+type FetchedAsset: ResolvedAsset & Object;
+```
 
 Asset with all the applicable source content files available on the local file system.
 
@@ -8,16 +10,20 @@ Asset with all the applicable source content files available on the local file s
 
 ### content
 
-> **content**: [`FetchedContent`](FetchedContent.md)
+```ts
+content: FetchedContent;
+```
 
 Source content of the asset.
 
 ### dirty?
 
-> **dirty**?: `boolean`
+```ts
+dirty?: boolean;
+```
 
 Whether any of the source content files were modified since last build.
 
 ## Source
 
-[server/asset.ts:61](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L61)
+[server/asset.ts:61](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L61)

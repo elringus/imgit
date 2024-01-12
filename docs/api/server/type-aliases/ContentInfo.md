@@ -1,6 +1,8 @@
 # ContentInfo
 
-> **ContentInfo**: `Object`
+```ts
+type ContentInfo: Object;
+```
 
 Result of probing a content file.
 
@@ -8,28 +10,36 @@ Result of probing a content file.
 
 ### alpha?
 
-> **alpha**?: `boolean`
+```ts
+alpha?: boolean;
+```
 
 Whether the media content has alpha channel (transparency).
 
 ### height
 
-> **height**: `number`
+```ts
+height: number;
+```
 
 Height of the media content, in pixels.
 
 ### type
 
-> **type**: `string`
+```ts
+type: string;
+```
 
 MIME type of the media content.
 
 ### width
 
-> **width**: `number`
+```ts
+width: number;
+```
 
 Width of the media content, in pixels.
 
 ## Source
 
-[server/asset.ts:87](https://github.com/Elringus/Imgit/blob/cf06d86/src/server/asset.ts#L87)
+[server/asset.ts:87](https://github.com/Elringus/Imgit/blob/157689c/src/server/asset.ts#L87)
