@@ -3,17 +3,22 @@ import { observeVideo, unobserveVideo } from "./intersection.js";
 const IMAGE_LOADED_EVENT = "load";
 const VIDEO_LOADED_EVENT = "loadeddata";
 
-/** External mutation handlers. */
+/** External mutation handler. First tuple hook is invoked when an element is added
+ *  to HTML document; second one — when removed. */
 export type Handler = [(added: Element) => void, (removed: Element) => void];
 
 const observer = canObserve() ? new MutationObserver(handleMutations) : undefined;
 const handlers: Array<Handler> = [];
 
+/** Starts observing HTML document for changes. Required by imgit to lazy-load
+ *  elements added dynamically, eg in single-page apps (SPA). */
 export function observeMutations() {
     observer?.observe(document.body, { childList: true, subtree: true });
     if (canObserve()) handleAdded(document.body);
 }
 
+/** Adds custom handler for HTML document changes. Can be used by plugins
+ *  to share the imgit observer instance. */
 export function addHandler(handler: Handler) {
     handlers.push(handler);
 }

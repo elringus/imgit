@@ -120,4 +120,4 @@ Find minimal sample on using imgit directly with Deno runtime on GitHub: https:/
 :::
 
 
-Find available configuration options in the API reference. For available extension points (hooks), check out [plugins guide](/guide/plugins).
+Find available configuration options in the [API reference](/api/server/type-aliases/Options.md). For available extension points (hooks), check out [plugins guide](/guide/plugins).

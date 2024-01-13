@@ -3,6 +3,7 @@
 echo '{
     "entryPoints": [
         "../src/server/index.ts",
+        "../src/client/index.ts",
         "../src/plugin/youtube/index.ts",
         "../src/plugin/svg.ts",
         "../src/plugin/astro.ts",
