@@ -1,6 +1,6 @@
-import { addHandler } from "../../client/mutation.js";
+import { mutation } from "../../client/index.js";
 
-addHandler([handleAdded, handleRemoved]);
+mutation.addHandler([handleAdded, handleRemoved]);
 typeof document === "object" && handleAdded(document.body);
 
 function handleAdded(added: Element) {

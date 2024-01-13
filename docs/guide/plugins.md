@@ -53,3 +53,5 @@ import plugin from "./plugin.ts";
 // Inject plugin object.
 await boot({ plugins: [plugin] });
 ```
+
+Find more about available plugin options in the [API reference](/api/server/type-aliases/Plugin).
