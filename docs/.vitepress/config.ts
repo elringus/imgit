@@ -9,6 +9,7 @@ import youtube from "imgit/youtube";
 export default defineConfig({
     title: "imgit",
     titleTemplate: ":title • imgit",
+    description: "JavaScript utility to optimize web media content.",
     appearance: "dark",
     cleanUrls: true,
     lastUpdated: true,
