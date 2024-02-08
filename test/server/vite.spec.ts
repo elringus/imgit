@@ -80,3 +80,29 @@ it("doesn't inject client module when disabled in plugin config", async () => {
         tags: []
     });
 });
+
+it("doesn't resolve non-imgit module imports", async () => {
+    vi.spyOn(await import("../../src/server/import.js"), "isImgitAssetImport").mockReturnValue(false);
+    expect(vite().resolveId("foo")).toBeNull();
+});
+
+it("resolves imgit module imports", async () => {
+    vi.spyOn(await import("../../src/server/import.js"), "isImgitAssetImport").mockReturnValue(true);
+    expect(vite().resolveId("foo")).toStrictEqual("foo");
+});
+
+it("doesn't load non-imgit import", async () => {
+    vi.spyOn(await import("../../src/server/import.js"), "isImgitAssetImport").mockReturnValue(false);
+    const load = vi.spyOn(await import("../../src/server/import.js"), "importImgitAsset");
+    load.mockImplementation(() => Promise.reject());
+    await vite().load("");
+    expect(load).not.toBeCalled();
+});
+
+it("loads imgit import", async () => {
+    vi.spyOn(await import("../../src/server/import.js"), "isImgitAssetImport").mockReturnValue(true);
+    const load = vi.spyOn(await import("../../src/server/import.js"), "importImgitAsset");
+    load.mockImplementation(() => Promise.resolve("foo"));
+    await vite().load("");
+    expect(load).toBeCalled();
+});

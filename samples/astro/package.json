@@ -5,7 +5,7 @@
         "preview": "astro preview"
     },
     "dependencies": {
-        "astro": "^4.1.1",
-        "imgit": "^0.1.2"
+        "astro": "^4.3.5",
+        "imgit": "^0.1.3"
     }
 }

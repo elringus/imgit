@@ -30,9 +30,19 @@ export async function build(asset: BuiltAsset, merges?: BuiltAsset[]): Promise<v
     throw Error(`Failed to build HTML: unknown type (${asset.content.info.type}).`);
 }
 
-/** Builds serve url for content file with specified full path based on configured root option. */
-export function buildContentSource(path: string) {
+/** Resolves serve url for content file with specified full path based on configured root option. */
+export function resolveSource(path: string) {
     return `/${std.path.relative(cfg.root, std.path.dirname(path))}/${std.path.basename(path)}`;
+}
+
+/** Resolves dimensions of the specified asset accounting build preferences and aspect ratio. */
+export function resolveSize(asset: BuiltAsset) {
+    const info = asset.content.info;
+    const threshold = asset.spec.width ?? cfg.width;
+    const mod = threshold && info.width > threshold ? threshold / info.width : 1;
+    const width = Math.floor(info.width * mod);
+    const height = Math.floor(info.height * mod);
+    return { width, height };
 }
 
 async function mergeAndBuild(asset: BuiltAsset, merges: BuiltAsset[]): Promise<void> {
@@ -120,11 +130,7 @@ async function getCoverData(asset: BuiltAsset, path: string): Promise<string> {
 }
 
 function buildSizeAttributes(asset: BuiltAsset): string {
-    const info = asset.content.info;
-    const threshold = asset.spec.width ?? cfg.width;
-    const mod = threshold && info.width > threshold ? threshold / info.width : 1;
-    const width = Math.floor(info.width * mod);
-    const height = Math.floor(info.height * mod);
+    const { width, height } = resolveSize(asset);
     return `width="${width}" height="${height}"`;
 }
 
@@ -134,5 +140,5 @@ async function serve(path: string, asset: BuiltAsset): Promise<string> {
             const src = await plugin.serve(path, asset);
             if (src) return src;
         }
-    return buildContentSource(path);
+    return resolveSource(path);
 }

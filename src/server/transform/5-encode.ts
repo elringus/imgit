@@ -8,12 +8,12 @@ export async function encodeAll(assets: ProbedAsset[]): Promise<EncodedAsset[]> 
     await everythingIsFetched();
     for (const asset of assets)
         if (!(await encodeWithPlugins(<EncodedAsset>asset)))
-            await encodeAsset(<EncodedAsset>asset);
+            await encode(<EncodedAsset>asset);
     return <EncodedAsset[]>assets;
 }
 
 /** Encodes asset content with ffmpeg. */
-export async function encodeAsset(asset: EncodedAsset): Promise<void> {
+export async function encode(asset: EncodedAsset): Promise<void> {
     await encodeMain(asset.content, asset);
     await encodeSafe(asset.content, asset);
     await encodeDense(asset.content, asset);

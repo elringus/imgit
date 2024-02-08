@@ -2,8 +2,8 @@ import { captureAll, capture } from "./1-capture.js";
 import { resolveAll, resolve, resolveSpec } from "./2-resolve.js";
 import { fetchAll, fetch } from "./3-fetch.js";
 import { probeAll, probe } from "./4-probe.js";
-import { encodeAll, encodeAsset } from "./5-encode.js";
-import { buildAll, build, buildContentSource, CONTAINER_ATTR } from "./6-build.js";
+import { encodeAll, encode } from "./5-encode.js";
+import { buildAll, build, resolveSource, CONTAINER_ATTR, resolveSize } from "./6-build.js";
 import { rewriteAll, rewrite } from "./7-rewrite.js";
 
 /** Individual document transformation stages. */
@@ -12,8 +12,8 @@ export const stages = {
     resolve: { asset: resolve, spec: resolveSpec },
     fetch: { asset: fetch },
     probe: { asset: probe },
-    encode: { asset: encodeAsset },
-    build: { asset: build, source: buildContentSource, CONTAINER_ATTR },
+    encode: { asset: encode },
+    build: { asset: build, source: resolveSource, size: resolveSize, CONTAINER_ATTR },
     rewrite: { content: rewrite }
 };
 
