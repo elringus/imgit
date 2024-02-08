@@ -1,4 +1,4 @@
-import { Platform, Prefs, Plugin, boot, exit, transform, std } from "../server/index.js";
+import { Platform, Prefs, Plugin, boot, exit, transform, std, loader } from "../server/index.js";
 
 /** Configures vite plugin behaviour. */
 export type VitePrefs = Prefs & {
@@ -17,8 +17,10 @@ export type VitePlugin = {
     transformIndexHtml: {
         order: "pre" | "post",
         handler: (html: string, ctx: { filename: string }) => Promise<{ html: string, tags: HtmlTag[] }>
-    }
+    };
     buildEnd: (error?: Error) => Promise<void> | void;
+    resolveId: (source: string) => string | null;
+    load: (id: string) => Promise<string> | null;
 };
 
 // https://vitejs.dev/guide/api-plugin#transformindexhtml
@@ -45,7 +47,9 @@ export default function (prefs?: VitePrefs, platform?: Platform): VitePlugin {
                 tags: !prefs || prefs.inject !== false ? inject(<never>prefs?.plugins) : []
             })
         },
-        buildEnd: exit
+        buildEnd: exit,
+        resolveId: (source) => loader.isImgitAssetImport(source) ? source : null,
+        load: (id) => loader.isImgitAssetImport(id) ? loader.importImgitAsset(id) : null
     };
 }
 

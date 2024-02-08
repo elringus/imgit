@@ -115,7 +115,7 @@ await fs.writeFile("./public/index.html", output);
 await exit();
 ```
 
-::: tip Example
+::: tip SAMPLE
 Find minimal sample on using imgit directly with Deno runtime on GitHub: https://github.com/elringus/imgit/tree/main/samples/minimal.
 :::
 

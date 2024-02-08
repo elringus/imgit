@@ -1,0 +1,31 @@
+---
+import psd from "imgit:https://github.com/elringus/imgit/raw/main/samples/assets/psd.psd";
+import mkv from "imgit:https://github.com/elringus/imgit/raw/main/samples/assets/mkv.mkv";
+---
+
+<html lang="en">
+
+<head>
+    <title>Astro Import Sample</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:,">
+    <style is:global>
+        body { background: #222; }
+        img, video { max-width: 100%; height: auto; }
+    </style>
+</head>
+
+<body>
+
+<img src={psd.content.encoded}
+     height={psd.info.height}
+     loading="lazy"/>
+
+<video src={mkv.content.encoded}
+       poster={mkv.content.cover}
+       height={mkv.info.height}
+       autoplay loop/>
+
+</body>
+
+</html>

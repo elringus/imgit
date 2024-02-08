@@ -42,6 +42,6 @@ export default { extends: { Layout: DefaultTheme.Layout } };
 
 :::
 
-::: tip Sample
+::: tip SAMPLE
 https://github.com/elringus/imgit/tree/main/samples/vitepress
 :::

@@ -8,6 +8,7 @@ export { Plugin, PluginInjection } from "./config/plugin.js";
 export { ctx } from "./context.js";
 export { Cache, cache } from "./cache.js";
 export { stages, transform } from "./transform/index.js";
+export * as loader from "./import.js";
 export * from "./config/index.js";
 export * from "./asset.js";
 
