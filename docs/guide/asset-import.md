@@ -9,7 +9,7 @@ Use `imgit:` namespace when importing a media asset to make imgit optimize it an
 ```astro
 ---
 import psd from "imgit:https://example.com/photo.psd";
-import mkv from "imgit:/public/video.mkv";
+import mkv from "imgit:/assets/video.mkv";
 ---
 
 <img src={psd.content.encoded}

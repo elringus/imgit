@@ -33,7 +33,7 @@ into optimized HTML. For example, given following `index.md` page:
 ![](https://example.com/photo.psd)
 
 # MKV Video
-![](/public/video.mkv)
+![](/assets/video.mkv)
 
 # YouTube Video
 ![](https://www.youtube.com/watch?v=arbuYnJoLtU)
@@ -57,7 +57,7 @@ In case you'd like to instead manually build the HTML (eg, with custom component
 ```astro
 ---
 import psd from "imgit:https://example.com/photo.psd";
-import mkv from "imgit:/public/video.mkv";
+import mkv from "imgit:/assets/video.mkv";
 ---
 
 <img src={psd.content.encoded}
