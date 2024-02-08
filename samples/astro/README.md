@@ -10,4 +10,4 @@ Example on plugging imgit to [astro](https://astro.build) web framework:
 > [!IMPORTANT]
 > Initial build could take up to 5 minutes for all the sample assets referenced in index.astro to fetch and encode. The files will be stored under `public` directory and consequent runs won't incur additional processing time.
 
-Examine `src/pages/index.astro` and `astro.config.mts` sources for details.
+Examine `src/pages/index.astro` (markdown source transform), `src/pages/import.astro` (manual asset import) and `astro.config.mts` sources for details.

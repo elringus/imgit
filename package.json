@@ -5,7 +5,7 @@
     "author": "Elringus (https://elringus.me)",
     "license": "MIT",
     "keywords": ["CLS", "lazy-load", "embed", "size", "encode", "compress", "md", "avif", "vite-plugin"],
-    "repository": { "type": "git", "url": "https://github.com/elringus/imgit.git" },
+    "repository": { "type": "git", "url": "git+https://github.com/elringus/imgit.git" },
     "funding": "https://github.com/sponsors/elringus",
     "homepage": "https://imgit.dev",
     "bugs": { "url": "https://github.com/elringus/imgit/issues" },
