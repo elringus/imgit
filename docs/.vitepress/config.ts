@@ -55,6 +55,7 @@ export default defineConfig({
                     items: [
                         { text: "Introduction", link: "/guide/" },
                         { text: "Getting Started", link: "/guide/getting-started" },
+                        { text: "Asset Import", link: "/guide/asset-import" },
                         { text: "GPU Acceleration", link: "/guide/gpu-acceleration" },
                         { text: "Plugins", link: "/guide/plugins" }
                     ]

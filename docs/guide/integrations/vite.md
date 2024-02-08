@@ -25,6 +25,6 @@ export default defineConfig({
 
 :::
 
-::: tip Sample
+::: tip SAMPLE
 https://github.com/elringus/imgit/tree/main/samples/vite
 :::
