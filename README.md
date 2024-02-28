@@ -14,22 +14,24 @@
 
 # Convert media links to optimized HTML
 
-Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals).
+Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [Web Vitals](https://web.dev/vitals) — imgit is a JavaScript package and set of plugins for popular web frameworks to enhance user experience when interacting with media-heavy websites, such as blogs, landings, portfolios and documentation sites.
 
-✨ Builds optimized HTML for arbitrary image, video and YouTube syntax, such as URLs, markdown or JSX tags.
+## Features
 
-⚡ Encodes to the modern AV1/AVIF format compressing by up to 90% without noticeable quality loss. Supports GPU acceleration.
+✨ Builds optimized HTML for media URLs, markdown or JSX tags
 
-♻️ Works with most known media formats: JPEG, PNG, APNG, SVG, GIF, WEBP, WEBM, MP4, AVI, MOV, MKV, BMP, TIFF, TGA and even PSD.
+⚡ Encodes to AV1/AVIF utilizing GPU acceleration
 
-🌊 Generates tiny blurred covers from the source content to be beautifully crossfaded into HD originals once lazy-loaded.
+♻️ Supports JPG, A/PNG, GIF, WEBM/P, AVI, MKV, TIFF, PSD and more
 
-📐 Optionally scales down the content to specified threshold while preserving high-resolution variants for high-DPI displays.
+🌊 Generates tiny blurred covers cross-faded into HD source on lazy-load
 
-🌐 Fetches from remote sources, such as image hostings. Uploads optimized content to designated endpoint, such as CDN.
+📐 Scales the content while preserving HD original for high-DPI displays
 
-🗺️ Built-in plugins for Astro, SvelteKit, SolidStart, VitePress, Nuxt and Remix. Adapters for Node, Deno and Bun runtimes.
+🌐 Fetches sources from remote URLs, uploads optimized versions to CDN
 
-### 🎬 Get Started
+🗺️ Plugs into Astro, Svelte, VitePress and more; runs on Node, Deno and Bun
+
+## 🎬 Get Started
 
 http://imgit.dev/guide
