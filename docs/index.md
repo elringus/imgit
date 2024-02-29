@@ -1,6 +1,6 @@
 ---
 layout: home
-
+markdownStyles: false
 title: Convert media links to optimized HTML
 titleTemplate: imgit • :title
 
@@ -20,7 +20,7 @@ hero:
     alt: imgit
 ---
 
-<div class="VPFeatures VPHomeFeatures">
+<div class="features">
     <div class="container">
         <div class="items" style="margin: -8px">
             <div class="items">
@@ -201,9 +201,9 @@ hero:
 
 <style scoped>
 /* A hack copying home page specific styles, as they're applied with guid attr. */
-.VPFeatures { position: relative; padding: 0 24px; }
-@media (min-width: 640px) { .VPFeatures { padding: 0 48px; } }
-@media (min-width: 960px) { .VPFeatures { padding: 0 64px; } }
+.features { position: relative; padding: 0 24px; }
+@media (min-width: 640px) { .features { padding: 0 48px; } }
+@media (min-width: 960px) { .features { padding: 0 64px; } }
 .container { margin: 0 auto; max-width: 1152px; }
 .items { display: flex; flex-wrap: wrap; }
 .item { padding: 8px; width: 100%; }
