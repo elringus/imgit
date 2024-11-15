@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://imgit.dev" target="_blank" rel="noopener noreferrer">
+  <a href="https://imgit.elringus.com" target="_blank" rel="noopener noreferrer">
     <img width="200" src="https://github.com/elringus/imgit/raw/main/docs/public/favicon.svg" alt="imgit logo">
   </a>
 </p>
@@ -34,4 +34,4 @@ Images, video and YouTube: fetch, encode, scale, lazyload – for best UX and [W
 
 ## 🎬 Get Started
 
-http://imgit.dev/guide
+http://imgit.elringus.com/guide
