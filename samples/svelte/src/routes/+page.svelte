@@ -1,8 +1,8 @@
 <script context="module">
-	import "imgit/client";
-	import "imgit/client/youtube";
-	import "imgit/styles";
-	import "imgit/styles/youtube";
+    import "imgit/client";
+    import "imgit/client/youtube";
+    import "imgit/styles";
+    import "imgit/styles/youtube";
 </script>
 
 <style>
