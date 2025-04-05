@@ -76,7 +76,7 @@ export default defineConfig({
             "/api/": await getApiSidebar()
         }
     },
-    sitemap: { hostname: "https://imgit.elringus.com" }
+    sitemap: { hostname: "https://imgit.dev" }
 });
 
 async function getApiSidebar(): Promise<DefaultTheme.SidebarItem[]> {
